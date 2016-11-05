@@ -1,0 +1,8 @@
+ec:
+  build: docker/elasticsearch
+  labels:
+    com.ducva.sars: "SARS ElasticSearch"
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+  restart: always
