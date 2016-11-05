@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAN_CARD_DATA -->
+<table desc="Thông tin card tag sansan">
+	<primary-key>
+		<column name="ID_TAGTBL" lname="Tag TBL ID" data-type="integer" not-null="true" default-value="0" comment="ID tag"/>
+	</primary-key>
+	
+	<column name="ID_COMPANY" lname="Sansan company ID" data-type="integer" not-null="false" default-value="NULL" comment="ID công ty"/>
+	<column name="ID_CARD" lname="Card ID" data-type="integer" not-null="true" comment="ID namecard"/>
+	<column name="TAG" lname="Tag name" data-type="c-thirty-two-length" not-null="true" default-value="''" comment="Tag"/>
+	
+	<foreign-key parent-table="SAN_COM_INFO">
+		<column name="ID_COMPANY" referColumn="ID_COMPANY"/>
+	</foreign-key>
+	<foreign-key parent-table="SAN_CARD_DATA">
+		<column name="ID_CARD" referColumn="ID_CARD"/>
+	</foreign-key>
+</table>

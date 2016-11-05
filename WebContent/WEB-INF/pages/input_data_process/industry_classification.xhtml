@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:form id="industryForm">
+			<table>
+				<tr>
+					<td>
+                        <label class="#{(inputAccountingDataBean.viewMode or
+						inputAccountingDataBean.hasInputIndustryCode()) ? '' : 'mandatory'}">#{messages.industry_category_code_main}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputText id="mainIndustryCode" value="#{inputAccountingDataBean.accComIndustry.code_industry_main}"
+							required="true" requiredMessage="#{messages.industry_category_code_main_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode or inputAccountingDataBean.hasInputIndustryCode()}"
+							maxlength="32">
+							<p:ajax event="change" update="@this @([id$=mainIndustryName])" resetValues="true"
+								process="@this" listener="#{inputAccountingDataBean.loadIndustryMain}"></p:ajax>
+						</p:inputText>
+					</td>
+					<td>
+						<p:outputPanel id="mainIndustryName">
+							<p:outputLabel rendered="#{inputAccountingDataBean.mainIndustry ne null}">#{inputAccountingDataBean.mainIndustry.title}</p:outputLabel>
+						</p:outputPanel>
+					</td>
+				</tr>
+				<tr>
+					<td>
+                        <label class="#{(inputAccountingDataBean.viewMode or
+						inputAccountingDataBean.hasInputIndustryCode()) ? '' : 'mandatory'}">#{messages.industry_category_code_subsidiary}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputText id="subIndustryCode" value="#{inputAccountingDataBean.accComIndustry.code_industry_sub}"
+							required="true" requiredMessage="#{messages.industry_category_code_subsidiary_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode or inputAccountingDataBean.hasInputIndustryCode()}"
+							maxlength="32">
+							<p:ajax event="change" update="@this @([id$=industryName])" process="@this" 
+								resetValues="true" listener="#{inputAccountingDataBean.loadIndustry}"></p:ajax>
+						</p:inputText>
+					</td>
+					<td>
+						<p:outputPanel id="industryName">
+							<p:outputLabel rendered="#{inputAccountingDataBean.industry ne null}">#{inputAccountingDataBean.industry.title}</p:outputLabel>
+						</p:outputPanel>
+					</td>
+				</tr>
+				<tr>
+					<td>
+                        <label>#{messages.rank_of_the_same_sector} (#{messages.nation_wide})</label>
+					</td>
+					<td class="proc3-width-col">
+						<pe:inputNumber value="#{inputAccountingDataBean.accComIndustry.rank_industry_nation}"
+                    		symbolPosition="s" emptyValue="empty" decimalPlaces="0"
+                    		disabled="#{inputAccountingDataBean.viewMode}"
+                    		maxValue="999999999">
+                    		<p:ajax event="change" update="@this" process="@this"></p:ajax>
+                   		</pe:inputNumber>
+						<label>(#{messages.position})</label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+                        <label>#{messages.population_of_the_same_industry} (#{messages.nation_wide})</label>
+					</td>
+					<td class="proc3-width-col">
+						<pe:inputNumber value="#{inputAccountingDataBean.accComIndustry.pop_industry_nation}"
+                    		symbolPosition="s" emptyValue="empty" decimalPlaces="0"
+                    		disabled="#{inputAccountingDataBean.viewMode}"
+                    		maxValue="999999999">
+                    		<p:ajax event="change" update="@this" process="@this"></p:ajax>
+                   		</pe:inputNumber>
+						<label>(#{messages.company})</label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+                        <label>#{messages.rank_of_the_same_sector} (#{messages.prefecture})</label>
+					</td>
+					<td class="proc3-width-col">
+						<pe:inputNumber value="#{inputAccountingDataBean.accComIndustry.rank_industry_pref}"
+                    		symbolPosition="s" emptyValue="empty" decimalPlaces="0"
+                    		disabled="#{inputAccountingDataBean.viewMode}" maxValue="999999999">
+                    		<p:ajax event="change" update="@this" process="@this"></p:ajax>
+                   		</pe:inputNumber>
+						<label>(#{messages.position})</label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+                        <label>#{messages.population_of_the_same_industry} (#{messages.prefecture})</label>
+					</td>
+					<td class="proc3-width-col">
+						<pe:inputNumber value="#{inputAccountingDataBean.accComIndustry.pop_industry_pref}"
+                    		symbolPosition="s" emptyValue="empty" decimalPlaces="0"
+                    		disabled="#{inputAccountingDataBean.viewMode}" maxValue="999999999">
+                    		<p:ajax event="change" update="@this" process="@this"></p:ajax>
+                   		</pe:inputNumber>
+						<label>(#{messages.company})</label>
+					</td>
+				</tr>
+			</table>
+		</h:form>
+</ui:composition>

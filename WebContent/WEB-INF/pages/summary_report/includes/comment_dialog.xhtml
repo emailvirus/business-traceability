@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent">
+	<o:importConstants
+		type="arrow.businesstraceability.constant.SummaryReportConstants.OperationType" />
+
+
+	<p:dialog modal="true" header="#{messages.rejectReason}"
+		resizable="false" visible="true" closeOnEscape="true"
+		widgetVar="dlgComment" id="dlgComment">
+		<h:form>
+			<br />
+
+			<p:inputTextarea rows="14" styleClass="text-area comment" cols="50"
+				id="txtComment" value="#{summaryReportBean.comment}" />
+
+			<br />
+			<br />
+
+			<p:outputPanel style="text-align:center;">
+				<p:commandButton value="#{messages.reject}"
+					rendered="#{summaryReportBean.monthlyReportPermission.hasApprovePermission()}"
+					process="@form" onstart="PF('blockUI_js').block()"
+					oncomplete="PF('blockUI_js').unblock()"
+					action="#{summaryReportBean.saveMonthlyReport(OperationType.REJECT)}"
+					update=":contentPane">
+				</p:commandButton>
+				<p:commandButton value="#{messages.reOpen}"
+					rendered="#{summaryReportBean.monthlyReportPermission.hasReOpenPermission()}"
+					process="@form"
+					action="#{summaryReportBean.saveMonthlyReport(OperationType.REOPEN)}"
+					update=":contentPane" onstart="PF('blockUI_js').block()"
+					oncomplete="PF('blockUI_js').unblock()"
+					onsuccess="#{summaryReportBean.actionCloseOrKeepDialog()}">
+				</p:commandButton>
+				<p:spacer></p:spacer>
+				<p:spacer></p:spacer>
+				<p:commandButton value="#{messages.cancel}"
+					action="#{popupPanelBean.hide}" process="@this" immediate="true"
+					onsuccess="PF('dlgComment').hide();"
+					onstart="PF('blockUI_js').block()"
+					oncomplete="PF('blockUI_js').unblock()" />
+			</p:outputPanel>
+		</h:form>
+
+
+		<!-- Block UI -->
+		<pe:blockUI source="dlgComment" target="dlgComment"
+			event="expand, select, unselect, change, click" autoShow="true"
+			widgetVar="blockUI_js" id="blockUI">
+			<h:panelGrid columns="2">
+				<h:graphicImage library="images" name="loading.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{messages['loading']}..."
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+
+	</p:dialog>
+</ui:composition>

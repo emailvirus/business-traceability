@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent">
+	<p:outputPanel id="searchCompanySansanPanel"
+		rendered="#{maintenanceAccountingDataBean.renderSansanCompanyPanel}">
+		<h:form>
+			<table>
+				<tr>
+					<td><label>#{messages.id_name_card}</label></td>
+					<td><p:inputText
+							value="#{maintenanceAccountingDataBean.inputIdNameCard}"
+							widgetVar="idNameCard" maxlength="64"
+							onchange="updateSearchSansanCompanyButton()"
+							onkeyup="updateSearchSansanCompanyButton()">
+						</p:inputText></td>
+				</tr>
+				<tr>
+					<td><label>#{messages.id_san_company_condition}</label></td>
+					<td><p:inputText
+							value="#{maintenanceAccountingDataBean.inputCompanySansan}"
+							widgetVar="idSanCompany" maxlength="64"
+							onchange="updateSearchSansanCompanyButton()"
+							onkeyup="updateSearchSansanCompanyButton()">
+						</p:inputText></td>
+				</tr>
+				<tr>
+					<td><label>#{messages.company_name}</label></td>
+					<td><p:inputText
+							value="#{maintenanceAccountingDataBean.inputCompanySansanName}"
+							widgetVar="companyName" maxlength="250"
+							onchange="updateSearchSansanCompanyButton()"
+							onkeyup="updateSearchSansanCompanyButton()">
+						</p:inputText></td>
+					<td><p:commandButton id="searchSansanCompanyButton"
+							icon="fa fa-search" value="#{messages.search}"
+							widgetVar="searchSansanCompanyButton"
+							action="#{maintenanceAccountingDataBean.searchSansanCompany()}"
+							update="@this @([id$=maintenaceCompanyPanel])"
+							onclick="PrimeFaces.widgets['sansanCompanyTable'].paginator.setPage(0);"
+							onstart="PF('globalBlockUI_js').block(); "
+							oncomplete="PF('globalBlockUI_js').unblock(); selectSansanCompanyTableRow();"></p:commandButton></td>
+				</tr>
+			</table>
+
+			<script>
+				var searchSansanCompanyButton = PrimeFaces.widgets['searchSansanCompanyButton'];
+				updateSearchSansanCompanyButton = function() {
+					var idNameCard = PrimeFaces.widgets['idNameCard'];
+					var idSanCompany = PrimeFaces.widgets['idSanCompany'];
+					var companyName = PrimeFaces.widgets['companyName'];
+
+					if(idNameCard.jq[0].value.length > 0 || idSanCompany.jq[0].value.length > 0 || companyName.jq[0].value.length > 0) {
+						searchSansanCompanyButton.enable();
+					} else {
+						searchSansanCompanyButton.disable();
+					}
+				}
+				$(document).ready(function() {
+					updateSearchSansanCompanyButton();
+				});
+			</script>
+		</h:form>
+	</p:outputPanel>
+	<br />
+	<br />
+	<ui:include
+		src="/WEB-INF/pages/maintenance_accounting_data/list_sansan_company_PROC2.xhtml" />
+</ui:composition>

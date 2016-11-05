@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAN_IDMAP_COMPANY -->
+<table desc="Thông tin SAN_IDMAP_COMPANY">
+	<primary-key>
+		<column name="ID_COMPANY" data-type="integer" not-null="true" comment="ID Company"/>
+	</primary-key>
+		<column name="ID_SAN_COMPANY" data-type="c-long-code" not-null="true"/>
+</table>

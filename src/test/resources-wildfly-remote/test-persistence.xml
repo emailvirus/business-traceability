@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
+             xmlns="http://java.sun.com/xml/ns/persistence"
+             xsi:schemaLocation="
+        http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+
+    <persistence-unit name="business_traceability">
+        <jta-data-source>java:jboss/datasources/test-business_traceability</jta-data-source>
+
+        <class>arrow.businesstraceability.data.persistence.entity.Abstract_entity</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Abstract_entity_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Abstract_entity_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Addresspoint_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Addresspoint_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Addresspoint_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Authority_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Authority_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Authority_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Basepoint_info</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Basepoint_info_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Basepoint_info_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Business_company_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Business_company_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Business_company_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Business_cons_info</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Business_cons_info_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Business_cons_info_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Captital_level_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Captital_level_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Captital_level_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Company_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Company_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Company_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Credit_info</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Credit_info_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Credit_info_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Daily_activity_type</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Daily_activity_type_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Daily_activity_type_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Daily_report</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Daily_report_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Daily_report_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Employee_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Employee_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Employee_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Industry_big_info</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_big_info_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_big_info_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Industry_big_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_big_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_big_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Industry_mdl_info</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_mdl_info_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_mdl_info_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Industry_mdl_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_mdl_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_mdl_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Industry_sml_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_sml_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Industry_sml_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Notification_config</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Notification_config_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Notification_config_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Notification_data</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Notification_data_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Notification_data_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Notification_item</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Notification_item_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Notification_item_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Personnel_affairs_info</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Personnel_affairs_info_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Personnel_affairs_info_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.Position_mst</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Position_mst_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.Position_mst_MAPPED$Pk</class>
+        <class>arrow.businesstraceability.data.persistence.entity.User_login</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.User_login_MAPPED</class>
+        <class>arrow.businesstraceability.data.persistence.entity.mapped.User_login_MAPPED$Pk</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <properties>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
+            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

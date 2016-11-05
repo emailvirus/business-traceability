@@ -1,0 +1,425 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<p:outputPanel id="record">
+		<div class="title">
+			<p:outputLabel value="１．#{messages.secondedPersons}"></p:outputLabel>
+		</div>
+		<arrow:dataTable value="" var="record" rows="20" id="recordTable"
+			rowIndexVar="index" paginator="true" styleClass="data-table"
+			rowStyleClass="" paginatorPosition="bottom"
+			emptyMessage="#{messages.noDataFound}"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+			<p:column>
+
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.companyName}"
+						parentTable="recordTable"></ar:columHeader>
+				</f:facet>
+				<!-- 				#{record.companyName} -->
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.newContract}"
+						parentTable="recordTable"></ar:columHeader>
+				</f:facet>
+				<!-- 				#{record.newContract} -->
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.increaseEmployeeContract}"
+						parentTable="recordTable"></ar:columHeader>
+				</f:facet>
+				<!-- 				#{record.increaseEmp} -->
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.lostContract}"
+						parentTable="recordTable"></ar:columHeader>
+				</f:facet>
+				<!-- 				#{record.notExtendContract} -->
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.cancelContract}"
+						parentTable="recordTable"></ar:columHeader>
+				</f:facet>
+				<!-- 				#{record.cancelContract} -->
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.cancelContractNormal}"
+						parentTable="recordTable"></ar:columHeader>
+				</f:facet>
+				<!-- 				#{record.cancelNormalContract} -->
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.total}" parentTable="recordTable"></ar:columHeader>
+				</f:facet>
+				<!-- 				#{record.total} -->
+			</p:column>
+		</arrow:dataTable>
+	</p:outputPanel>
+
+	<p:outputPanel id="activityReport">
+		<div class="title">
+			<p:outputLabel value="２．#{messages.activityReport}"></p:outputLabel>
+		</div>
+		<div class="sub-title">
+			<p:outputLabel>#{messages.allVisitNumber}</p:outputLabel>
+		</div>
+
+		<div class="sub-info-panel">
+			<table>
+				<tr>
+					<td width="50px"><p:outputLabel value="#{messages.total}  "></p:outputLabel></td>
+					<td><p:inputText
+							value="#{summaryReportBean.monthlyReportRevision.sou_houmon_kensuu}"
+							styleClass="small-input" disabled="true"></p:inputText></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td valign="middle"><p:selectBooleanCheckbox
+							value="#{summaryReportBean.showVisitTimePanel}">
+							<p:ajax process="@this" update="activityReport" />
+						</p:selectBooleanCheckbox> <p:outputLabel value=" #{messages.industryBreakdown}"></p:outputLabel>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<p:outputPanel rendered="#{summaryReportBean.showVisitTimePanel}">
+			<table id="careerInfoTable" class="view-table">
+				<tbody>
+					<tr>
+						<td><p:outputLabel value="#{messages.software} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_sofuto_wea}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.network} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_netto_waku}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.architecture} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_kenchiku}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.construction} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_doboku}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel value="#{messages.equipment} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_setsubi}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.electrical} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_denki}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.plant} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_puranto}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.common} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_ippan}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel value="#{messages.communicationWireless} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_tsuushin_musen}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.communicationWired} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_tsuushin_yuusen}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.machineryHard} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_kikai_hado}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.bussiness} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_jimu}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel value="#{messages.callCenter} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_shokushu_koru_centa}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+					</tr>
+				</tbody>
+			</table>
+		</p:outputPanel>
+
+		<div class="sub-info-panel">
+			<table>
+				<tr>
+					<td width="50px"></td>
+					<td valign="middle"><p:selectBooleanCheckbox
+							value="#{summaryReportBean.showPurposePanel}">
+							<p:ajax process="@this" update="activityReport" />
+						</p:selectBooleanCheckbox> <p:outputLabel value=" #{messages.purpose}"></p:outputLabel></td>
+				</tr>
+			</table>
+		</div>
+
+		<p:outputPanel rendered="#{summaryReportBean.showPurposePanel}">
+			<table id="purposeTable" class="view-table">
+				<tbody>
+					<tr>
+						<td><p:outputLabel value="#{messages.newVisit} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_mokuteki_shinkihoumon}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.existingRegularVisit} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_mokuteki_kizon_no_teiki_houmon}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel
+								value="#{messages.existingNonRegularVisit} "></p:outputLabel> <p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_mokuteki_kizon_igai_no_teiki_houmon}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel
+								value="#{messages.introductionTechnician} "></p:outputLabel> <p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_mokuteki_gijutsusha_shoukai}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel value="#{messages.visitation} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_mokuteki_gyouda}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.estimate} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_mokuteki_mitsumori}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.claim} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_mokuteki_kuremu}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+						<td><p:outputLabel value="#{messages.other} "></p:outputLabel>
+							<p:inputText
+								value="#{summaryReportBean.monthlyReportRevision.houmon_kensuu_mokuteki_sonota}"
+								styleClass="small-input" disabled="true"></p:inputText></td>
+					</tr>
+				</tbody>
+			</table>
+		</p:outputPanel>
+
+		<div class="sub-title">
+			<p:outputLabel value="#{messages.staffManagement}"></p:outputLabel>
+		</div>
+
+		<table id="employeeManagementTable" class="view-table">
+			<tr>
+				<td><p:outputLabel value="#{messages.telephoneFollow} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.follow_up_call_required}"
+						value="#{summaryReportBean.monthlyReportRevision.sutaffu_kanri_denwa_forosuu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.telephoneFollow}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+				<td><p:outputLabel value="#{messages.directFollow} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.follow_up_interview_required}"
+						value="#{summaryReportBean.monthlyReportRevision.sutaffu_kanri_mensetsu_forosuu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.directFollow}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+				<td><p:outputLabel value="#{messages.claim} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.claim_required}"
+						value="#{summaryReportBean.monthlyReportRevision.sutaffu_kanri_kuremu_suu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.claim}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+				<td><p:outputLabel value="#{messages.other} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.other_required}"
+						value="#{summaryReportBean.monthlyReportRevision.sutaffu_kanri_sono_ta_no_kazu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.other}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+			</tr>
+		</table>
+	</p:outputPanel>
+
+	<p:outputPanel id="recruitReport">
+		<div class="title">
+			<p:outputLabel value="３．#{messages.recruitReport}"></p:outputLabel>
+		</div>
+
+		<table id="recruitInfoTable" class="view-table">
+			<tr>
+				<td><p:outputLabel value="#{messages.primaryInteview} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.first_round_interview_required}"
+						value="#{summaryReportBean.monthlyReportRevision.ichiji_mensetsu_no_kensuu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+				<td><p:outputLabel value="#{messages.secondaryInterview} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.second_round_interview_required}"
+						value="#{summaryReportBean.monthlyReportRevision.niji_mensetsu_no_kensuu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.secondaryInterview}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+				<td><p:outputLabel value="#{messages.adoptionNumber} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.applicant_number_required}"
+						value="#{summaryReportBean.monthlyReportRevision.saiyou_suu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.adoptionNumber}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+				<td><p:outputLabel value="#{messages.employedFollowNumber} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.recruitment_supporter_number_required}"
+						value="#{summaryReportBean.monthlyReportRevision.saiyou_sapoto_ninzuu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.employedFollowNumber}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+			</tr>
+		</table>
+	</p:outputPanel>
+
+	<p:outputPanel id="targetNextMonth">
+		<div class="title">
+			<p:outputLabel value="４．#{messages.nextMonthGoal}"></p:outputLabel>
+		</div>
+
+		<table id="targetNexMonthTable" class="view-table">
+			<tr>
+				<td><p:outputLabel value="#{messages.newDevelopmentNumber} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.new_approached_customer_number_required}"
+						value="#{summaryReportBean.monthlyReportRevision.shinki_kaitaku_suu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.newDevelopmentNumber}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+				<td><p:outputLabel value="#{messages.increasedNumber} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.new_customer_number_required}"
+						value="#{summaryReportBean.monthlyReportRevision.zouka_suu}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.increasedNumber}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+				<td><p:outputLabel value="#{messages.salePH} "></p:outputLabel>
+					<p:inputText
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.ph_revenus_required}"
+						value="#{summaryReportBean.monthlyReportRevision.uriage_ph}"
+						styleClass="small-input" disabled="#{readOnly}"
+						converter="#{converterStorage.integerConverter}"
+						converterMessage="#{messages.positiveIntegerFormatMessage}"
+						validatorMessage="#{messages.salePH}. #{messages.monthly_report_min_value_input}"
+						maxlength="4">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+						<f:validateDoubleRange minimum="0" />
+						<f:convertNumber integerOnly="true" />
+					</p:inputText></td>
+				<td><p:outputLabel value="#{messages.costRate} "></p:outputLabel>
+					<pe:inputNumber id="costRateInput"
+						required="#{not empty param[summaryReportBean.submit.clientId]}" requiredMessage="#{messages.proportion_with_expense_required}"
+						value="#{summaryReportBean.monthlyReportRevision.genka_ritsu}"
+						disabled="#{readOnly}" symbol="%" symbolPosition="s"
+						validatorMessage="wrong format"
+						converter="#{converterStorage.doubleConverter}" maxValue="999.99">
+						<p:ajax event="change" process="@this" update="@this"
+							resetValues="true" />
+					</pe:inputNumber></td>
+			</tr>
+		</table>
+	</p:outputPanel>
+</ui:composition>

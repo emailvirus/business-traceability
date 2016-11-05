@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui" xmlns:p="http://primefaces.org/ui">
+
+	<!-- To access constants -->
+	<o:importConstants
+		type="arrow.businesstraceability.control.helper.ScreenContext" />
+	<!-- 	<p:outputPanel></p:outputPanel> -->
+	<!-- Show Menu bar -->
+	<div id="topBar">
+		<div id="menuBar">
+			<h:form id="menuForm">
+				<p:menubar>
+					<p:submenu label="#{messages.daily_report}" icon="fa fa-calendar"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.DAILY_REPORT_REGISTER) || userCredential.hasViewPermission(ScreenContext.DAILY_REPORT_HISTORY_SEARCH_FORM_CODE) || userCredential.hasViewPermission(ScreenContext.DAILY_REPORT_SEARCH_EMPLOYEE_FORM_CODE)}">
+						<p:menuitem icon="fa fa-plus" styleClass="fa-fixed-width"
+							value="#{messages['register_daily_report']}"
+							action="#{screenBean.switchScreen(ScreenContext.DAILY_REPORT_REGISTER)}"
+							rendered="#{userCredential.hasViewPermission(ScreenContext.DAILY_REPORT_REGISTER)}"
+							update=":contentPane, :globalBlockUI"
+							onstart="PF('globalBlockUI_js').block()"
+							oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;">
+							<f:setPropertyActionListener value="#{0}"
+								target="#{registerActivityBean.reportOwnerEmployee}" />
+						</p:menuitem>
+
+						<p:menuitem icon="fa fa-search" styleClass="fa-fixed-width"
+							value="#{messages['search_history_daily_report']}"
+							action="#{screenBean.switchScreen(ScreenContext.DAILY_REPORT_HISTORY_SEARCH_FORM_CODE)}"
+							rendered="#{userCredential.hasViewPermission(ScreenContext.DAILY_REPORT_HISTORY_SEARCH_FORM_CODE)}"
+							update=":contentPane, :globalBlockUI"
+							onstart="PF('globalBlockUI_js').block()"
+							oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;">
+						</p:menuitem>
+
+						<p:menuitem icon="fa fa-search" styleClass="fa-fixed-width"
+							value="#{messages['search_daily_report']}"
+							action="#{screenBean.switchScreen(ScreenContext.DAILY_REPORT_SEARCH_EMPLOYEE_FORM_CODE)}"
+							rendered="#{userCredential.hasViewPermission(ScreenContext.DAILY_REPORT_SEARCH_EMPLOYEE_FORM_CODE)}"
+							update=":contentPane, :globalBlockUI"
+							onstart="PF('globalBlockUI_js').block()"
+							oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;">
+						</p:menuitem>
+					</p:submenu>
+
+					<p:menuitem icon="fa fa-building"
+						value="#{messages['company_management']}"
+						action="#{screenBean.switchScreen(ScreenContext.COMPANY_MANAGEMENT_FORM_CODE, true)}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.COMPANY_MANAGEMENT_FORM_CODE)}"
+						update=":contentPane, :globalBlockUI"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+						
+					<p:submenu label="#{messages['master_data']}" icon="fa fa-database"
+					rendered="#{userCredential.hasViewPermission(ScreenContext.EMPLOYEE_MANAGEMENT_FORM_CODE) || userCredential.hasViewPermission(ScreenContext.ADDRESSPOINT_MANAGEMENT_CODE)}">
+						<p:menuitem icon="fa fa-user"
+						value="#{messages['employee_management']}"
+						action="#{screenBean.switchScreen(ScreenContext.EMPLOYEE_MANAGEMENT_FORM_CODE, true)}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.EMPLOYEE_MANAGEMENT_FORM_CODE)}"
+						update=":contentPane, :globalBlockUI"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+						<p:menuitem icon="fa fa-home"
+						value="#{messages['addresspoint_management']}"
+						action="#{screenBean.switchScreen(ScreenContext.ADDRESSPOINT_MANAGEMENT_CODE, true)}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.ADDRESSPOINT_MANAGEMENT_CODE)}"
+						update=":contentPane, :globalBlockUI"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+					</p:submenu>
+					<p:menuitem icon="fa fa-bar-chart"
+						value="#{messages['summary_report']}"
+						action="#{screenBean.switchScreen(ScreenContext.SUMMARY_REPORT_FORM_CODE)}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.SUMMARY_REPORT_FORM_CODE)}"
+						update=":contentPane, :globalBlockUI"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+
+					<p:submenu icon="fa fa-envelope"
+						label="#{messages['notification_management']}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.NOTIFICATION_FORM_CODE) || userCredential.hasViewPermission(ScreenContext.NOTIFICATION_DASHBOARD)}">
+						<p:menuitem icon="fa fa-cog"
+							value="#{messages['notification_setting']}"
+							action="#{screenBean.switchScreen(ScreenContext.NOTIFICATION_FORM_CODE)}"
+							rendered="#{userCredential.hasViewPermission(ScreenContext.NOTIFICATION_FORM_CODE)}"
+							update=":contentPane, :globalBlockUI"
+							onstart="PF('globalBlockUI_js').block()"
+							oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+						<p:menuitem icon="fa fa-bell"
+							action="#{screenBean.switchScreen(ScreenContext.NOTIFICATION_DASHBOARD)}"	
+							actionListener="#{notificationBean.init()}"
+							update=":contentPane, :globalBlockUI"
+							onstart="PF('globalBlockUI_js').block()"
+							value="#{messages.view_notifications}"
+							oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+					</p:submenu>
+					
+					<p:submenu icon="fa fa-retweet"
+						label="#{messages['accounting_data']}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.SEARCH_NAME_CARD_DATA_PROC_1) || userCredential.hasViewPermission(ScreenContext.MAINTENANCE_ACCOUNTING_DATA)}">
+					<p:menuitem icon="fa fa-file-text"
+						value="#{messages.credit_management}"
+                        id="menu_#{ScreenContext.SEARCH_NAME_CARD_DATA_PROC_1}"
+						action="#{screenBean.switchScreen(ScreenContext.SEARCH_NAME_CARD_DATA_PROC_1, true)}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.SEARCH_NAME_CARD_DATA_PROC_1)}"
+						update=":contentPane, :globalBlockUI"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+						<p:menuitem icon="fa fa-pencil-square-o"
+						value="#{messages.maintenance_accounting}"
+						action="#{screenBean.switchScreen(ScreenContext.MAINTENANCE_ACCOUNTING_DATA, true)}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.MAINTENANCE_ACCOUNTING_DATA)}"
+						update=":contentPane, :globalBlockUI"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+						
+					</p:submenu >
+
+					<p:submenu icon="fa fa-exchange"
+						label="#{messages['migration_export']}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.UPLOAD_CSV) || userCredential.hasViewPermission(ScreenContext.BASS_EXPORT)}">
+						<p:menuitem icon="fa fa-upload"
+							value="#{messages['upload_sansan_data']}"
+							action="#{screenBean.switchScreen(ScreenContext.UPLOAD_CSV)}"
+							rendered="#{userCredential.hasViewPermission(ScreenContext.UPLOAD_CSV)}"
+							update=":contentPane, :globalBlockUI"
+							onstart="PF('globalBlockUI_js').block()"
+							oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+						<p:menuitem icon="fa fa-download"
+							value="#{messages['bass_export']}"
+							action="#{screenBean.switchScreen(ScreenContext.BASS_EXPORT, true)}"
+							rendered="#{userCredential.hasViewPermission(ScreenContext.BASS_EXPORT)}"
+							update=":contentPane, :globalBlockUI"
+							onstart="PF('globalBlockUI_js').block()"
+							oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+
+					</p:submenu>
+					<p:submenu icon="fa fa-exchange" label="#{messages['import_and_verify_sansan']}">
+					<p:menuitem icon="fa fa-file-text"
+						value="#{messages.program_test}"
+						action="#{screenBean.switchScreen(ScreenContext.SANSAN_IMPORT, true)}"
+						update=":contentPane, :globalBlockUI"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+					<p:menuitem icon="fa fa-file-text"
+						value="#{messages.integration_test}"
+						action="#{screenBean.switchScreen(ScreenContext.VERIFY_DATA_SANSAN_AFTER_IMPORT, true)}"
+						update=":contentPane, :globalBlockUI"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+					</p:submenu>
+				</p:menubar>
+			</h:form>
+		</div>
+
+		<div id="profileBar">
+			<h:form id="profileBarForm">
+				<p:megaMenu id="profileMenu">
+					<p:menuitem id="registerReport" icon="fa fa-plus"
+						value="#{messages['register_daily_report']}"
+						action="#{screenBean.switchScreen(ScreenContext.DAILY_REPORT_REGISTER)}"
+						rendered="#{userCredential.hasViewPermission(ScreenContext.DAILY_REPORT_REGISTER)}"
+						update=":contentPane, :globalBlockUI"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;">
+						<f:setPropertyActionListener value="#{userCredential.userCode}"
+							target="#{registerActivityBean.reportOwnerEmployee}" />
+						<f:setPropertyActionListener value="#{0}"
+							target="#{registerActivityBean.reportOwnerEmployee}" />
+					</p:menuitem>
+
+					<p:submenu
+						label="#{messages['employee']} : #{userCredential.employeeName}">
+						<p:column>
+							<h:outputText
+								value="#{messages.name}: #{userCredential.employeeName}" />
+							<br />
+							<h:outputText
+								value="#{messages.branch}: #{userCredential.adpName}" />
+							<br />
+							<h:outputText
+								value="#{messages.position}: #{userCredential.positionName}" />
+							<br />
+							<p:outputLabel value="#{messages.language}" />:
+							<br />
+							<!-- http://stackoverflow.com/questions/19684538/selectonemenu-label-is-covered -->
+							<!--  have to add faces-redirect=true to resolve -->
+							<table align="center">
+								<tr>
+									<td><p:commandLink id="japan" title="#{messages.ja}" onstart="PF('confirmChangeToJap').show();">
+											<p:graphicImage library="images" name="jp.png"></p:graphicImage>
+										</p:commandLink></td>
+									<td><p:commandLink id="english" title="#{messages.en}" onstart="PF('confirmChangeToEng').show();">
+											<p:graphicImage library="images" name="en.png"></p:graphicImage>
+										</p:commandLink></td>
+								</tr>
+							</table>
+							<p:submenu>
+								<p:menuitem icon="fa fa-edit icon-fixed-width"
+									value="#{messages.edit_profile}"
+									action="#{screenBean.switchScreen(ScreenContext.EMPLOYEE_EDIT_PROFILE)}"
+									update=":contentPane, :globalBlockUI" />
+								<p:menuitem icon="fa fa-unlock icon-fixed-width"
+									value="#{messages.change_password}"
+									action="#{screenBean.switchScreen(ScreenContext.EMPLOYEE_CHANGE_PASSWORD)}"
+									update=":contentPane, :globalBlockUI" />
+								<p:menuitem icon="fa fa-sign-out icon-fixed-width"
+									value="#{messages.logout}"
+									action="#{authenticationBean.logout}" update="@all" />
+							</p:submenu>
+						</p:column>
+					</p:submenu>
+					<p:menuitem value="#{messages['themes']}:">
+
+					</p:menuitem>
+					<p:menuitem>
+						<p:themeSwitcher id="themeSwitcher" style="text-align: left;"
+							value="#{userCredential.preferences.theme}">
+							<f:selectItem itemLabel="#{messages['default']}"
+								itemValue="start" />
+							<f:selectItems value="#{themeBean.themes}" />
+							<p:ajax event="change" update="@all"
+								listener="#{userCredential.changeTheme}" />
+						</p:themeSwitcher>
+					</p:menuitem>
+				</p:megaMenu>
+				
+				<p:confirmDialog widgetVar="confirmChangeToEng" hideEffect="fade" showEffect="fade" header="#{messages.confirmChangeLanguageHeader}" message="#{messages.confirmChangeLanguage}" appendTo="@(body)">
+					<p:commandButton value="#{messages.yes}" icon="ui-icon-check" styleClass="ui-confirmdialog-yes" update="@all" process="@this"
+						actionListener="#{localeSelector.setLocale('en')}" onstart="PrimeFaces.widgets['confirmChangeToEng'].hide(); start();"/>
+					<p:commandButton value="#{messages.no}" icon="ui-icon-close" styleClass="ui-confirmdialog-no" oncomplete="PrimeFaces.widgets['confirmChangeToEng'].hide()"/>
+				</p:confirmDialog>
+				
+				<p:confirmDialog widgetVar="confirmChangeToJap" hideEffect="fade" showEffect="fade" header="#{messages.confirmChangeLanguageHeader}" message="#{messages.confirmChangeLanguage}" appendTo="@(body)">
+					<p:commandButton value="#{messages.yes}" icon="ui-icon-check" styleClass="ui-confirmdialog-yes" update="@all" process="@this"
+						actionListener="#{localeSelector.setLocale('ja')}" onstart="PrimeFaces.widgets['confirmChangeToJap'].hide(); start();"/>
+					<p:commandButton value="#{messages.no}" icon="ui-icon-close" styleClass="ui-confirmdialog-no" oncomplete="PrimeFaces.widgets['confirmChangeToJap'].hide()"/>
+				</p:confirmDialog>
+			</h:form>
+		</div>
+	</div>
+</ui:composition>

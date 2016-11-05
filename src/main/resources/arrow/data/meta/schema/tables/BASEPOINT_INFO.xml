@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- BASEPOINT_INFO -->
+<table desc="Danh sách chi nhánh của công ty khách hàng">
+	<primary-key>
+		<column lname="Basepoint Code" name="BAS_POINT_CODE" data-type="c-short-code" not-null="true" default-value="null"/>
+		<column lname="Company Code" name="BAS_COMPANY_CODE" data-type="c-code" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="BAS_DELETE_FLG" data-type="flag" not-null="true" default-value="false"/>
+	<column lname="Last updated time. Not used anymore" name="BAS_UPDATE_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+	
+	<foreign-key parent-table="COMPANY_MST">
+		<column name="BAS_COMPANY_CODE" referColumn="COM_COMPANY_CODE" />
+	</foreign-key>
+	<foreign-key parent-table="ADDRESSPOINT_MST">
+		<column name="BAS_POINT_CODE" referColumn="ADP_CODE" />		
+	</foreign-key>
+</table>

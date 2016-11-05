@@ -1,0 +1,228 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui">
+	
+	
+	<h:form enctype="multipart/form-data">
+		<h:outputText value="#{messages['input_file_data']}" />
+		<p:fileUpload mode="advanced" skinSimple="true"
+			allowTypes="#{verifySansanDataBean.inputFileAllowType}"
+			sizeLimit="#{verifySansanDataBean.inputFileSizeLimit}"
+			multiple="false" fileLimit="1"
+			invalidFileMessage="#{messages['invalid_type_csv_upload']}"
+			invalidSizeMessage="#{messages['invalid_size_csv_upload']}"
+			fileLimitMessage="#{messages['limit_file_csv_upload']}"
+			label="#{messages['chose_file_upload']}"
+			uploadLabel="#{messages['uploadInputData']}"
+			cancelLabel="#{messages['cancel']}"
+			fileUploadListener="#{verifySansanDataBean.uploadFileListener}"
+			update="@this" widgetVar="uploadInputData">
+		</p:fileUpload>
+		<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+			<p:commandButton icon="fa fa-building" value="#{messages['processImportSansan']}"
+				action="#{verifySansanDataBean.importSansanFileToDatabase()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+				update="@form" />
+			<p:commandButton icon="fa fa-building" value="#{messages['get_log_file']}"
+				action="#{verifySansanDataBean.getLogFile()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+				update="@form" />
+		</h:panelGrid>
+		<p:panelGrid columns="2" rendered="#{verifySansanDataBean.visible}">
+	    <f:facet name="header">
+	        <h:outputText value="#{messages['downloadLogFile']}" />
+	    </f:facet>	
+    	<h:outputText value="#{messages['logFile']}" />
+   	    <p:commandLink ajax="false" id="logFileDownload"  actionListener="#{verifySansanDataBean.downloadFile(verifySansanDataBean.logFileName)}" 
+		 	onclick="PrimeFaces.monitorDownload(start, stop);" styleClass="register-link" >
+        		<h:outputText value="#{verifySansanDataBean.logFileName}" />
+    	</p:commandLink>
+	</p:panelGrid>
+	</h:form>
+	<h:form id="form_resutl_after_import">
+		<p:growl></p:growl>
+		<p:messages></p:messages>
+		<p:tooltip />
+		<!-- To access constants -->
+		<o:importConstants type="arrow.framework.faces.message.MessageCode"
+			var="messageCode" />
+		<p:fieldset legend="#{messages['select_table']}:">
+			<table style="min-width: 50%">
+				<tr>
+					<td style="width: 150px"><p:outputLabel
+							value="#{messages['select_table']}" /></td>
+					<td><p:selectOneMenu id="car"
+							value="#{resultAfterImportBean.tableSelected}">
+							<f:selectItem itemLabel="Select One" itemValue="" />
+							<f:selectItems value="#{resultAfterImportBean.tables}" />
+							<p:ajax event="change" update="@form"
+								listener="#{resultAfterImportBean.afterSelectTable()}"></p:ajax>
+						</p:selectOneMenu></td>
+				</tr>
+				<p:outputPanel
+					rendered="#{resultAfterImportBean.tableSelected!=null}">
+					<p:outputPanel rendered="#{resultAfterImportBean.renderIdComp}">
+						<tr>
+							<td><p:outputLabel value="#{messages['id_san_company']}" /></td>
+							<td><h:inputText
+									value="#{resultAfterImportBean.idSanCompany}"
+									style="width:100%" /></td>
+						</tr>
+					</p:outputPanel>
+					<p:outputPanel rendered="#{resultAfterImportBean.renderIdCard}">
+						<tr>
+							<td><p:outputLabel value="#{messages['id_name_card']}" /></td>
+							<td><h:inputText
+									value="#{resultAfterImportBean.idSanCardData}"
+									style="width:100%" /></td>
+						</tr>
+					</p:outputPanel>
+					<tr>
+						<td></td>
+						<td><p:commandButton icon="fa fa-search"
+								value="#{messages['search']}"
+								action="#{resultAfterImportBean.findDataSanTableBy()}"
+								rendered="true" update="@form"
+								onstart="PF('globalBlockUI_js').block()"
+								oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+							<p:commandButton icon="fa fa-search"
+								value="#{messages['count_metadata']}"
+								action="#{resultAfterImportBean.countMetadata()}"
+								rendered="true" update="@form"
+								onstart="PF('globalBlockUI_js').block()"
+								oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" /></td>
+					</tr>
+
+				</p:outputPanel>
+			</table>
+
+		</p:fieldset>
+		<p:fieldset legend="#{resultAfterImportBean.tableSelected}"
+			rendered="#{resultAfterImportBean.dataSanTable!=null}"
+			id="data_san_table">
+			<script type="text/javascript">
+				genTable('#{resultAfterImportBean.dataSanTable}','#{resultAfterImportBean.fieldsName}','#form_resutl_after_import\\:data_san_table')
+			</script>
+		</p:fieldset>
+		<p:fieldset legend="#{resultAfterImportBean.tableSelected}"
+			rendered="#{resultAfterImportBean.renderCountMetadata}">
+			<table>
+				<tr>
+					<td><h4><p:outputLabel
+							value="#{messages['total_record_in_database']}" /></h4></td>
+					<td><p:outputLabel
+							value="#{resultAfterImportBean.totalRecord}" /></td>
+				</tr>
+			</table>
+			<p:outputPanel
+				rendered="#{resultAfterImportBean.tableSelected.equals('san_card_data')}">
+				<table>
+					<tr>
+						<h4>
+							<p:outputLabel
+								value="#{messages['enum_Info_validation_metadata']}" />
+						</h4>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_Info_validation_delete']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumInfo.get('DELETE')}" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_Info_validation_new']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumInfo.get('NEW')}" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_Info_validation_other']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumInfo.get('OTHER')}" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_Info_validation_unchanged_or_change_item_reflected']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumInfo.get('UNCHANGED_OR_CHANGE_ITEM_REFLECTED')}" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_Info_validation_existed_and_other_attributes_changed']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumInfo.get('EXISTED_AND_OTHER_ATTRIBUTES_CHANGED')}" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_Info_validation_existed_and_company_id_changed']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumInfo.get('EXISTED_AND_COMPANY_ID_CHANGED')}" /></td>
+					</tr>
+
+					<!-- 					enum proc -->
+				</table>
+				<table>
+					<tr>
+						<h4>
+							<p:outputLabel
+								value="#{messages['enum_proc_metadata']}" />
+						</h4>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_proc_file']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumProc.get('SYNC_FILE')}" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_proc_api']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumProc.get('SYNC_API')}" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_proc_file_and_api']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumProc.get('SYNC_API_AND_FILE')}" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['enum_proc_other']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapEnumProc.get('OTHER')}" /></td>
+					</tr>
+
+				</table>
+			</p:outputPanel>
+			<p:outputPanel
+				rendered="#{resultAfterImportBean.tableSelected.equals('san_com_info')}">
+				<table>
+					<tr><h4><p:outputLabel
+								value="#{messages['company_metadata']}" /></h4></tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['company_id_temp']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapCompanyMetadata.get('Y')}" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel
+								value="#{messages['company_id_sansan']}" /></td>
+						<td><p:outputLabel
+								value=":  #{resultAfterImportBean.mapCompanyMetadata.get('N')}" /></td>
+					</tr>
+
+				</table>
+			</p:outputPanel>
+		</p:fieldset>
+	</h:form>
+	<h:outputScript library="js" name="gen_table_from_json.js" />
+</ui:composition>

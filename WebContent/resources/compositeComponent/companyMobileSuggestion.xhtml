@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:composite="http://java.sun.com/jsf/composite">
+
+	<composite:interface>
+	    <composite:attribute name="value" />
+		<composite:attribute name="id" />
+		<composite:attribute name="update" default="@this"/>
+	    <composite:attribute name="process" default="@this"/>
+	    <composite:attribute name="onSelect" method-signature="void test()"/>
+	    <composite:attribute name="disabled"/>
+	</composite:interface>
+
+<composite:implementation>
+
+	<p:outputPanel id="compositePanel">
+		<script type="text/javascript">
+	        $(function() {
+				$("#editDailyReport").trigger("create");
+				var fields = {
+					customerCode:'#{messages.customer_code}',
+					companyCode:'#{messages.company_code}',
+					companyName:'#{messages.company_name}',
+					companyFurigana:'#{messages.company_furigana}',
+					url:'#{messages.url}',
+					typeOfWork:'#{messages.company_type_of_work}',
+					listed:'#{messages.company_listed}'
+				};
+
+				var mapListed = {
+					1:'#{messages.companyListedTypeOne}',
+					2:'#{messages.companyListedTypeTwo}',
+					3:'#{messages.companyListedOtherType}',
+					4:'#{messages.companyListedNotListed}'
+				};
+				companySuggestion(fields, mapListed);
+	        });
+	    </script>
+
+		<div class="ui-filterable">
+			<p:inputText pt:data-type="search" id="#{cc.attrs.id}" styleClass="companyAutocomplete ui-filterable"
+						 placeholder="#{messages.typeToFindCompany}"
+						 value="#{cc.attrs.value}"
+						 ajax="false"
+					/>
+			<ul id="companyAutocomplete" data-role="listview" data-inset="true" data-filter="true"
+				data-input=".companyAutocomplete"></ul>
+		</div>
+
+		<p:remoteCommand name="setCompany" action="#{cc.attrs.onSelect}" process="#{cc.attrs.process}" update="#{cc.attrs.update}"/>
+	    </p:outputPanel>
+	</composite:implementation>
+
+</html>

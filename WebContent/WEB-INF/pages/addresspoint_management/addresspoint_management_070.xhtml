@@ -1,0 +1,14 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:fragment rendered="#{addresspointManagementBean.currentAddresspoint != null}">
+		<ui:include src="/WEB-INF/pages/addresspoint_management/addresspoint_management_detail.xhtml" />
+	</ui:fragment>
+	<ui:fragment rendered="#{addresspointManagementBean.currentAddresspoint == null}">
+		<ui:include src="/WEB-INF/pages/addresspoint_management/addresspoint_management_list.xhtml" />
+	</ui:fragment>
+</ui:composition>

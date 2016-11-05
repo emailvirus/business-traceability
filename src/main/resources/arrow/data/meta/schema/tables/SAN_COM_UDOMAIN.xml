@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAN_COM_UDOMAIN -->
+<table desc="Thông tin domain url sansan">
+	<primary-key>
+		<column name="ID_URLDOMAIN" lname="URL domain TBL ID" data-type="integer" not-null="true" default-value="0" comment="ID domain URL"/>
+	</primary-key>
+	
+	<column name="ID_COMPANY" lname="Sansan company ID" data-type="integer" not-null="true" comment="ID công ty"/>
+	<column name="URL_DOMAIN" lname="URL domain part" data-type="c-long-code" not-null="true" default-value="''" comment="URL(1_domain)"/>
+	<column name="N_DUPINFO" lname="Number of duplication count" data-type="integer" not-null="true" default-value="0" comment="Tính duplicate"/>
+	<column name="DATE_LATEST_EXCHANGE" lname="Latest date of card exchange" data-type="short-date" not-null="false" default-value="NULL" comment="Ngày chuyển đổi namecard mới nhất"/>
+	
+	<foreign-key parent-table="SAN_COM_INFO">
+		<column name="ID_COMPANY" referColumn="ID_COMPANY"/>
+	</foreign-key>
+</table>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ACC_COM_BUGYO49 -->
+<table desc="Tài khoản ngân hàng">
+	<primary-key>
+		<column name="CODE" lname="Customer classification code (49)" data-type="c-five-length" not-null="true" comment=""/>
+	</primary-key>
+
+	<column name="TITLE" lname="Take the lead first distinguished name" data-type="giga-text" not-null="true" comment=""/>
+</table>

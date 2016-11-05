@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" xmlns:h="http://java.sun.com/jsf/html" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:o="http://omnifaces.org/ui">
+
+	<o:importConstants type="arrow.businesstraceability.constant.MobilePageId" />
+	<pm:header>
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="#{messages.register}" icon="ui-icon-plus" action="#{mobileScreenFlowBean.gotoPage(MobilePageId.EDIT_DAILY_REPORT)}" />
+					<p:commandButton value="#{messages.daily_reports}" icon="notes" action="#{mobileScreenFlowBean.gotoPage(MobilePageId.DAILY_REPORTS)}" />
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="#{messages.logout}" action="#{authenticationBean.logout}" update="@all" />
+				</f:facet>
+			</p:toolbar>
+		</h:form>
+	</pm:header>
+	<pm:content>
+		<h:form>
+			<p:dataList value="#{notificationBean.dashBoardNotification}" var="notificaton">
+				<f:facet name="header">
+					Notifications
+				</f:facet>
+				<p:accordionPanel activeIndex="-1">
+					<p:tab
+						title="#{messages.employee_code}: #{notificaton.nc_target_employee},  
+						#{messages.employee_name}: #{notificationBean.getEmployeeName(notificaton.nc_target_employee)},         
+						#{messages.branch}: #{notificaton.employee_mst.addresspoint_mst.adp_name}, 
+						#{messages.new_items}: #{notificationBean.getNumRowNotiUnread(notificaton)}">
+						<p:dataList value="#{notificationBean.getAllReportInDashBoard(notificaton)}" var="report" pt:data-inset="true" id="reportListTable">
+							<f:facet name="header">
+						       	List of Reports
+						    </f:facet>
+							<h:outputLink value="#editDailyReport?transition=slide">
+								<p:panelGrid columns="2">
+									<p:outputLabel>#{messages.start_time}: <arrow:outputTime value="#{report.dai_work_stime}"></arrow:outputTime>
+									</p:outputLabel>
+									<p:outputLabel>#{messages.company}: #{report.company_mst.com_company_name}</p:outputLabel>
+									<p:outputLabel>#{messages.end_time}: <arrow:outputTime value="#{report.dai_work_etime}"></arrow:outputTime>
+									</p:outputLabel>
+									<p:outputLabel>#{messages.head_office}: #{report.company_mst.com_point_code}</p:outputLabel>
+									<p:outputLabel>#{messages.duration}: <arrow:outputTime value="#{report.dai_required_time}"></arrow:outputTime>
+									</p:outputLabel>
+								</p:panelGrid>
+							</h:outputLink>
+							<f:facet name="footer">
+						        List of Reports
+						    </f:facet>
+						</p:dataList>
+					</p:tab>
+				</p:accordionPanel>
+				<f:facet name="footer">
+					Notifications
+				</f:facet>
+			</p:dataList>
+		</h:form>
+	</pm:content>
+</ui:composition>

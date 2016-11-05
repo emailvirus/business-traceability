@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAN_COM_INFO -->
+<table desc="Thông tin name card sansan">
+	<primary-key>
+			<column name="ID_SAN_COMPANY" lname="Sansan company ID" data-type="c-long-code" not-null="false" default-value="NULL" comment="ID công ty"/>
+	</primary-key>
+	
+	<column name="NAME_COMPANY" lname="Company name" data-type="c-big-code" not-null="false" default-value="NULL" comment="Tên công ty"/>
+	<column name="NAME_COM_ENG" lname="Company name in English" data-type="c-big-code" not-null="false" default-value="NULL" comment="Tên công ty( Tiếng Anh）"/>
+	<column name="NAME_COM_KANA" lname="Company name in Kana" data-type="c-big-code" not-null="false" default-value="NULL" comment="Tên công ty（Kana）"/>
+	<column name="MYNUM_COM" lname='Company "my number" (national unique number)' data-type="c-thirty-two-length" not-null="false" default-value="NULL" comment="Mã số pháp nhân"/>
+	<column name="ID_SARSCOM" lname="SARS company ID" data-type="c-code" not-null="false" default-value="NULL" comment="ID công ty SRS"/>
+	<column name="TS_CREATE" lname="Timestamp of record creation" data-type="timestamp" not-null="true" default-value="0" comment="Ngày giờ tạo"/>
+	<column name="TS_UPDATE" lname="Timestamp of last update" data-type="timestamp" not-null="true" default-value="0" comment="Ngày giờ update cuối cùng"/>
+	<column name="CN_UPDATE" lname="Cumulative number of attribute update" data-type="integer" not-null="true" default-value="0" comment="Lũy kế số lần update"/>
+	<column name="ID_COMPANY" data-type="integer" not-null="false"  comment="ID công ty"/>
+	<column name="TS_EXPORT" lname="Timestamp of last export" data-type="timestamp" not-null="false" default-value="0" comment="Ghi thời gian output file lần cuối cùng."/>	
+	
+	<foreign-key parent-table="COMPANY_MST">
+		<column name="ID_SARSCOM" referColumn="COM_COMPANY_CODE"/>
+	</foreign-key>
+</table>

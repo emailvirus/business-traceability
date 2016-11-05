@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:o="http://omnifaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+	<ui:define name="content">
+		<h:form id="searchCompanyPanel">
+			<p:outputLabel value="Find Company"></p:outputLabel>
+			<table>
+						<tr>
+							<td><p:autoComplete id="companyAutoComplete"
+									value="#{debugFindDuplicate.companySuggest}"
+									converter="#{converterStorage.companySuggestConverter}"
+									title="#{messages.typeToFindCompany}"
+									emptyMessage="#{messages.noCompanyFound}" cache="true"
+									cacheTimeout="300" dropdown="false" scrollHeight="200"
+									var="comp" itemValue="#{comp}"
+									itemLabel="#{comp.com_company_name}" forceSelection="true"
+									completeMethod="#{debugFindDuplicate.filterCompany}"
+									widgetVar="companyWgVar"
+									>
+
+									<p:ajax event="itemSelect" process="@this" update="searchCompanyPanel"
+										resetValues="true" />
+									<p:ajax event="change" process="@this" update="searchCompanyPanel"
+										onstart="if(PF('companyWgVar').panel.is(':visible')) return false;" resetValues="true" />
+
+									<p:column styleClass="width-fifty" headerText="#{messages.customer_code}">
+										<label>#{comp.com_customer_code}</label>
+									</p:column>
+
+									<p:column styleClass="width-fifty" headerText="#{messages.company_code}">
+										<label>#{comp.com_company_code}</label>
+									</p:column>
+
+									<p:column styleClass="width-one-hundred summary-content" headerText="#{messages.company_name}">
+										<label title="#{comp.com_company_name}">#{comp.com_company_name}</label>
+									</p:column>
+
+									<p:column id="furiganaColumn" styleClass="width-one-hundred summary-content" headerText="#{messages.company_furigana}">
+										<label title="#{comp.com_company_furigana}">#{comp.com_company_furigana}</label>
+									</p:column>
+
+									<p:column styleClass="width-one-hundred-fifty summary-content" headerText="#{messages.url}">
+										<label title="#{comp.com_url}">#{comp.com_url}</label>
+									</p:column>
+
+									<p:column styleClass="width-eighty summary-content" headerText="#{messages.company_type_of_work}">
+										<label>#{comp.worktype}</label>
+									</p:column>
+
+								</p:autoComplete></td>
+						</tr>
+						<tr>
+							<td>
+								<p:commandButton value="Find Duplicate" action="#{debugFindDuplicate.findDuplicate}" process="@this" update="result"
+								onstart="start()" oncomplete="stop()" />
+							</td>
+						</tr>
+					</table>
+					<p:outputLabel value="Code" for="code"></p:outputLabel>
+					<p:inputText value="#{debugFindDuplicate.companySuggest.com_company_code}" id="code" readonly="true" disabled="true"/>
+
+					<p:outputLabel value="Name" for="name"></p:outputLabel>
+					<p:inputText value="#{debugFindDuplicate.companySuggest.com_company_name}" id="name" readonly="true" disabled="true"/>
+
+					<p:outputLabel value="Furigana" for="furigana"></p:outputLabel>
+					<p:inputText value="#{debugFindDuplicate.companySuggest.com_company_furigana}" id="furigana" readonly="true" disabled="true"/>
+
+					<p:outputLabel value="Website" for="website"></p:outputLabel>
+					<p:inputText value="#{debugFindDuplicate.companySuggest.com_url}" id="website" readonly="true" disabled="true"/>
+
+					<p:dataTable id="result" value="#{debugFindDuplicate.listDuplication}" var="point" paginator="true" rows="10" rowIndexVar="rowIndex">
+						<p:column headerText="No">
+						<h:outputText value="#{rowIndex}" />
+					</p:column>
+					<p:column headerText="Company code" filterBy="#{point.com_company_code}" sortBy="#{point.com_company_code}">
+						<h:outputText value="#{point.com_company_code}" />
+					</p:column>
+					<p:column headerText="Company name" filterBy="#{point.com_company_name}" sortBy="#{point.com_company_name}">
+						<h:outputText value="#{point.com_company_name}" />
+					</p:column>
+					<p:column headerText="Company Furiganan Name" filterBy="#{point.com_company_furigana}" sortBy="#{point.com_company_furigana}">
+						<h:outputText value="#{point.com_company_furigana}" />
+					</p:column>
+					<p:column headerText="Company url" filterBy="#{point.com_url}" sortBy="#{point.com_url}">
+						<h:outputText value="#{point.com_url}" />
+					</p:column>
+					<p:column headerText="Confident Level" filterBy="#{point.clusterIndex}" sortBy="#{point.clusterIndex}">
+						<h:outputText value="#{point.clusterIndex}" />
+					</p:column>
+					</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

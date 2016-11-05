@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" xmlns:h="http://java.sun.com/jsf/html" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+		<pm:header title="Add Company">
+			<h:form>
+			<p:commandButton action="#{mobileScreenFlowBean.goBack()}" value="#{messages.back}" icon="ui-icon-arrow-l" styleClass="ui-btn-left ui-btn-inline" />
+			</h:form>
+		</pm:header>
+		<pm:content>
+			<h:form>
+			<pm:field>
+				<p:outputLabel for="companyName" value="#{messages['company_name']}" />
+				<p:inputText id="companyName" />
+			</pm:field>
+			<pm:field>
+				<p:outputLabel for="companyLimitedCodes" value="#{messages['companyLimited']}" />
+				<p:selectOneButton id="companyLimitedCodes">
+					<f:selectItems value="#{companyManagementBean.companyLimitedCodes}" />
+				</p:selectOneButton>
+			</pm:field>
+			<pm:field>
+				<p:outputLabel for="companyFurigama" value="#{messages['company_furigama']}" />
+				<p:inputText id="companyFurigama" />
+			</pm:field>
+
+			<pm:field>
+				<p:outputLabel value="#{messages['company_main_address']}" />
+				<p:autoComplete id="companyAddress" queryDelay="1000" completeMethod="#{companyManagementBean.filterHeadOffice}" var="head" itemLabel="#{head.adp_name}" itemValue="#{head}"
+					converter="#{converterStorage.addressPointMstConverter}" style="float:left; width:78%" onkeydown="if (event.keyCode == 13) { return false; }">
+				</p:autoComplete>
+			</pm:field>
+			<pm:field>
+				<p:outputLabel for="companyTypeOfWork" value="#{messages['company_type_of_work']}" />
+
+				<p:selectOneMenu id="companyTypeOfWork" value="#{companyManagementBean.listCompanies}">
+					<f:selectItem itemValue="" itemLabel="--Select--" />
+					<f:selectItems value="#{companyManagementBean.listBusinessTypes}" var="item" itemValue="#{item.big_code}" itemLabel="#{item.big_name}" />
+				</p:selectOneMenu>
+
+			</pm:field>
+			<pm:field>
+				<p:outputLabel value="#{messages['company_listed']}" for="company_listed" />
+				<p:selectOneButton id="company_listed">
+					<f:selectItems value="#{companyManagementBean.companyListedCodes}" />
+				</p:selectOneButton>
+			</pm:field>
+			<pm:field>
+				<p:outputLabel for="companyUrl" value="#{messages['company_url']}" />
+				<p:inputText id="companyUrl" type="url" />
+			</pm:field>
+			<pm:field>
+				<p:commandButton action="#{mobileScreenFlowBean.goBack()}" value="#{messages.save_and_select}" icon="ui-icon-check"/>
+				<p:commandButton  action="#{mobileScreenFlowBean.goBack()}" value="#{messages.cancel}" icon="ui-icon-delete"/>
+			</pm:field>
+			</h:form>
+		</pm:content>
+
+</ui:composition>

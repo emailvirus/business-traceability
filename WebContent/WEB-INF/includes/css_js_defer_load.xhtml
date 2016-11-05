@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+>
+	<h:outputScript library="js" name="offline/offline.js" />
+	<h:outputScript library="js" name="offline/ui.js" />
+	<h:outputScript library="js" name="offline/reconnect.js" />
+	<h:outputScript library="js" name="offline/requests.js" />
+	<h:outputScript library="js" name="jquery-ui.js" />
+	<h:outputScript library="js" name="main.js" />
+	<h:outputScript library="js" name="customize.js" />
+	<h:outputScript library="js" name="pivot.js" />
+	<h:outputScript library="js" name="locale/messages_#{localeSelector.locale}.js" />
+
+	<script type="text/javascript">
+		Offline.options = {
+			checks: {
+				xhr: {
+					url: function () {
+						return "/business_traceability/resources/images/triarrow-logo.png?_=" + Math.floor(1e9 * Math.random())
+					}, timeout: 5e3
+				}, image: {
+					url: function () {
+						return "/business_traceability/resources/images/triarrow-logo.png?_=" + Math.floor(1e9 * Math.random())
+					}
+				}, active: "xhr"
+			}, checkOnLoad: !0, interceptRequests: !0, reconnect: {initialDelay: 3, delay: 1.5}, requests: !0, game: !1
+		}
+	</script>
+</ui:composition>

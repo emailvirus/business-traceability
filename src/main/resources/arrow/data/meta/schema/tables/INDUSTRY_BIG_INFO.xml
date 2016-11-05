@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- INDUSTRY_BIG_INFO.xml -->
+<table>
+	<primary-key>
+		<column name="INB_BIG_CODE" data-type="c-code" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="INB_COMPANY_CODE" data-type="c-code" not-null="true" default-value="null"/>
+	<column name="INB_DELETE_FLG" data-type="flag" not-null="true" default-value="false"/>	
+	<column name="INB_UPDATE_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+	
+	<foreign-key parent-table="COMPANY_MST">
+		<column name="INB_COMPANY_CODE" referColumn="COM_COMPANY_CODE"/>
+	</foreign-key>
+</table>
+
+
+
+

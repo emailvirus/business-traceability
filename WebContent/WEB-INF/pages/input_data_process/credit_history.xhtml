@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent">
+	<script type="text/javascript">
+		renderTableWithNoFilter();
+    </script>
+	<h:form>
+        <p:scrollPanel mode="native">
+	        <arrow:dataTable value="#{inputAccountingDataBean.listCredits}" paginator="true" paginatorPosition="bottom" id="creditsData"
+	        	paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+	        	var="data" rowKey="#{data.id_credit}" selection="#{inputAccountingDataBean.accComCredit}" rows="10">
+	        	
+	        	<p:column selectionMode="single" styleClass="arrow-column-select" />
+	        	
+	        	<p:ajax event="rowSelectRadio" update="@([id$=customerTradeName])" process="@this"
+	        		listener="#{inputAccountingDataBean.selectCreditEvent}"
+	        		onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+
+	            <f:facet name="header">
+	                    #{messages.report_history}
+	                	<p:commandButton id="toggler" type="button" value="#{messages.toggle_column}" style="float: right;" icon="ui-icon-calculator" />
+						<p:columnToggler datasource="creditsData" trigger="toggler" />
+					<div style="clear: both;"/>
+	            </f:facet>
+	            
+	            <p:column styleClass="arrow-ui-date-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.survey_date}" />
+	            	</f:facet>
+	            	<arrow:outputDate value="#{data.date_survey}"></arrow:outputDate>
+	            </p:column>
+	            
+	            <p:column  styleClass="arrow-ui-name-column" >
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.request_user_account}" />
+                    </f:facet>
+	            	<span>#{data.employee_mst.emp_name}</span>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-name-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.information_source}" />
+                    </f:facet>
+	            	<span>#{data.accComBugyo16.title}</span>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-number-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.credit_score_number}" />
+                    </f:facet>
+	            	<span>#{data.score_credit}</span>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-name-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.credit_score_rank}" />
+                    </f:facet>
+	            	<span>#{data.accComBugyo15.title}</span>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-sort-text-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.status}" />
+	            	</f:facet>
+	            	<span>#{'D' eq data.status ? messages.draft : messages.approved}</span>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-name-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.final_authorizer}" />
+                    </f:facet>
+	            	<span>#{data.finalApprovalEmployee.emp_name}</span>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-date-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.approval_date}" />
+	            	</f:facet>
+	            	<arrow:outputDate value="#{data.date_authorize}"></arrow:outputDate>
+	            </p:column>
+	        </arrow:dataTable>
+        </p:scrollPanel>
+    </h:form>
+ </ui:composition>

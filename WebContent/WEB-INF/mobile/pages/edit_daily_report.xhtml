@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" xmlns:h="http://java.sun.com/jsf/html" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:o="http://omnifaces.org/ui">
+	<o:importConstants type="arrow.businesstraceability.constant.MobilePageId" />
+	<pm:header title="Daily Report">
+		<h:form>
+			<p:commandButton action="#{mobileScreenFlowBean.goBack()}" value="#{messages.back}" icon="ui-icon-arrow-l" styleClass="ui-btn-left ui-btn-inline" />
+		</h:form>
+	</pm:header>
+	<pm:content>
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton type="button" value="#{messages.add}" icon="ui-icon-plus" />
+					<p:commandButton type="button" value="#{messages.edit}" icon="ui-icon-edit" />
+					<p:commandButton type="button" value="#{messages.delete}" icon="ui-icon-delete" />
+				</f:facet>
+			</p:toolbar>
+			<pm:field>
+				#{mobileDailyReportBean.currentReport.dai_business_details}
+				<p:outputLabel for="workDate" value="#{messages.work_date}" />
+				<p:inputText type="date" value="#{mockupMobile.workDateInput}" id="workDate" />
+			</pm:field>
+			<pm:field>
+				<p:outputLabel value="#{messages.start_time}" for="start_time" />
+				<p:inputText type="time" id="start_time" />
+			</pm:field>
+			<pm:field>
+				<p:outputLabel value="#{messages.end_time}" for="end_time" />
+				<p:inputText type="time" id="end_time" />
+			</pm:field>
+			<pm:field>
+				<p:outputLabel value="#{messages.daily_category}" for="select_in_category" />
+				<p:selectOneRadio id="select_in_category" value="#{mockupMobile.selectVisitBusiness}" onchange="jQuery('#select_visit_business').toggle();">
+					<f:selectItem itemLabel="#{messages.category_visit_business}" itemValue="true" />
+					<f:selectItem itemLabel="#{messages.category_other_work}" itemValue="false" />
+				</p:selectOneRadio>
+			</pm:field>
+			<div id="select_visit_business" style="display: none;">
+				<p:commandButton value="#{messages.create_new_company}" action="#{mobileScreenFlowBean.gotoPage(MobilePageId.ADD_COMPANY)}" />
+				<pm:field>
+					<p:outputLabel value="#{messages.company}" for="search_field" />
+					<p:inputText type="search" id="search_field" />
+				</pm:field>
+				<pm:field>
+					<p:outputLabel value="#{messages.head_office}" />
+					<p:inputText readonly="true" />
+				</pm:field>
+				<pm:field>
+					<p:outputLabel value="#{messages.officer}" for="officer" />
+					<p:inputText id="officer" />
+				</pm:field>
+				<pm:field>
+					<p:outputLabel value="#{messages.department}" for="department" />
+					<p:inputText id="department" />
+				</pm:field>
+				<pm:field>
+					<p:outputLabel value="#{messages.purpose}" for="select_purpose" />
+					<p:selectOneMenu id="select_purpose">
+						<f:selectItem itemLabel="purpose 01" />
+						<f:selectItem itemLabel="purpose 02" />
+						<f:selectItem itemLabel="purpose 03" />
+					</p:selectOneMenu>
+				</pm:field>
+				<pm:field>
+					<p:outputLabel value="#{messages.business_type}" for="select_business_type" />
+					<p:selectOneMenu id="select_business_type">
+						<f:selectItem itemLabel="type 01" />
+						<f:selectItem itemLabel="type 02" />
+						<f:selectItem itemLabel="type 03" />
+					</p:selectOneMenu>
+				</pm:field>
+			</div>
+			<pm:field>
+				<p:outputLabel value="#{messages.daily_content}" for="content" />
+				<p:inputTextarea id="content" />
+			</pm:field>
+			<pm:field>
+				<p:outputLabel value="#{messages.daily_reminder}" />
+				<pm:switch onchange="jQuery('#fromToDate').toggle();">
+				</pm:switch>
+				<div id="fromToDate" style="display: none;">
+					<pm:field>
+						<p:outputLabel value="#{messages.from}" for="from" />
+						<p:inputText type="date" id="from" />
+					</pm:field>
+					<pm:field>
+						<p:outputLabel value="#{messages.to}" for="to" />
+						<p:inputText type="date" id="to" />
+					</pm:field>
+				</div>
+			</pm:field>
+		</h:form>
+	</pm:content>
+</ui:composition>

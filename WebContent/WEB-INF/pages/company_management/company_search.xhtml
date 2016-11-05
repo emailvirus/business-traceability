@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:arr="http://arrow-tech.vn/arrow"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:pe="http://primefaces.org/ui/extensions" >
+
+	<ui:param name="monthlyReportDisableForUpdate"
+		value="#{registerActivityBean.monthlyReportDisableForUpdate}" />
+
+	<p:outputPanel id="searchCompanyPanel">
+		<table>
+			<tr>
+				<td><label class="mandatory">#{messages.company}</label></td>
+				<td colspan="3">
+					<table>
+						<tr>
+							<td><p:autoComplete id="companyAutoComplete"
+									value="#{registerActivityBean.companySuggest}"
+									converter="#{converterStorage.companySuggestConverter}"
+									title="#{messages.typeToFindCompany}"
+									emptyMessage="#{messages.noCompanyFound}" cache="true"
+									cacheTimeout="300" dropdown="false" scrollHeight="200"
+									var="comp" itemValue="#{comp}"
+									itemLabel="#{comp.com_company_name}" forceSelection="true"
+									completeMethod="#{registerActivityBean.filterCompany}"
+									widgetVar="companyWgVar"
+									disabled="#{monthlyReportDisableForUpdate}"
+									required="true"
+									requiredMessage="#{messages.daily_003_you_have_to_select_company}">
+
+									<p:ajax event="itemSelect" process="@this" update="searchCompanyPanel"
+										resetValues="true" />
+									<p:ajax event="change" process="@this" update="searchCompanyPanel"
+										onstart="if(PF('companyWgVar').panel.is(':visible')) return false;" resetValues="true" />
+
+									<p:column styleClass="width-fifty" headerText="#{messages.customer_code}">
+										<label>#{comp.com_customer_code}</label>
+									</p:column>
+									
+									<p:column styleClass="width-fifty" headerText="#{messages.company_code}">
+										<label>#{comp.com_company_code}</label>
+									</p:column>
+
+									<p:column styleClass="width-one-hundred summary-content" headerText="#{messages.company_name}">
+										<label title="#{comp.com_company_name}">#{comp.com_company_name}</label>
+									</p:column>
+
+									<p:column id="furiganaColumn" styleClass="width-one-hundred summary-content" headerText="#{messages.company_furigana}">
+										<label title="#{comp.com_company_furigana}">#{comp.com_company_furigana}</label>
+									</p:column>
+
+									<p:column styleClass="width-one-hundred-fifty summary-content" headerText="#{messages.url}">
+										<label title="#{comp.com_url}">#{comp.com_url}</label>
+									</p:column>
+									
+									<p:column styleClass="width-eighty summary-content" headerText="#{messages.company_type_of_work}">
+										<label>#{comp.worktype}</label>
+									</p:column>
+
+									<p:column styleClass="width-eighty" headerText="#{messages.company_listed}">
+										<label>#{registerActivityBean.getListedLabel(comp.listed)}</label>
+									</p:column>
+									
+								</p:autoComplete></td>
+						</tr>
+						<tr>
+							<td><p:outputPanel
+									rendered="#{!registerActivityBean.parentScreenIsHistoryReport}">
+									<p:outputLabel value="#{messages.company_do_not_exist} " />
+									<p:commandLink styleClass="register-link"
+										value=" #{messages.register_now}"
+										onstart="PF('globalBlockUI_js').block()"
+										oncomplete="PF('globalBlockUI_js').unblock();" process="@this"
+										update=":contentPane"
+										action="#{registerActivityBean.createNewCompany}"
+										disabled="#{monthlyReportDisableForUpdate}" />
+								</p:outputPanel></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td><label class="mandatory">#{messages.branch}</label></td>
+				<td colspan="3"><p:selectOneMenu id="branchOfCompany" required="true" requiredMessage="#{messages.daily_022_branch_is_required}"
+						disabled="#{monthlyReportDisableForUpdate or (registerActivityBean.companySuggest eq null)}"
+						value="#{registerActivityBean.currentReport.dai_comppoint_code}">
+						<f:selectItem itemValue="#{null}" itemLabel="---" />
+						<f:selectItems value="#{registerActivityBean.branchOfCompany}"
+							var="branch" itemValue="#{branch.adp_code}" itemLabel="#{branch.adp_name}" />
+						<p:ajax process="@this" update="searchCompanyPanel" />
+					</p:selectOneMenu></td>
+			</tr>
+			
+			<tr>
+				<td><label>#{messages.person_in_charge}</label></td>
+				<td colspan="3">
+					<p:outputPanel id="psnInChargePanel">
+						<ar:personInChargeSuggestion id="personInChargeSuggestion" process="@this" update="registerDailyReportForm:departmentPanel" value="#{registerActivityBean.currentReport.dai_compemp_name}" 
+							comPointCode="#{registerActivityBean.currentReport.dai_comppoint_code}" companyCode="#{registerActivityBean.companySuggest.com_company_code}" onSelect="#{registerActivityBean.changeEmployeeAndDepartmentName}"
+							disabled="#{monthlyReportDisableForUpdate or (registerActivityBean.companySuggest eq null) or (registerActivityBean.currentReport.dai_comppoint_code eq null)}" valueChangeListener="#{registerActivityBean.changeValueEmployeeNameListener}"/>
+					</p:outputPanel>
+				</td>
+			</tr>
+			
+			<tr>
+				<td><label>#{messages.department}</label></td>
+				<td colspan="3">
+					<p:outputPanel id="departmentPanel">
+						<ar:dailyRepostDepartmentSuggestion id="departmentSuggestion" process="@this" update="registerDailyReportForm:psnInChargePanel" value="#{registerActivityBean.currentReport.dai_employee_post}"
+							comPointCode="#{registerActivityBean.currentReport.dai_comppoint_code}" companyCode="#{registerActivityBean.companySuggest.com_company_code}" onSelect="#{registerActivityBean.changeEmployeeAndDepartmentName}"
+							disabled="#{monthlyReportDisableForUpdate or (registerActivityBean.companySuggest eq null) or (registerActivityBean.currentReport.dai_comppoint_code eq null)}" valueChangeListener="#{registerActivityBean.changeValueDepartmentNameListener}"/>
+					</p:outputPanel>
+				</td>
+			</tr>
+			
+			<tr>
+				<td><h:outputText value="#{messages.purpose}"
+						styleClass="mandatory" /></td>
+						
+				<td><p:selectOneMenu id="ddlActivityType"
+						value="#{registerActivityBean.currentReport.daily_activity_type}"
+						converter="#{converterStorage.dailyActivityTypeConverter}"
+						disabled="#{registerActivityBean.monthlyReportDisableForUpdate}">
+						<f:selectItems value="#{registerActivityBean.activityTypes}"
+							var="item" itemValue="#{item}"
+							itemLabel="#{item.dat_name_DIRECT}" />
+						<p:ajax update="@this" oncomplete="isModified = true" />
+					</p:selectOneMenu></td>
+					
+				<td class="padding-left-thirty"><h:outputText value="#{messages.business_type}"
+						styleClass="mandatory" /></td>
+						
+				<td><p:selectOneMenu id="ddlBusinessType"
+						value="#{registerActivityBean.currentReport.industry_big_mst}" converter="#{converterStorage.industryBigInfoConverter}"
+						disabled="#{registerActivityBean.monthlyReportDisableForUpdate}">
+						<f:selectItems value="#{registerActivityBean.listIndustryBigMST}"
+							var="item" itemValue="#{item}" 
+							itemLabel="#{item.big_name}" />
+						<p:ajax update="@this" oncomplete="isModified = true" />
+					</p:selectOneMenu></td>
+			</tr>
+		</table>
+	</p:outputPanel>
+</ui:composition>

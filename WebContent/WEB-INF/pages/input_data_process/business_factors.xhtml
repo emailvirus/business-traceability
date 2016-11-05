@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+		<h:form>
+			<table>
+				<tr>
+					<td>
+						<label>#{messages.company_index_of_research_institute}</label>
+					</td>
+					<td colspan="3" class="proc3-width-col">
+						<p:inputText value="#{inputAccountingDataBean.accComCredit.indx_com}"
+							disabled="#{inputAccountingDataBean.viewMode}"
+							maxlength="64">
+							<p:ajax event="change" update="@this" process="@this"></p:ajax>
+						</p:inputText>
+						<label>(#{messages.research_institutions_use_code})</label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.zip_code_of_hq}</label>
+					</td>
+					<td colspan="3" class="proc3-width-col">
+						<p:inputMask mask="999-99?99" value="#{inputAccountingDataBean.accComCredit.code_zip}"
+							required="true" requiredMessage="#{messages.zip_code_of_hq_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode}"
+							maxlength="10">
+							<p:ajax event="change" update="@this" process="@this"></p:ajax>
+						</p:inputMask>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.address_of_hq_all}</label>
+					</td>
+					<td colspan="3" class="proc3-width-col">
+						<p:inputText value="#{inputAccountingDataBean.accComCredit.addr_all_hq}"
+							required="true" requiredMessage="#{messages.address_of_hq_all_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode}"
+							maxlength="60">
+							<p:ajax event="change" update="@this" process="@this"></p:ajax>
+						</p:inputText>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.tel}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputText value="#{inputAccountingDataBean.accComCredit.tel_hq}"
+							required="true" requiredMessage="#{messages.tel_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode}" validatorMessage="#{messages.please_enter_a_valid_tel}"
+							maxlength="20">
+							<f:validateRegex pattern="^\d{1,4}-\d{4}$|^\d{2,5}-\d{1,4}-\d{4}$|^0\d0-\d{4}-\d{4}$" />
+							<p:ajax event="change" process="@this" update="@this"></p:ajax>
+						</p:inputText>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>#{messages.fax}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputText value="#{inputAccountingDataBean.accComCredit.fax_hq}"
+							disabled="#{inputAccountingDataBean.viewMode}"
+							maxlength="20">
+							<p:ajax event="change" process="@this" update="@this" listener="#{inputAccountingDataBean.validationFax()}"></p:ajax>
+						</p:inputText>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>#{messages.number_of_employee}</label>
+					</td>
+					<td class="proc3-width-col">
+						<pe:inputNumber value="#{inputAccountingDataBean.accComCredit.n_employee}"
+                    		symbolPosition="s" emptyValue="empty" decimalPlaces="0" disabled="#{inputAccountingDataBean.viewMode}"
+                    		maxValue="999999999">
+                    		<p:ajax event="change" update="@this" process="@this"></p:ajax>
+                   		</pe:inputNumber>
+						<label>(#{messages.people})</label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>#{messages.capital}</label>
+					</td>
+					<td class="proc3-width-col">
+						<pe:inputNumber value="#{inputAccountingDataBean.accComCredit.capital}"
+                    		symbolPosition="s" emptyValue="empty" decimalPlaces="0"
+                    		disabled="#{inputAccountingDataBean.viewMode}"
+                    		maxValue="999999999">
+                    		<p:ajax event="change" update="@this" process="@this"></p:ajax>
+                   		</pe:inputNumber>
+						<label>(#{messages.thousand_yen})</label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.fiscal_closing_month}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:selectOneMenu value="#{inputAccountingDataBean.accComCredit.code_acc_fiscalmonth}"
+							required="true" requiredMessage="#{messages.fiscal_closing_month_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode}">
+							<f:selectItem itemValue="" itemLabel="#{messages.select}" />
+							<f:selectItems value="#{accComBugyoBean.listAccComBugyo12}" var="accCom" 
+								itemValue="#{accCom.code}" itemLabel="#{accCom.title}" />
+							<p:ajax event="change" update="@this" />
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>#{messages.url}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputText value="#{inputAccountingDataBean.accComCredit.url}"
+							disabled="#{inputAccountingDataBean.viewMode}"
+							maxlength="250">
+							<p:ajax event="change" process="@this" update="@this"></p:ajax>
+						</p:inputText>
+					</td>
+				</tr>
+			</table>
+		</h:form>
+</ui:composition>

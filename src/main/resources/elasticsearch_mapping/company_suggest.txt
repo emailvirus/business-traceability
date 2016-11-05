@@ -1,0 +1,12 @@
+{  
+   "properties":{  
+      "name":{  
+         "type":"string"
+      },
+      "company_suggest":{  
+         "type":"completion",
+         "analyzer":"standard",
+         "payloads":"true"
+      }
+   }
+}

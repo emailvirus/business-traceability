@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- INDUSTRY_MDL_MST -->
+<table>
+	<primary-key>
+		<column name="MDL_CODE" data-type="small-int" not-null="true" default-value="null"/>
+		<column name="MDL_MD_CODE" data-type="small-int" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="MDL_NAME" data-type="name" not-null="true" default-value="null"/>
+</table>

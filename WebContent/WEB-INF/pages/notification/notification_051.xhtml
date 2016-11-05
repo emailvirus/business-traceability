@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent" xmlns:o="http://omnifaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!-- To access constants -->
+	<o:importConstants type="arrow.businesstraceability.control.helper.ScreenContext" />
+	<ui:param name="showAllButtonLabel"
+		value="#{registerActivitySearchEmployeeBean.showAllBusinessDetail ? messages.collapse_history_search : messages.show_all_history_search}" />
+	<ui:param name="showAllButtonIcon"
+		value="ui-icon-circle-triangle-#{registerActivitySearchEmployeeBean.showAllBusinessDetail ? 's' : 'e'}" />
+
+	<h:form>
+		<p:panel>
+			<p:commandButton id="markAllAsRead" value="#{messages.mark_all_as_read}" disabled="#{notificationBean.disableButtonMarkAllAsRead}"
+				action="#{notificationBean.markAllAsRead}" update="@all" icon="ui-icon-trash" process="@this" />
+			<p:commandButton id="leftDeleteButton" value="#{messages.mark_as_read}" disabled="#{notificationBean.disableButtonMarkAsRead}"
+				action="#{notificationBean.markAsReadNotificationData}" update=":contentPane" icon="ui-icon-trash" process="@this" />
+			<p:commandButton id="noticeSettingButton" value="#{messages.notification_setting}" icon="fa fa-cog" process="@this"
+				action="#{screenBean.switchScreen(ScreenContext.NOTIFICATION_FORM_CODE)}" rendered="#{userCredential.hasViewPermission(ScreenContext.NOTIFICATION_FORM_CODE)}"
+				update=":contentPane, :globalBlockUI" onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()" />
+		</p:panel>
+		<p:panel>
+			<arrow:dataTable id="dashBoardTable" paginator="true" rows="20" value="#{notificationBean.dashBoardNotification}" var="notificaton" resizableColumns="true"
+				paginatorPosition="bottom">
+				<p:column styleClass="arrow-row-branch " style="width: 5%;">
+					<p:rowToggler />
+				</p:column>
+
+				<p:column styleClass="arrow-ui-code-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.employee_code}" escape="false">
+						</h:outputText>
+					</f:facet>
+					<h:outputText value="#{notificaton.nc_target_employee}" />
+				</p:column>
+
+				<p:column styleClass="arrow-ui-name-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.employee_name}" />
+					</f:facet>
+					<h:outputText value="#{notificationBean.getEmployeeByCode(notificaton.nc_target_employee).emp_name}" />
+				</p:column>
+
+				<p:column styleClass="arrow-ui-code-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.branch}" escape="false" />
+					</f:facet>
+					<h:outputText value="#{notificationBean.getEmployeeByCode(notificaton.nc_target_employee).addresspoint_mst.adp_name}" />
+				</p:column>
+
+				<p:column styleClass="arrow-ui-code-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.new_items}" escape="false" />
+					</f:facet>
+					<h:outputText value="#{notificationBean.getNumRowNotiUnread(notificaton)}" />
+				</p:column>
+
+				<p:rowExpansion id="rowContent">
+						<arrow:dataTable id="reportTable" paginator="true" rows="10" value="#{notificationBean.getAllReportInDashBoard(notificaton)}" var="report" resizableColumns="true"
+							paginatorPosition="bottom">
+							<p:column styleClass="arrow-ui-view-column">
+								<p:commandButton id="viewReport" value="#{messages.view}" update=":contentPane" icon="ui-icon-circle-arrow-e" action="#{notificationBean.setSelectedReportByUser(report)}"
+									process="@this" actionListener="#{notificationBean.deleteNotificationData(report)}" oncomplete="PF('userReportsFromNotice_dlg').show();">
+								</p:commandButton>
+							</p:column>
+							<p:column styleClass="arrow-ui-date-only-column">
+							<f:facet name="header">
+									<h:outputText value="#{messages.work_date}" escape="false">
+									</h:outputText>
+								</f:facet>
+								<arrow:outputDate value="#{report.dai_work_date}" pattern="yyyy/MM/dd"></arrow:outputDate>
+							</p:column>
+
+							<p:column styleClass="arrow-ui-time-column">
+								<f:facet name="header">
+									<h:outputText value="#{messages.start_br_time}" escape="false">
+									</h:outputText>
+								</f:facet>
+								<arrow:outputTime value="#{report.dai_work_stime}"></arrow:outputTime>
+							</p:column>
+
+							<p:column styleClass="arrow-ui-time-column">
+								<f:facet name="header">
+									<h:outputText value="#{messages.end_br_time}" escape="false">
+									</h:outputText>
+								</f:facet>
+								<arrow:outputTime value="#{report.dai_work_etime}"></arrow:outputTime>
+							</p:column>
+
+							<p:column styleClass="arrow-ui-time-column">
+								<f:facet name="header">
+									<h:outputText value="#{messages.duration_abbr}" />
+								</f:facet>
+								<arrow:outputTime value="#{report.dai_required_time}"></arrow:outputTime>
+							</p:column>
+
+							<p:column styleClass="arrow-ui-name-column">
+								<f:facet name="header">
+									<h:outputText value="#{messages.company_br_name}" escape="false" />
+								</f:facet>
+								<h:outputText value="#{report.company_mst.com_company_name}" />
+							</p:column>
+
+							<p:column styleClass="arrow-ui-name-column">
+								<f:facet name="header">
+									<h:outputText value="#{messages.head_br_office}" escape="false" />
+								</f:facet>
+								<h:outputText value="#{report.company_mst.addresspoint_mst.adp_name}" />
+							</p:column>
+
+							<p:column styleClass="arrow-ui-short-name-column">
+								<f:facet name="header">
+									<h:outputText value="#{messages.officer}" />
+								</f:facet>
+								<h:outputText value="#{report.dai_compemp_name}" />
+							</p:column>
+							<p:column styleClass="arrow-ui-select-column">
+								<f:facet name="header">
+									<p:selectBooleanCheckbox value="#{notificaton.selectedAll}" update="reportTable, @form:leftDeleteButton">
+										<p:ajax event="change" update="reportTable, @form:leftDeleteButton" listener="#{notificationBean.toggleSelectionAllReport(notificaton)}" />
+									</p:selectBooleanCheckbox>
+								</f:facet>
+								<p:selectBooleanCheckbox value="#{report.selected}">
+									<p:ajax event="change" update="reportTable, @form:leftDeleteButton" listener="#{notificationBean.toggleSelectionReport(report, notificaton)}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+						</arrow:dataTable>
+				</p:rowExpansion>
+			</arrow:dataTable>
+		</p:panel>
+		
+		<p:dialog header="#{messages.report_of_the_day}: #{notificationBean.reportSelectedByUser.employee_mst.emp_name} - #{commonReportBean.showDateWithFormat(notificationBean.reportSelectedByUser.dai_work_date)}" 
+			widgetVar="userReportsFromNotice_dlg" modal="true" position="top"
+			appendTo="@(body)" minHeight="100" closeOnEscape="true" height="auto">
+				<ui:include src="/WEB-INF/pages/includes/result_search_employee_daily_report.xhtml">
+					<ui:param name="reports" value="#{commonReportBean.getReportsOfSelectedUser(notificationBean.reportSelectedByUser)}" />
+					<ui:param name="renderSelectBox" value="false" />
+				</ui:include>
+		</p:dialog>
+	</h:form>
+
+</ui:composition>

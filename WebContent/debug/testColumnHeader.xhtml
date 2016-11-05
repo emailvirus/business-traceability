@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent" 
+	xmlns:o="http://omnifaces.org/ui" template="/WEB-INF/template/template.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<p:commandButton value="search" action="#{debugAction.search}" update="@all"></p:commandButton>
+			<p:dataTable value="#{debugAction.listCompany}" var="com" id="tableCompany">
+				<p:column>
+					<f:facet name="header">
+						<ar:columHeader value="Company" parentTable="tableCompany" filter="#{debugAction.listCompany.filter('company_name')}"></ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{com.com_company_name}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<ar:columHeader value="Last Updated At" parentTable="tableCompany" filter="#{debugAction.listCompany.filter('last_updated_at')}"></ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{com.last_updated_at}" />
+				</p:column>
+			
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:fragment rendered="#{screenBean.currentScreenContext eq null}">
+		<ui:include src="/WEB-INF/includes/daskboard.xhtml" />
+	</ui:fragment>
+	<p:panel header="#{screenBean.currentScreenContext.currentFormName}" widgetVar="contentPanel_js" id="contentPanel" style="height:100vh; border:0 none" rendered="#{screenBean.currentScreenContext ne null}">
+		<f:facet name="header">
+			<h:form>
+				<h:outputLabel value="#{screenBean.currentScreenContext.currentFormName}" styleClass="arrow-form-title"/>
+				<span>  </span>
+				<p:commandLink title="#{messages.close}" action="#{screenBean.switchToHome()}" update=":contentPane" process="@this" immediate="true" styleClass="fa fa-remove" oncomplete="isModified=false;">
+				</p:commandLink>
+			</h:form>
+		</f:facet>
+		<ui:include src="#{screenBean.currentScreenContext.currentFormPath}" />
+	</p:panel>
+</ui:composition>

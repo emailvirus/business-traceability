@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" xmlns:h="http://java.sun.com/jsf/html" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:o="http://omnifaces.org/ui">
+
+	<pm:header title="#{messages.add_company}">
+	</pm:header>
+	<pm:content>
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton action="#{mobileScreenFlowBean.goBack()}" value="#{messages.back}" icon="ui-icon-arrow-l" styleClass="ui-btn-left ui-btn-inline" update=":editDailyReport" />
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="#{messages.logout}" icon="ui-icon-power" action="#{authenticationBean.logout}" process="@this" update="@all" />
+				</f:facet>
+			</p:toolbar>
+		</h:form>
+		<h:form>
+			<pm:field>
+				<p:outputLabel for="companyName" value="#{messages['company_name']}" />
+				<p:inputText id="companyName" value="#{companyManagementMobileBean.companyManagement.com_company_name}" required="true" requiredMessage="#{messages['company_is_required']}">
+					<p:ajax event="change" process="@this" update="companyFurigama" listener="#{companyManagementMobileBean.changeCompanyName}"></p:ajax>
+				</p:inputText>
+			</pm:field>
+			<pm:field>
+				<p:outputLabel for="companyLimitedCodes" value="#{messages['companyLimited']}" />
+				<p:selectOneButton id="companyLimitedCodes" value="#{companyManagementMobileBean.companyManagement.com_limited_code}" required="true" requiredMessage="#{messages['company_limited_is_required']}">
+					<f:selectItems value="#{companyManagementMobileBean.companyLimitedCodes}" />
+				</p:selectOneButton>
+			</pm:field>
+			<pm:field>
+				<p:outputLabel for="companyFurigama" value="#{messages['company_furigama']}" />
+				<p:inputText id="companyFurigama" value="#{companyManagementMobileBean.companyManagement.com_company_furigana}" required="true" requiredMessage="#{messages['furigana_is_required']}">
+					<p:ajax event="change" update="@this" process="@this" />
+				</p:inputText>
+			</pm:field>
+			<pm:field>
+				<p:outputLabel for="headOffice" value="#{messages.head_office}" />
+				<p:selectOneMenu id="headOffice" filter="true" value="#{companyManagementMobileBean.companyManagement.addresspoint_mst}" required="true" requiredMessage="#{messages['head_office_is_required']}"
+					converter="#{converterStorage.addressPointMstConverter}">
+					<f:selectItems value="#{companyManagementMobileBean.listHeadOffice}" var="item" itemValue="#{item}" itemLabel="#{item.adp_name}" />
+					<p:ajax event="change"></p:ajax>
+				</p:selectOneMenu>
+			</pm:field>
+			<pm:field>
+				<p:outputLabel for="companyTypeOfWork" value="#{messages['company_type_of_work']}" />
+				<p:selectOneMenu id="companyTypeOfWork" value="#{companyManagementMobileBean.companyManagement.industry_big_mst}" converter="#{converterStorage.industryBigInfoConverter}">
+					<f:selectItems value="#{companyManagementMobileBean.listBusinessTypes}" var="item" itemValue="#{item}" itemLabel="#{item.big_name}" />
+					<p:ajax event="change" />
+				</p:selectOneMenu>
+			</pm:field>
+			<pm:field>
+				<p:outputLabel value="#{messages['company_listed']}" for="company_listed" />
+				<p:selectOneButton id="company_listed" value="#{companyManagementMobileBean.companyManagement.com_listed_code}" required="true" requiredMessage="#{messages['company_listed_is_required']}">
+					<f:selectItems value="#{companyManagementMobileBean.companyListedCodes}" />
+				</p:selectOneButton>
+			</pm:field>
+			<pm:field>
+				<p:outputLabel for="companyUrl" value="#{messages['company_url']}" />
+				<p:inputText id="companyUrl" type="url" value="#{companyManagementMobileBean.companyManagement.com_url}" />
+			</pm:field>
+			<pm:field>
+				<p:commandButton action="#{companyManagementMobileBean.saveCompany}" value="#{messages.save_and_select}" icon="ui-icon-check" process="@form" update=":growl, @form, :editDailyReport" />
+				<p:commandButton type="submit" action="#{mobileScreenFlowBean.goBack()}" value="#{messages.back}" icon="ui-icon-arrow-l" process="@this" update=":editDailyReport, :home" />
+			</pm:field>
+		</h:form>
+	</pm:content>
+
+</ui:composition>

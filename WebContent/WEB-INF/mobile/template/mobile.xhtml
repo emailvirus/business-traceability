@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<f:view renderKitId="PRIMEFACES_MOBILE" />
+<h:head>
+	<f:facet name="last">
+		<h:outputStylesheet library="css" name="mobile.css" />
+	</f:facet>
+</h:head>
+
+<h:body id="mContentPage">
+	<p:growl id="growl" showDetail="true" />
+	<ui:insert name="content" />
+
+	<!-- // 	http://stackoverflow.com/questions/23912268/avoid-to-show-the-keyboard-when-a-selectonemenu-is-selected-on-mobile-devices/24054918#24054918 -->
+</h:body>
+</html>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:arr="http://arrow-tech.vn/arrow">
+
+	<p:outputPanel id="searchPanel" autoUpdate="true">
+		<arr:dialog modal="true" header="#{searchPanel.title}" visible="true" rendered="#{searchPanel.rendered}" top="5" left="100" resizable="false"  widgetVar="searchModalPanel" position="fixed">
+			<p:ajax event="close" listener="#{searchPanel.hide()}" immediate="true" />
+			<h:panelGrid columns="2">
+				<c:forEach items="#{searchPanel.searchService.searchParameters}" var="parameter">
+					<h:form>
+						<table>
+							<tr>
+								<td align="left"><p:outputPanel>
+										<h:outputText style="white-space: nowrap;" value="#{parameter.title}" />
+									</p:outputPanel></td>
+
+								<td align="right" width="100%"><p:outputPanel>
+
+										<h:panelGrid columns="4" styleClass="display-calendar" rendered="#{parameter.type == 'DATE_RANGE'}">
+											<h:outputText value="From:" />
+											<p:calendar label="Date From" datePattern="dd/MM/yyyy" value="#{parameter.dateFrom}" enableManualInput="true" />
+											<h:outputText value="To:" />
+											<p:calendar label="Date To" datePattern="dd/MM/yyyy" value="#{parameter.dateTo}" enableManualInput="true" />
+										</h:panelGrid>
+
+
+										<h:panelGrid columns="1" styleClass="display-calendar" rendered="#{parameter.type == 'DATE'}">
+											<p:calendar datePattern="dd/MM/yyyy" value="#{parameter.dateValue}" enableManualInput="true" id="search_panel_date_input#{searchPanel.searchService.searchParameters.indexOf(parameter)}"
+												reRender="search_panel_date_input#{searchPanel.searchService.searchParameters.indexOf(parameter)}" />
+										</h:panelGrid>
+
+										<h:panelGrid columns="1" styleClass="display-calendar" rendered="#{parameter.type == 'DATE_ONLY'}">
+											<p:calendar datePattern="dd/MM/yyyy" value="#{parameter.dateValue}" enableManualInput="true"
+												id="search_panel_date_only_input#{searchPanel.searchService.searchParameters.indexOf(parameter)}"
+												reRender="search_panel_date_only_input#{searchPanel.searchService.searchParameters.indexOf(parameter)}">
+												<p:ajax event="dateSelect" update="search_panel_date_only_input#{searchPanel.searchService.searchParameters.indexOf(parameter)}" process="@this" />
+											</p:calendar>
+										</h:panelGrid>
+
+										<h:inputText value="#{parameter.value}" rendered="#{parameter.type == 'STRING'}" />
+
+										<h:inputText label="#{messages['integer_input']}" value="#{parameter.value}" converter="#{synRound.negativeIntegerWithNullConverter}" convertTo="Integer"
+											rendered="#{parameter.type == 'INTEGER'}" />
+
+										<h:inputText label="#{messages['decimal_input']}" value="#{parameter.value}" converter="#{synRound.qtyAllowNullConverter}" convertTo="Double" rendered="#{parameter.type == 'DOUBLE'}" />
+									</p:outputPanel></td>
+
+								<td align="right"><p:outputPanel style="padding-right: 20px;">
+										<p:commandButton value="#{messages['search']}" action="#{searchPanel.searchService.search(parameter)}" update="@form">
+										</p:commandButton>
+									</p:outputPanel></td>
+
+							</tr>
+						</table>
+
+					</h:form>
+
+				</c:forEach>
+			</h:panelGrid>
+
+			<h:form id="searchResult_Form" ajaxSubmit="true">
+				<p:outputPanel id="searchResults">
+					<div>
+
+						<p:dataTable id="searchResult_Table" value="#{searchPanel.searchService.searchResults}" var="result" rows="10" reRender="scroller">
+							<p:column rendered="#{searchPanel.allowBatchAction}">
+								<f:facet name="header">
+									<p:selectBooleanCheckbox id="searchResultSelectedAllCheckBox" value="#{searchPanel.selectedAll}" disabled="#{empty searchPanel.searchService.searchResults}">
+										<p:ajax  update="searchResult_Table" />
+									</p:selectBooleanCheckbox>
+								</f:facet>
+								<p:selectBooleanCheckbox id="searchResult_BatchActionCheckbox" value="#{searchPanel.selectionMap[result]}">
+									<p:ajax  update="searchResult_Table" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+
+							<c:forEach items="#{searchPanel.searchService.displayParameters}" var="parameter">
+								<p:column sortBy="#{result[parameter.sortBy]}">
+									<f:facet name="header">
+										<h:outputText value="#{parameter.title}" />
+									</f:facet>
+									<p:commandLink action="#{searchPanel.selectResult(result)}" process="@this" update=":#{p:component('searchPanel')}, #{searchPanel.selectResultReRender}" rendered="#{parameter.textComponent}"
+										oncomplete="PF('searchModalPanel').hide();#{searchPanel.onResultSelect};" disabled="#{not searchPanel.allowCommandLink}">
+											<ui:fragment rendered="#{parameter.type == 'DATE_RANGE' or parameter.type == 'DATE' or parameter.type == 'DATE_ONLY'}">
+											<h:outputText value="#{result[parameter.name]}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</ui:fragment>
+
+										<ui:fragment rendered="#{parameter.type != 'DATE_RANGE' and parameter.type != 'DATE' and parameter.type != 'DATE_ONLY'}">
+												<h:outputText style="white-space: nowrap;" value="#{result[parameter.name]}" />
+										</ui:fragment>
+									</p:commandLink>
+								</p:column>
+							</c:forEach>
+
+						</p:dataTable>
+
+						<h:outputText styleClass="attention" value="#{messages['no_records_found']}" rendered="#{searchPanel.searched and empty(searchPanel.searchService.searchResults)}" />
+
+						<ui:fragment rendered="#{searchPanel.allowBatchAction}">
+							<div align="center">
+								<p:commandButton id="searchResult_SubmitButton" value="#{messages['submit']}" action="#{searchPanel.executeBatchAction()}" update=":#{p:component('searchPanel')}, #{searchPanel.selectResultReRender}"
+									/>
+							</div>
+						</ui:fragment>
+
+					</div>
+				</p:outputPanel>
+			</h:form>
+		</arr:dialog>
+		<!-- <rich:modalPanel id="searchModalPanel" rendered="#{searchPanel.rendered}" showWhenRendered="true" autosized="true" top="5" left="100">
+
+
+			<h:panelGrid columns="2">
+				<c:forEach items="#{searchPanel.searchService.parameters}" var="parameter">
+					<h:form ajaxSubmit="true">
+
+						<table width="100%">
+							<tr>
+								<td align="left"><p:outputPanel>
+										<h:outputText style="white-space: nowrap;" value="#{parameter.title}" />
+									</p:outputPanel></td>
+
+								<td align="right" width="100%"><p:outputPanel>
+										<ui:fragment rendered="#{parameter.type == 'DATE_RANGE'}">
+											<h:panelGrid columns="4" styleClass="display-calendar">
+												<h:outputText value="From:" />
+												<p:calendar label="Date From" datePattern="dd/MM/yyyy" value="#{parameter.dateFrom}" enableManualInput="true" />
+												<h:outputText value="To:" />
+												<p:calendar label="Date To" datePattern="dd/MM/yyyy" value="#{parameter.dateTo}" enableManualInput="true" />
+											</h:panelGrid>
+										</ui:fragment>
+
+										<ui:fragment rendered="#{parameter.type == 'DATE'}">
+											<h:panelGrid columns="1" styleClass="display-calendar">
+												<p:calendar datePattern="dd/MM/yyyy" value="#{parameter.dateValue}" enableManualInput="true" id="search_panel_date_input#{searchPanel.searchService.parameters.indexOf(parameter)}"
+													reRender="search_panel_date_input#{searchPanel.searchService.parameters.indexOf(parameter)}" />
+											</h:panelGrid>
+										</ui:fragment>
+
+										<ui:fragment rendered="#{parameter.type == 'DATE_ONLY'}">
+											<h:panelGrid columns="1" styleClass="display-calendar">
+												<p:calendar datePattern="dd/MM/yyyy" value="#{parameter.dateValue}" enableManualInput="true" id="search_panel_date_only_input#{searchPanel.searchService.parameters.indexOf(parameter)}"
+													reRender="search_panel_date_only_input#{searchPanel.searchService.parameters.indexOf(parameter)}">
+													<p:ajax event="onchanged" reRender="search_panel_date_only_input#{searchPanel.searchService.parameters.indexOf(parameter)}" ajaxSingle="true" />
+													<p:ajax event="oninputchange" reRender="search_panel_date_only_input#{searchPanel.searchService.parameters.indexOf(parameter)}" ajaxSingle="true" />
+												</p:calendar>
+											</h:panelGrid>
+										</ui:fragment>
+
+										<ui:fragment rendered="#{parameter.type == 'STRING'}">
+											<h:inputText value="#{parameter.value}" />
+										</ui:fragment>
+
+										<ui:fragment rendered="#{parameter.type == 'INTEGER'}">
+											<h:inputText label="#{messages.integer_input}" value="#{parameter.value}" converter="#{synRound.negativeIntegerWithNullConverter}" convertTo="Integer" />
+										</ui:fragment>
+
+										<ui:fragment rendered="#{parameter.type == 'DOUBLE'}">
+											<h:inputText label="#{messages.decimal_input}" value="#{parameter.value}" converter="#{synRound.qtyAllowNullConverter}" convertTo="Double" />
+										</ui:fragment>
+									</p:outputPanel></td>
+
+								<td align="right"><p:outputPanel style="padding-right: 20px;">
+										<p:commandButton value="#{messages.search}" actionListener="#{searchPanel.searchButtonClicked}" action="#{searchPanel.searchService.search(parameter)}" reRender="searchPanel">
+											<s:defaultAction />
+										</p:commandButton>
+									</p:outputPanel></td>
+
+							</tr>
+						</table>
+
+					</h:form>
+
+				</c:forEach>
+			</h:panelGrid>
+
+			<ui:fragment rendered="#{searchPanel.includeSrc ne null}">
+				<ui:include src="#{searchPanel.includeSrc}" />
+			</ui:fragment>
+
+			<hr />
+
+			
+
+		</rich:modalPanel> -->
+
+	</p:outputPanel>
+</ui:composition>

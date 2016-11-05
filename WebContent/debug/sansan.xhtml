@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:o="http://omnifaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<p:growl></p:growl>
+			<p:messages></p:messages>
+			<p:tooltip />
+			<!-- To access constants -->
+			<o:importConstants type="arrow.framework.faces.message.MessageCode" />
+			<p:commandButton icon="fa fa-building" value="readCsv"
+				action="#{sansanImportFileDataBean.readCsv()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+
+			<p:commandButton icon="fa fa-building" value="importDataFirst"
+				action="#{sansanImportFileDataBean.importData()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+				
+			<p:commandButton icon="fa fa-building" value="deleteAllIndex"
+				action="#{debugBean.deleteAllIndex()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+		</h:form>
+	</ui:define>
+</ui:composition>

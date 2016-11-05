@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	template="/WEB-INF/template/template.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:define name="content">
+		<h:form>
+			<p:commandButton icon="fa fa-building" value="import first time"
+				action="#{debugBeanCallSarsBatch.importFirstTime()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<p:commandButton icon="fa fa-building" value="import file"
+				action="#{debugBeanCallSarsBatch.importFile()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<br />
+		</h:form>
+		<h:form>
+			<p:fieldset legend="Import Api" style="margin-bottom:20px">
+				<h:panelGrid>
+				Date :
+					<p:calendar showOn="both" mode="popup"
+						value="#{debugBeanCallSarsBatch.dateReg}"
+						id="dateReminderStartTime" pattern="MM/dd/yyyy">
+						<p:ajax process="@this" update="@this"
+							oncomplete="isModified = true" />
+					</p:calendar>
+					<p:outputLabel value="#{messages['start_time']}: " for="startTime" />
+					<pe:timePicker id="startTime" class="startTime"
+						value="#{debugBeanCallSarsBatch.fromTimeReg}" mode="popup"
+						widgetVar="startTimeWidget" rows="3" intervalMinutes="10"
+						locale="#{localeSelector.locale}" required="true"
+						requiredMessage="#{messages['daily_013_start_time_and_end_time_are_required']}">
+						<p:ajax event="close" />
+					</pe:timePicker>
+					<p:outputLabel value="#{messages['end_time']}: " for="endTime" />
+					<pe:timePicker id="endTime" class="endTime"
+						value="#{debugBeanCallSarsBatch.toTimeReg}" mode="popup"
+						widgetVar="endTimeWidget" rows="3" intervalMinutes="10"
+						locale="#{localeSelector.locale}" required="true"
+						requiredMessage="#{messages['daily_013_start_time_and_end_time_are_required']}">
+						<p:ajax event="close" />
+					</pe:timePicker>
+					<p:commandButton icon="fa fa-building" value="import api"
+						action="#{debugBeanCallSarsBatch.importApi()}" rendered="true"
+						update="@form" onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow">
+<table>
+	<tr>
+		<td>#{actionAtLabel}</td>
+		<td>:</td>
+		<td>
+			#{DateUtils:formatFullDateTime(actionAt,localeSelector.locale)}
+		</td>
+	</tr>
+	<ui:fragment rendered="#{!hideActionBy}">
+		<tr>
+			<td>#{actionByLabel}</td>
+			<td>:</td>
+			<td>
+				#{actionBy}
+			</td>
+		</tr>
+	</ui:fragment>
+</table>
+</ui:composition>

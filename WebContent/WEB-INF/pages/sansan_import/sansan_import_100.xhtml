@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:arrow="http://arrow-tech.vn/arrow">
+
+	<h:form enctype="multipart/form-data">
+		<h:outputText value="#{messages['input_file_data']}" />
+		<p:fileUpload mode="advanced" skinSimple="true"
+			allowTypes="#{verifySansanDataBean.inputFileAllowType}"
+			sizeLimit="#{verifySansanDataBean.inputFileSizeLimit}"
+			multiple="false" fileLimit="1"
+			invalidFileMessage="#{messages['invalid_type_csv_upload']}"
+			invalidSizeMessage="#{messages['invalid_size_csv_upload']}"
+			fileLimitMessage="#{messages['limit_file_csv_upload']}"
+			label="#{messages['chose_file_upload']}"
+			uploadLabel="#{messages['uploadInputData']}"
+			cancelLabel="#{messages['cancel']}"
+			fileUploadListener="#{verifySansanDataBean.uploadFileListener}"
+			update="@this @([id$=processImportSansanButton])"
+			widgetVar="uploadInputData">
+		</p:fileUpload>
+		<h:outputText value="#{messages['expected_file_data']}" />
+		<p:fileUpload mode="advanced" skinSimple="true"
+			allowTypes="#{verifySansanDataBean.expectedFileAllowType}"
+			sizeLimit="#{verifySansanDataBean.expectedFileSizeLimit}"
+			multiple="true" fileLimit="20"
+			invalidFileMessage="#{messages['invalid_type_csv_upload']}"
+			invalidSizeMessage="#{messages['invalid_size_csv_upload']}"
+			fileLimitMessage="#{messages['limit_file_csv_upload']}"
+			label="#{messages['chose_file_upload']}"
+			uploadLabel="#{messages['uploadExpectedData']}"
+			cancelLabel="#{messages['cancel']}"
+			fileUploadListener="#{verifySansanDataBean.uploadExpectedFileListener}"
+			oncomplete="PF('uploadExpectedData').uploadedFileCount = 0"
+			widgetVar="uploadExpectedData">
+		</p:fileUpload>
+
+		<h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+			<p:commandButton icon="fa fa-building"
+				value="#{messages['processImportSansan']}"
+				disabled="#{verifySansanDataBean.disableImportCsvButton}"
+				action="#{verifySansanDataBean.importSansanFileToDatabase()}"
+				id="processImportSansanButton"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+				update="@this @([id$=textAreaShowMessage]) @([id$=downloadLogFilePanel])" />
+		</h:panelGrid>
+		
+		#{messages['connectAndGetDataFromSansanApi']}
+		<h:panelGrid columns="7" style="margin-bottom:10px" cellpadding="5">
+			<p:outputLabel value="#{messages['date']}: "
+				for="dateReminderStartTime" />
+			<p:calendar showOn="both" mode="popup"
+				widgetVar="dateReminderStartTime"
+				value="#{verifySansanDataBean.dateReg}" id="dateReminderStartTime"
+				pattern="MM/dd/yyyy">
+				<p:ajax process="@this" update="@this @([id$=apiButton])"
+					oncomplete="isModified = true" />
+			</p:calendar>
+			<p:outputLabel value="#{messages['start_time']}: " for="startTime" />
+			<pe:timePicker id="startTime" class="startTime"
+				value="#{verifySansanDataBean.fromTimeReg}" mode="popup"
+				widgetVar="startTimeWidget" rows="3" intervalMinutes="10"
+				locale="#{localeSelector.locale}">
+				<p:ajax event="close" update="@([id$=apiButton])"/>
+			</pe:timePicker>
+			<p:outputLabel value="#{messages['end_time']}: " for="endTime" />
+			<pe:timePicker id="endTime" class="endTime"
+				value="#{verifySansanDataBean.toTimeReg}" mode="popup"
+				widgetVar="endTimeWidget" rows="3" intervalMinutes="10"
+				locale="#{localeSelector.locale}">
+				<p:ajax event="close" update="@([id$=apiButton])"/>
+			</pe:timePicker>
+			<p:commandButton icon="fa fa-building" 
+				value="#{messages['connectAndGetDataFromSansanApi']}" id="apiButton"
+				action="#{verifySansanDataBean.callApi()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+				update="@form" />
+		</h:panelGrid>
+
+		<p:outputPanel id="downloadLogFilePanel">
+			<p:panelGrid columns="2" rendered="#{verifySansanDataBean.visible}">
+				<f:facet name="header">
+					<h:outputText value="#{messages['downloadLogFile']}" />
+				</f:facet>
+				<h:outputText value="#{messages['logFile']}" />
+				<p:commandLink ajax="false" id="logFileDownload"
+					actionListener="#{verifySansanDataBean.downloadFile(verifySansanDataBean.logFileName)}"
+					onclick="PrimeFaces.monitorDownload(start, stop);"
+					styleClass="register-link">
+					<h:outputText value="#{verifySansanDataBean.logFileName}" />
+				</p:commandLink>
+			</p:panelGrid>
+		</p:outputPanel>
+		<p:outputPanel id="textAreaShowMessage">
+			<p:commandButton icon="fa fa-building"
+				value="#{messages['verifyWithExpected']}"
+				action="#{verifySansanDataBean.compareExpected()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+				update="textAreaShowMessage" />
+			<p:commandButton icon="fa fa-building"
+				value="#{messages['clean_program_test_data']}"
+				action="#{verifySansanDataBean.cleanProgramTest()}"
+				onstart="PF('globalBlockUI_js').block()" update="@this"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<p:fieldset legend="#{messages.status}" styleClass="verify-fieldset">
+				<p:inputTextarea value="#{verifySansanDataBean.statusMsg}"
+					id="status" scrollHeight="1000" autoResize="true"
+					styleClass="verify-status" />
+			</p:fieldset>
+		</p:outputPanel>
+	</h:form>
+
+	<script>
+	   $(function() {
+	      // setTimeout waits till the widgetVar is ready!
+	      setTimeout(sortFileUpload, 2000);
+	   });
+	
+	   function sortFileUpload() {
+	      //Set this option to true to issue all file upload requests in a sequential order instead of simultaneous requests.  
+	      PF('uploadExpectedData').jq.data().blueimpFileupload.options.sequentialUploads = true;
+	
+	      //every time a new file is added, sort the files based on name
+	      PF('uploadExpectedData').jq.change(function() {
+	          PF('uploadExpectedData').files.sort(function fileSort(a, b) {
+	           return a.name.localeCompare(b.name)
+	          })
+	      });
+	   }
+		
+	   
+	</script>
+</ui:composition>

@@ -1,0 +1,153 @@
+/* for Column Headers */
+.ui-datatable-scrollable-header-box th {
+	padding: 5px 4px 3px 5px !important;
+	white-space: nowrap;
+}
+
+/* For all input fields */
+.ui-inputtext,.arrow-ui-input {
+	width: 12vw;
+	min-width: 12vw;
+	max-width: 12vw;
+}
+
+.ui-fieldset .ui-fieldset-legend {
+	padding: 0.1em 0.2em;
+	background: none;
+	border: none;
+}
+
+.ui-datatable tbody td {
+	border-color: #DDDDDD !important;
+}
+
+.ui-autocomplete-input,.ui-selectonemenu-label {
+	width: 10vw;
+	max-width: 10vw;
+}
+
+.ui-panel-title form {
+	height: 15px;
+	margin-bottom: -6px;
+	vertical-align: middle;
+}
+
+/* Display Close Icon at middle of Header */
+.ui-panel-title form a {
+	/* 	top: 15px; */
+	position: absolute;
+}
+
+div[id*="testModal_modal"] {
+	opacity: 0;
+	filter: Alpha(opacity = 0);
+	z-index: 0 !important;
+}
+
+/*
+ *	Change the borders of the tab panels
+ */
+.ui-tabs {
+	border: none;
+}
+
+.ui-tabs .ui-tabs-panels {
+	border-bottom: 1px solid #CCCCCC;
+	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+	border-radius: 3px 3px 3px 3px;
+}
+
+.ui-row-toggler,.ui-row-editor,a.ui-icon {
+	display: inline-block !important;
+}
+
+/* set min width for all functional buttons */
+button.ui-button-text-icon-left {
+	min-width: 85px !important;
+	margin: 1px;
+}
+
+/* Overwrite .ui-dashboard-column */
+.ui-dashboard-column {
+	float: none;
+}
+
+
+/*
+* fixed size of all calendars
+*/
+input.hasDatepicker {
+	/* If you max-width as bellow , The GUI has been change when click show or not show calendar*/
+	/*max-width: 80px;*/
+	
+}
+
+.ui-spinner-input {
+	max-width: 60px;
+}
+
+/*
+* fixed bug 79
+*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.ui-panel-title form a {
+		/* 		top: 25px; */
+		position: absolute;
+	}
+}
+
+/*
+* fixed bug 94 . Show message error when login on Chrome and Safari
+*/
+#growl_container div {
+	display: block;
+}
+
+/*
+* fix issue: http://stackoverflow.com/questions/19684538/selectonemenu-label-is-covered
+*/
+.ui-selectonemenu{
+/*      width: 100% !important; */
+}
+.ui-selectonemenu-label {
+	width: 88% !important;
+}
+
+/*
+label[id*="themeSwitcher"] {
+	width:100% !important;
+}
+
+label[id*="themeSwitcher"] {
+	width: 90% !important;
+}
+*/
+.orangelight_rowtable {
+	background: orange !important;
+}
+
+.ui-growl-icon-close {
+	width: 100%;
+	height: 100%;
+	background-image: none !important;
+}
+
+
+.ui-menu .ui-menu-parent .ui-menu-child {
+	width: 16.5em;
+}
+
+.ui-panel .ui-panel-titlebar {
+	padding-bottom: 1em !important;
+}
+
+.ui-widget .ui-icon.fa {
+	padding-top : 2px;
+}
+.ui-panel .ui-panel-title{
+	margin: 0;
+}
+.ui-outputlabel-rfi {
+	color: red !important;
+}

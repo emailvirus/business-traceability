@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ACC_COM_PURCHASE -->
+<table desc="Bảng tương quan khách hàng, dự thảo sửa đổi">
+	<primary-key>
+		<column name="id_com_relation" lname="Industry category TBL ID" data-type="integer" not-null="true" comment="ID Loại hình kinh doanh"/>
+	</primary-key>
+	
+	<column name="INDX_CUSTOMER" lname="Customer code (index)" data-type="c-thirteen-length" not-null="true" comment="ID Tên thương mại"/>
+	<column name="ID_CREDIT" lname="Credit score TBL ID" data-type="integer" not-null="false" default-value="NULL" comment="ID Thông tin doanh nghiệp"/>
+	<column name="CODE_ACC_SURVEYER" lname="Survey institute and information source code" data-type="c-thirteen-length" not-null="true" comment="Mã nguồn thông tin"/>
+	<column name="DATE_SURVEY" lname="Date of survey" data-type="date" not-null="true" comment="Ngày điều tra"/>
+	<column name="ENUM_COM_RELATION" lname="Status of company relation category" data-type="c-flag" not-null="true" comment="Phân loại quan hệ"/>
+	<column name="NAME_COM_RELATION" lname="Name of related company" data-type="c-sixty-length" not-null="true" comment="Tên công ty"/>
+	
+	<foreign-key parent-table="ACC_COM_CREDIT">
+		<column name="ID_CREDIT" referColumn="ID_CREDIT"/>
+	</foreign-key>
+</table>

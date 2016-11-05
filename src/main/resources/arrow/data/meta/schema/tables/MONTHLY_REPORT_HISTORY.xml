@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table desc="MONTHLY_REPORT_HISTORY">
+	<primary-key>
+		<column name="BAJON_BANGOU" data-type="integer" not-null="true" />
+		<column name="SHAIN_KODO" data-type="integer" not-null="true" />
+		<column name="REPOTO_NO_GETSUDO" data-type="integer" not-null="true" />
+		<column name="REPOTO_NO_NENDO" data-type="integer" not-null="true" />
+		<column name="SOUSA" data-type="c-short-code" not-null="true"
+			comment="SB: Submission, RE: Reject, AP:Approve, RO: Reopen" />
+	</primary-key>
+
+	<column name="SOUSA_JITEN" data-type="timestamp" not-null="true" />
+	<column name="SHOUNINSHA_KODO" data-type="integer" not-null="true" />
+	<column name="COMMENT" data-type="free-text" not-null="false" />
+
+	<foreign-key parent-table="MONTHLY_REPORT_REVISION">
+		<column name="BAJON_BANGOU" referColumn="BAJON_BANGOU" />
+		<column name="SHAIN_KODO" referColumn="SHAIN_KODO" />
+		<column name="REPOTO_NO_GETSUDO" referColumn="REPOTO_NO_GETSUDO" />
+		<column name="REPOTO_NO_NENDO" referColumn="REPOTO_NO_NENDO" />
+	</foreign-key>
+
+	<foreign-key parent-table="EMPLOYEE_MST">
+		<column name="SHOUNINSHA_KODO" referColumn="EMP_CODE" />
+	</foreign-key>
+</table>

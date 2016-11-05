@@ -1,0 +1,123 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:p="http://primefaces.org/ui">
+	<script type="text/javascript">
+          renderTableWithNoFilter();
+    </script>
+	<p:outputPanel id="maintenaceCompanyPanel" styleClass="no-border-panel"
+		rendered="#{maintenanceAccountingDataBean.renderSansanCompanyPanel}">
+		<h:form id="maintenaceCompanyForm">
+			<arrow:dataTable value="#{maintenanceAccountingDataBean.listCard}"
+				widgetVar="sansanCompanyTable" paginator="true" rows="5"
+				tableStyle="width:100% !important;" rowKey="#{card.idCompany}"
+				styleClass="name-card-table" paginatorPosition="bottom"
+				id="sansanCompanyTable" var="card"
+				selection="#{maintenanceAccountingDataBean.listNameCard}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+				<p:ajax event="page" oncomplete="selectSansanCompanyTableRow()" />
+				<f:facet name="header">
+	                    #{messages.registered_company}
+	                  <p:commandButton id="toggler" type="button"
+						value="#{messages.toggle_column}" style="float:right"
+						icon="ui-icon-calculator" />
+					<p:columnToggler datasource="sansanCompanyTable" trigger="toggler">
+						<p:ajax event="toggle" listener="#{toggleColumnBean.onToggle}" />
+					</p:columnToggler>
+					<br />
+				</f:facet>
+				<p:column selectionMode="multiple"
+					style="width:16px;text-align:center">
+					<h:inputHidden value="#{card.idSanCompany}"
+						pt:idComEntity="#{card.idComEntity ne null ? card.idComEntity : null}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-name-column"
+					visible="#{toggleColumnBean.list[1]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.company_name}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.companyName}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[2]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.number_of_url}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.countUrlOfCompany}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[3]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.business_card_number}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.sumOfCard}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[4]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.numbers_of_owner}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.sumOfOwner}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[5]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.numbers_of_cust}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.sumOfClient}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[6]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.latest_changed}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.latestChanged}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[7]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.oldest_changed}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.oldestChanged}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[8]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.regular_contact}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.regularContact}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[9]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.frequency_of_access}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.freqOfAccess}" />
+				</p:column>
+			</arrow:dataTable>
+
+			<ui:include
+				src="/WEB-INF/pages/maintenance_accounting_data/edit_accounting_data_PROC3.xhtml" />
+		</h:form>
+
+		<script>
+			initDataTableSelectRow('maintenaceCompanyForm', 'sansanCompanyTable', 'sansanCompanyTable', null);
+		</script>
+	</p:outputPanel>
+</ui:composition>

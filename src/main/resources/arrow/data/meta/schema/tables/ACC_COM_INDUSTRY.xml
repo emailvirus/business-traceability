@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ACC_COM_INDUSTRY -->
+<table desc="Bảng loại hình kinh doang, dự thảo sửa đổi">
+	<primary-key>
+		<column name="ID_INDUSTRY" lname="Industry category TBL ID" data-type="integer" not-null="true" comment="ID Loại hình kinh doanh"/>
+	</primary-key>
+	
+	<column name="ID_COM_ENTITY" lname="Company permanent info TBL ID" data-type="integer" not-null="true" comment="ID tên thương mại"/>
+	<column name="ID_CREDIT" lname="Credit score TBL ID" data-type="integer" not-null="false" default-value="NULL" comment="ID Thông tin doanh nghiệp"/>
+	<column name="CODE_INDUSTRY_MAIN" lname="Industry category code (main)" data-type="c-thirty-two-length" not-null="false" comment="Mã loại hình kinh doanh (Chính)"/>
+	<column name="CODE_INDUSTRY_SUB" lname="Industry category code (subsidiary)" data-type="c-thirty-two-length" not-null="false" default-value="NULL" comment="Mã loại hình kinh doanh (Phụ)"/>
+	<column name="RANK_INDUSTRY_NATION" lname="Rank of the same sector (nation-wide)" data-type="integer" not-null="false" default-value="NULL" comment="Xếp hạng cấp toàn quốc"/>
+	<column name="RANK_INDUSTRY_PREF" lname="Rank of the same sector (prefecture level)" data-type="integer" not-null="false" default-value="NULL" comment="Xếp hạng cấp tỉnh "/>
+	<column name="POP_INDUSTRY_NATION" lname="Population of the same industry (nation-wide)" data-type="integer" not-null="false" default-value="NULL" comment="Dân số (toàn quốc)"/>
+	<column name="POP_INDUSTRY_PREF" lname="Population of the same industry (prefecture)" data-type="integer" not-null="false" default-value="NULL" comment="Dân số (tỉnh, thành phố)"/>
+	<column name="REF_INDUSTRY_CODE" lname="Reference industry code of ranking" data-type="integer" not-null="false" default-value="NULL" comment="Mã đối tượng xếp hạng"/>
+	
+	<foreign-key parent-table="ACC_COM_CREDIT">
+		<column name="ID_CREDIT" referColumn="ID_CREDIT"/>
+	</foreign-key>
+	
+	<foreign-key parent-table="ACC_COM_ENTITY">
+		<column name="ID_COM_ENTITY" referColumn="ID_COM_ENTITY"/>
+	</foreign-key>
+</table>

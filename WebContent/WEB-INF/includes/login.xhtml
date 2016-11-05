@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:o="http://omnifaces.org/ui" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent" xmlns:p="http://primefaces.org/ui">
+
+    <o:importConstants type="arrow.framework.faces.message.MessageCode"/>
+    <!-- To access constants -->
+    <o:importConstants type="arrow.businesstraceability.control.helper.ScreenContext"/>
+
+    <p:panel header="#{messages['login']}">
+        <p:focus for="loginForm"></p:focus>
+        <o:form id="loginForm" includeRequestParams="true">
+            <table>
+                <tr>
+                    <td>#{messages['employee_id']}</td>
+                    <td><ar:inputText id="username" value="#{authenticationBean.username}" label="#{messages['username']}" errorCodes="#{MessageCode.auth_001_invalid_user_or_password}" required="true"
+                                      autocomplete="false" styleClass=""/></td>
+                </tr>
+                <tr>
+                    <td>#{messages['password']}</td>
+                    <td><p:password autocomplete="false" value="#{authenticationBean.password}" label="#{messages['password']}" required="true"
+                                    requiredMessage="#{messages.password_is_required}" id="passwd" title="#{component.valid ? '' : messages.password_is_required}">
+                    </p:password> <p:message for="passwd" display="tooltip"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <!-- don't need oncomplete, to avoid PF() undefined error. -->
+                        <p:commandButton value="#{messages['login']}" action="#{authenticationBean.login}" update="@all" id="btnLogin"
+                                         onstart="PF('globalBlockUI_js').block()">
+                        </p:commandButton>
+                    </td>
+                    <td style="text-align:right; vertical-align:middle;">
+                        <p:commandLink id="lnkForgotPassword" value="#{messages['forgot_password']} ?" action="#{recoverPasswordBean.setIsSendMail}" process="@this" update="@all"
+                                       style="font-size:0.8em;"></p:commandLink>
+                    </td>
+                </tr>
+            </table>
+        </o:form>
+    </p:panel>
+</ui:composition>

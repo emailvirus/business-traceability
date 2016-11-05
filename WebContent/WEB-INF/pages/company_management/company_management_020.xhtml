@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui">
+	<!-- <ui:define name="content"> -->
+			<ui:fragment rendered="#{companyManagementBean.currentCompany != null}">
+				<ui:include src="/WEB-INF/pages/company_management/company_management_add.xhtml" />
+			</ui:fragment>
+			<ui:fragment rendered="#{companyManagementBean.currentCompany == null}">
+				<ui:include src="/WEB-INF/pages/company_management/company_management_list.xhtml" />
+			</ui:fragment>
+	<!-- </ui:define> -->
+</ui:composition>

@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:param name="disabledEditCompany"
+		value="#{companyManagementBean.disabledEditCompany}" />
+	<h:form id="companyAddForm">
+		<table>
+			<tr>
+				<td class="label">#{messages['company_code']}</td>
+				<td><p:inputText id="company_code"
+						value="#{companyManagementBean.currentCompany.com_company_code}"
+						label="#{messages['company_code']}" required="false"
+						autocomplete="false" disabled="true" /></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="label"><p:outputLabel
+						value="#{messages['company_name']}" for="company_name" /></td>
+				<td><p:inputText id="company_name"
+						value="#{companyManagementBean.currentCompany.com_company_name}"
+						label="#{messages['company_name']}" required="true"
+						autocomplete="false"
+						requiredMessage="#{messages.company_name_required}"
+						readonly="#{disabledEditCompany}">
+						<p:ajax event="change" process="@this"
+							update="@form:company_furigama"
+							listener="#{companyManagementBean.changeCompanyName}"></p:ajax>
+					</p:inputText></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="label"><p:outputLabel
+						value="#{messages['companyLimited']}" for="company_limited" /></td>
+				<td><p:selectOneMenu id="company_limited" required="true"
+						value="#{companyManagementBean.currentCompany.com_limited_code}"
+						style="width:100px !important;"
+						requiredMessage="#{messages.company_limited_required}"
+						disabled="#{disabledEditCompany}">
+						<f:selectItems
+							value="#{companyManagementBean.companyLimitedCodes}" />
+					</p:selectOneMenu></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="label"><p:outputLabel
+						value="#{messages['company_furigama']}" for="company_furigama" /></td>
+				<td><p:inputText id="company_furigama"
+						value="#{companyManagementBean.currentCompany.com_company_furigana}"
+						label="#{messages['company_furigama']}" required="true"
+						autocomplete="false"
+						requiredMessage="#{messages.furigana_required}"
+						readonly="#{disabledEditCompany}" /></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="label"><label class="customer-code-label"
+					for="customer_code">#{messages.customer_code}</label> <p:outputLabel
+						id="customer_code_info" class="fa fa-info-circle"></p:outputLabel>
+					<pe:tooltip for="customer_code_info"
+						value="#{messages.customer_code_tooltip}" mouseTracking="false">
+					</pe:tooltip></td>
+				<td><p:inputText id="customer_code" maxlength="4"
+						value="#{companyManagementBean.currentCompany.com_customer_code}"
+						widgetVar="customer_code" readonly="#{disabledEditCompany}"
+						styleClass="customer-code-input"
+						onkeyup="upperCaseInputByWidgetVar('customer_code')" onchange="upperCaseInputByWidgetVar('customer_code')"
+						disabled="#{!userCredential.headQuarterOfficer}"
+						validatorMessage="#{messages.customer_code_invalid}">
+						<f:validateRegex pattern="^[a-zA-Z](\d){3}$" />
+						<p:watermark value="#{messages.customer_code_place_holder}"
+							for="customer_code"></p:watermark>
+					</p:inputText></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="label"><p:outputLabel
+						value="#{messages['company_main_address']}"
+						for="company_main_address" /></td>
+				<td><p:autoComplete id="company_main_address"
+						value="#{companyManagementBean.currentCompany.addresspoint_mst}"
+						converter="#{converterStorage.addressPointMstConverter}"
+						title="#{messages.type_to_find_head_office}" forceSelection="true"
+						emptyMessage="#{messages.no_head_office_found}" cache="true"
+						cacheTimeout="300" dropdown="true" scrollHeight="200" var="head"
+						itemLabel="#{head.adp_name}" itemValue="#{head}"
+						completeMethod="#{companyManagementBean.filterHeadOffice}"
+						required="true" requiredMessage="#{messages.head_office_required}"
+						disabled="#{disabledEditCompany}">
+						<!-- don't use onChange event, after OnChange event the data will be input data which is not complete, so EntityConverter cannot find the correct entity -->
+						<p:column headerText="#{messages.head_code}">
+							<h:outputText value="#{head.adp_code}" />
+						</p:column>
+
+						<p:column headerText="#{messages.head_name}">
+							<h:outputText value="#{head.adp_name}" />
+						</p:column>
+						<p:ajax event="itemSelect" process="@this"
+							update="company_main_address" />
+					</p:autoComplete></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="label"><p:outputLabel
+						value="#{messages['company_type_of_work']}"
+						for="company_type_of_work" /></td>
+				<td><p:autoComplete required="true" id="company_type_of_work"
+						dropdown="true" requiredMessage="#{messages.work_type_required}"
+						value="#{companyManagementBean.currentCompany.industry_big_mst}"
+						editable="true" var="big" itemLabel="#{big.big_name}"
+						itemValue="#{big}"
+						completeMethod="#{companyManagementBean.autoCompleteTypeOfWork}"
+						forceSelection="true"
+						converter="#{converterStorage.industryBigInfoConverter}"
+						disabled="#{disabledEditCompany}" /></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="label">#{messages['company_url']}</td>
+				<td><p:outputPanel id="linkToOpen">
+						<ar:inputText id="company_url"
+							value="#{companyManagementBean.currentCompany.com_url}"
+							label="#{messages['company_url']}" required="false"
+							autocomplete="false" update="@([id$=linkToOpen])"
+							readonly="#{disabledEditCompany}" />
+						<span> </span>
+						<p:link target="_blank"
+							rendered="#{not empty companyManagementBean.currentCompany.com_url}"
+							value="#{messages.openInNewTab}"
+							href="#{companyManagementBean.currentCompany.com_url}" />
+					</p:outputPanel></td>
+				<td align="left"></td>
+			</tr>
+		</table>
+		<p:fieldset legend="#{messages['company_listed']}">
+			<p:selectOneRadio required="true" id="company_listed"
+				value="#{companyManagementBean.currentCompany.com_listed_code}"
+				disabled="#{disabledEditCompany}"
+				requiredMessage="#{messages.company_listed_is_required}">
+				<f:selectItems value="#{companyManagementBean.companyListedCodes}" />
+			</p:selectOneRadio>
+		</p:fieldset>
+		<table>
+			<tr>
+				<td class="label">#{messages['company_branch']}</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan="4"><p:pickList id="pickList"
+						value="#{companyManagementBean.companyBranch}" var="branch"
+						itemLabel="#{branch.adp_code}_#{branch.adp_name}"
+						itemValue="#{branch}"
+						converter="#{converterStorage.addressPointMstConverter}"
+						showSourceFilter="true" showTargetFilter="true"
+						filterMatchMode="contains" disabled="#{disabledEditCompany}">
+						<f:facet name="sourceCaption">#{messages['pick_all_city']}</f:facet>
+						<f:facet name="targetCaption">#{messages['company_branch']}</f:facet>
+						<p:column headerText="#{messages['company_cityId']}"
+							style="width:25%">
+							<h:outputText value="#{branch.adp_code}" />
+						</p:column>
+						<p:column headerText="#{messages['company_cityName']}"
+							style="width:75%;">
+							<h:outputText value="#{branch.adp_name}" />
+						</p:column>
+					</p:pickList></td>
+			</tr>
+			<tr>
+				<td colspan="4" align="left"><p:commandButton
+						value="#{messages['reset']}" update="@form" process="@this"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+						actionListener="#{companyManagementBean.reset}"
+						icon="fa fa-refresh" disabled="#{disabledEditCompany}" /> <p:commandButton
+						id="btnInsertCompany" value="#{messages['save']}"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+						action="#{companyManagementBean.saveCompany}"
+						update=":contentPane" icon="fa fa-save"
+						disabled="#{disabledEditCompany}" /> <p:commandButton
+						id="btnclose" value="#{messages['close']}"
+						action="#{companyManagementBean.closeCompany()}"
+						update=":contentPane" immediate="true" icon="fa fa-remove"
+						onstart="PF('globalBlockUI_js').block()"
+						oncomplete="PF('globalBlockUI_js').unblock()" /></td>
+			</tr>
+		</table>
+	</h:form>
+</ui:composition>

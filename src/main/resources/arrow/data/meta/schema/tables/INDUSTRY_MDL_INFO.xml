@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- INDUSTRY_MDL_INFO.xml -->
+<table>
+	<primary-key>
+		<column name="INM_COMPANY_CODE" data-type="c-code" not-null="true" default-value="null"/>
+		<column name="INM_BIG_CODE" data-type="c-code" not-null="true" default-value="null"/>
+		<column name="INM_MDL_CODE" data-type="c-code" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="INM_DELETE_FLG" data-type="flag" not-null="true" default-value="false"/>	
+	<column name="INM_UPDATE_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+	
+	<foreign-key parent-table="COMPANY_MST">
+		<column name="INM_COMPANY_CODE" referColumn="COM_COMPANY_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="INDUSTRY_BIG_INFO">
+		<column name="INM_BIG_CODE" referColumn="INB_BIG_CODE"/>
+	</foreign-key>
+</table>

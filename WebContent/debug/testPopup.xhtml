@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<!-- PrimeFaces require h:head. Plain HTML head tag won't work -->
+<!-- PrimeFaces require h:head. Plain HTML head tag won't work -->
+<h:head>
+	<title>#{messages.business_traceability_system}</title>
+
+	<h:outputStylesheet name="main.css" media="screen" library="css" />
+	<h:outputScript library="js" name="main.js" />
+</h:head>
+
+<h:body id="contentPage">
+	<h:outputStylesheet name="main.css" media="screen" library="css" />
+	<h:outputScript library="js" name="main.js" />
+	<h:form>
+		<ui:include src="/WEB-INF/includes/popup_panel.xhtml" />
+		<ui:include src="/WEB-INF/includes/search_panel.xhtml" />
+		<ui:include src="/WEB-INF/pages/company_management/company_search.xhtml" />
+		
+		<p:commandButton value="Show Popup" action="#{companySearchBean.show}" update="@all" process="@this">
+			<f:setPropertyActionListener value="afterSelectCompanyEvent" target="#{companySearchBean.afterSelectResultName}" />
+		</p:commandButton>
+		
+		<p:commandButton value="Show Popup" action="#{searchPanel.show}" update="@all" >
+			<f:setPropertyActionListener value="companySearch" target="#{searchPanel.searchServiceType}" />
+			<f:setPropertyActionListener value=":#{p:component('contentPage')}" target="#{searchPanel.selectResultReRender}" />
+			
+		</p:commandButton>
+	</h:form>
+</h:body>
+</html>

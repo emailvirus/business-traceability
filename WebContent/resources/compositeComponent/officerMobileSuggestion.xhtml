@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<composite:interface>
+    <composite:attribute name="value"/>
+    <composite:attribute name="id"/>
+    <composite:attribute name="update" default="@this"/>
+    <composite:attribute name="process" default="@this"/>
+    <composite:attribute name="comPointCode"/>
+    <composite:attribute name="companyCode"/>
+    <composite:attribute name="onSelect" method-signature="void test()"/>
+    <composite:attribute name="valueChangeListener"
+                         method-signature="void listener(javax.faces.event.AjaxBehaviorEvent)"/>
+    <composite:attribute name="disabled"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <p:outputPanel id="compositePanel">
+        <script type="text/javascript">
+            $(function () {
+                console.debug("create page");
+                $("#editDailyReport").trigger("create");
+                personInChargeSuggestion('#{messages.employee_name}', '#{messages.department}');
+            });
+        </script>
+        <div class="ui-filterable">
+        <p:inputText pt:data-type="search" id="#{cc.attrs.id}" styleClass="psnAutocomplete ui-filterable"
+                     placeholder="#{messages.typeToFindEmployee}" pt:comPointCode="#{cc.attrs.comPointCode}"
+                     pt:companyCode="#{cc.attrs.companyCode}"
+                     value="#{cc.attrs.value}" disabled="#{cc.attrs.disabled}"
+                     ajax="false"
+                />
+        <ul id="psnAutocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true"
+            data-input=".psnAutocomplete"></ul>
+        </div>
+        <p:remoteCommand name="setDepartmentName" action="#{cc.attrs.onSelect}" process="@this"
+                         update="#{cc.attrs.update}"/>
+    </p:outputPanel>
+</composite:implementation>
+
+</html>

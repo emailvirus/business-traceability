@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:o="http://omnifaces.org/ui"
+    xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+    xmlns:arrow="http://arrow-tech.vn/arrow"
+    xmlns:p="http://primefaces.org/ui">
+    <script type="text/javascript">
+          renderTableWithFilter();
+    </script>
+    <h:form>
+        <p:panel>
+            <p:commandButton value="#{messages.add}" icon="fa fa-file" action="#{employeeManagementBean.addNewEmployee()}" update=":contentPane"/>
+            <p:commandButton value="#{messages.edit}" icon="fa fa-edit" action="#{employeeManagementBean.editEmployee()}" update=":contentPane" />
+            <p:commandButton value="#{messages.change_status}"  onstart="PF('globalBlockUI_js').block()" 
+                    oncomplete="PF('globalBlockUI_js').unblock();" icon="ui-icon-transferthick-e-w" 
+                    action="#{employeeManagementBean.changeEmployeeStatus()}" update=":contentPane, :globalBlockUI" />
+        </p:panel>
+        <p:scrollPanel mode="native">
+        <arrow:dataTable value="#{employeeManagementBean.listEmployee}" var="emp" rows="20" id="employeeTable" rowIndexVar="index" paginator="true" tableStyle="width:100% !important;"
+        	rowStyleClass="#{emp.deleted ? 'deleted' : ''}"
+            paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+             >
+            <f:facet name="header">
+                    #{messages.employee}
+                  <p:commandButton id="toggler" type="button" value="#{messages.toggle_column}" style="float:right" icon="ui-icon-calculator" />
+                  <p:columnToggler datasource="employeeTable" trigger="toggler" >
+                         <p:ajax event="toggle" listener="#{toggleColumnBean.onToggle}" />
+                  </p:columnToggler>
+            </f:facet>
+            <p:column styleClass="arrow-column-header" toggleable="false" visible="#{toggleColumnBean.list[0]}">
+                <p:selectBooleanCheckbox value="#{emp.selected}" rendered="#{!emp.deleted}">
+                    <p:ajax event="change" update="@this"/>
+                </p:selectBooleanCheckbox>
+            </p:column>
+            <p:column headerText="#{messages.employee_no}" width="10" toggleable="false" visible="#{toggleColumnBean.list[1]}">
+                #{index+1}
+            </p:column>
+            <p:column styleClass="arrow-ui-code-column"  visible="#{toggleColumnBean.list[2]}">
+                <f:facet name="header">
+                    <ar:columHeader value="#{messages.employee_code}"
+                        parentTable="employeeTable"
+                        sorter="#{employeeManagementBean.listEmployee.sort('employee_code')}"
+                        filter="#{employeeManagementBean.listEmployee.filter('employee_code')}">
+                    </ar:columHeader> 
+                </f:facet>
+                #{emp.emp_code}
+            </p:column>
+            <p:column styleClass="arrow-ui-code-column" visible="#{toggleColumnBean.list[3]}">
+                <f:facet name="header">
+                    <p:commandLink styleClass="sorter" value="#{messages.employee_head_office}" 
+                    action="#{employeeManagementBean.listEmployee.sort('employee_head_office')}" 
+                    update="employeeTable" />
+                    <br />
+                    <p:selectOneMenu styleClass="ui-column-filter"
+                        value="#{employeeManagementBean.listEmployee.filter('employee_head_office').value}">
+                        <f:selectItems
+                            value="#{employeeManagementBean.selectItemHeadOffice}" />
+                        <p:ajax event="change" update="employeeTable" process="@this" />
+                    </p:selectOneMenu>
+                </f:facet>
+                #{emp.addresspoint_mst.adp_name_DIRECT}
+            </p:column>
+            <p:column styleClass="arrow-ui-code-column" visible="#{toggleColumnBean.list[4]}">
+                <f:facet name="header">
+                    <p:commandLink styleClass="sorter" value="#{messages.employee_position}" 
+                    action="#{employeeManagementBean.listEmployee.sort('employee_position')}" 
+                    update="employeeTable" />
+                    <br />
+                    <p:selectOneMenu styleClass="ui-column-filter"
+                        value="#{employeeManagementBean.listEmployee.filter('employee_position').value}">
+                        <f:selectItems
+                            value="#{employeeManagementBean.selectItemPosition}" />
+                        <p:ajax event="change" update="employeeTable" process="@this" />
+                    </p:selectOneMenu>
+                </f:facet>
+                #{emp.position_mst.pos_name_DIRECT}
+            </p:column>
+            <p:column styleClass="arrow-ui-name-column" >
+                <f:facet name="header" visible="#{toggleColumnBean.list[5]}">
+                    <ar:columHeader value="#{messages.employee_name}" 
+                        parentTable="employeeTable"
+                        sorter="#{employeeManagementBean.listEmployee.sort('employee_name')}"
+                        filter="#{employeeManagementBean.listEmployee.filter('employee_name')}" >
+                    </ar:columHeader>
+                </f:facet>
+                #{emp.emp_name_DIRECT}
+            </p:column>
+            <p:column styleClass="arrow-ui-code-column" visible="#{toggleColumnBean.list[6]}">
+                <f:facet name="header">
+                    <p:commandLink styleClass="sorter" value="#{messages.authority}" 
+                    action="#{employeeManagementBean.listEmployee.sort('employee_authority')}" 
+                    update="employeeTable" />
+                    <br />
+                    <p:selectOneMenu
+                        value="#{employeeManagementBean.listEmployee.filter('employee_authority').value}">
+                        <f:selectItems
+                            value="#{employeeManagementBean.selectItemAuthority}" />
+                        <p:ajax event="change" update="employeeTable" process="@this" />
+                    </p:selectOneMenu>
+                </f:facet>
+                #{emp.authority_mst.aut_name_DIRECT}
+            </p:column>
+            <p:column styleClass="arrow-ui-date-column" style="width:120px !important;min-width: 180px !important;" visible="#{toggleColumnBean.list[7]}">
+                <f:facet name="header">
+                	<ar:columHeader value="#{messages.hire_date}" parentTable="employeeTable" 
+                		sorter="#{employeeManagementBean.listEmployee.sort('employee_hire_date')}"
+                		filter="#{employeeManagementBean.listEmployee.filter('employee_hire_date')}" >
+                	</ar:columHeader>
+                </f:facet>
+                <arrow:outputDate value="#{emp.emp_entery_date_DIRECT}" />
+            </p:column>
+            <p:column styleClass="arrow-ui-tel-column"  visible="#{toggleColumnBean.list[8]}">
+                <f:facet name="header">
+                    <ar:columHeader value="#{messages.employee_tel}"
+                        parentTable="employeeTable"
+                        sorter="#{employeeManagementBean.listEmployee.sort('employee_tel')}"
+                        filter="#{employeeManagementBean.listEmployee.filter('employee_tel')}">
+                    </ar:columHeader>
+                </f:facet>
+                #{emp.emp_tel_DIRECT}
+            </p:column>
+            
+            <p:column styleClass="arrow-ui-tel-column"  visible="#{toggleColumnBean.list[9]}">
+                <f:facet name="header">
+                    <ar:columHeader value="#{messages.employee_mobile}"
+                        parentTable="employeeTable"
+                        sorter="#{employeeManagementBean.listEmployee.sort('employee_mobile')}"
+                        filter="#{employeeManagementBean.listEmployee.filter('employee_mobile')}">
+                    </ar:columHeader>
+                </f:facet>
+                #{emp.emp_mobile_DIRECT}
+            </p:column>
+            <p:column visible="#{toggleColumnBean.list[10]}" styleClass="arrow-ui-name-column">
+                <f:facet name="header">
+                    <ar:columHeader value="#{messages.employee_email}"
+                        parentTable="employeeTable"
+                        sorter="#{employeeManagementBean.listEmployee.sort('employee_email')}"
+                        filter="#{employeeManagementBean.listEmployee.filter('employee_email')}">
+                    </ar:columHeader>
+                </f:facet>
+                #{emp.emp_mail_DIRECT}
+            </p:column>
+            <p:column styleClass="arrow-ui-code-column" visible="#{toggleColumnBean.list[11]}" toggleable="false">
+                <f:facet name="header">
+                    <ar:columHeader value="#{messages.status}" parentTable="employeeTable">
+                    </ar:columHeader>
+                </f:facet>
+                #{employeeManagementBean.getEmployeeStatusName(emp.emp_condi_code)}
+            </p:column>
+        </arrow:dataTable>
+        </p:scrollPanel>
+    </h:form>
+</ui:composition>

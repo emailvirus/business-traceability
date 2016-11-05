@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAN_COM_WHOLE_CARD -->
+<table desc="Thông tin bảng tra cứu ngược thông tin namecard 2">
+	<primary-key>
+		<column name="ID_COMPANY" lname="Sansan company ID" data-type="integer" not-null="true" comment="ID công ty"/>
+	</primary-key>
+	
+	<column name="MAXN_VP" lname="Max number of view point" data-type="integer" not-null="true" default-value="0" comment="VP lớn nhất"/>
+	<column name="MAXN_CP" lname="Max number of contact point" data-type="integer" not-null="true" default-value="0" comment="CP lớn nhất"/>
+	<column name="CN_VP" lname="Cumulative view point" data-type="integer" not-null="true" default-value="0" comment="VP tích lũy"/>
+	<column name="CN_CP" lname="Cumulative contact point" data-type="integer" not-null="true" default-value="0" comment="CP tích lũy"/>
+	<column name="SN_CARD" lname="Sum number of cards" data-type="integer" not-null="true" default-value="0" comment="Tổng hợp số tấm namecard"/>
+	<column name="SN_OWNER" lname="Sum number of owners" data-type="integer" not-null="true" default-value="0" comment="Số người sở hữu namecard"/>
+	<column name="SN_CLIENT" lname="Sum number of client persons" data-type="integer" not-null="true" default-value="0" comment="Số người phụ trách khách hàng (số ID nhân vật)"/>
+	<column name="DATE_LATEST_EXCHANGE" lname="Latest date of card exchange" data-type="short-date" not-null="false" default-value="NULL" comment="Ngày chuyển đổi namecard mới nhất"/>
+	<column name="DATE_OLDEST_EXCHANGE" lname="Oldest date of card exchange" data-type="short-date" not-null="false" default-value="NULL" comment="Ngày chuyển đổi namecard cũ nhất"/>
+	<column name="CN_ATTR_CORRECTION" lname="Cumulative times of data attribute correction" data-type="integer" not-null="true" default-value="0" comment="Lũy kế số lần chỉnh sửa thuộc tính"/>
+	<column name="ID_LATEST_CARD" lname="Latest Card ID" data-type="integer" not-null="true" comment="ID namecard mới nhất"/>
+	<column name="ID_MAX_VP_CARD" lname="Max VP Card ID" data-type="integer" not-null="true"  comment="ID namecard VP lớn nhất"/>
+	<column name="ID_MAX_CP_CARD" lname="Max CP Card ID" data-type="integer" not-null="true" comment="ID namecard CP lớn nhất"/>
+	
+	<foreign-key parent-table="SAN_COM_INFO">
+		<column name="ID_COMPANY" referColumn="ID_COMPANY"/>
+	</foreign-key>
+	<foreign-key parent-table="SAN_CARD_DATA"  javaName="latestCard">
+		<column name="ID_LATEST_CARD" referColumn="ID_CARD"/>
+	</foreign-key>
+	<foreign-key parent-table="SAN_CARD_DATA"  javaName="maxVPCard">
+		<column name="ID_MAX_VP_CARD" referColumn="ID_CARD"/>
+	</foreign-key>
+	<foreign-key parent-table="SAN_CARD_DATA"  javaName="maxCPCard">
+		<column name="ID_MAX_CP_CARD" referColumn="ID_CARD"/>
+	</foreign-key>
+</table>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- COMPANY_MST -->
+<table desc="Thông tin công ty khách hàng">
+	<primary-key>
+		<column lname="Company Code" name="COM_COMPANY_CODE" data-type="c-code" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="COM_POINT_CODE" lname="HeadOffice's Prefecture Code" data-type="c-short-code" not-null="true" default-value="null" comment="Chi nhánh chính"/>
+	<column name="COM_COMPANY_NAME" lname="Company Name" data-type="long-name" not-null="false" default-value="null" comment="Tên công ty"/>
+	<column name="COM_COMPANY_FURIGANA" lname="Company Name in Furigana" data-type="long-name" not-null="false" default-value="null" comment="Tên công ty viết dạng Hiragana"/>
+	<column name="COM_CAPITAL_LEVEL" lname="Capital Level" data-type="object-integer" not-null="false" default-value="null"/>
+	<column name="COM_LISTED_CODE" lname="Company Listed status" data-type="small-int" not-null="false" default-value="null" comment="Liên quan đến cổ phiếu: chưa bán, đã bán,..."/>
+	<column name="COM_URL" data-type="url" not-null="false" default-value="null"/>
+	<column name="COM_REMARKS" lname="Remarks" data-type="description" not-null="false" default-value="null"/>
+	<column name="COM_DELETE_REASON" lname="Reason for deletion" data-type="description" not-null="false" default-value="null"/>
+	<column name="COM_DELETE_FLG" data-type="flag" not-null="true" default-value="false"/>
+	<column name="COM_UPDATE_DATE" lname="Last updated time. Not used" data-type="timestamp" not-null="false" default-value="null"/>
+	<column name="COM_INDBIG_CODE" lname="Company's Big Industry field" data-type="small-int" not-null="false" default-value="0" comment="Lĩnh vực hoạt động"/>
+	<column name="COM_INDMDL_CODE" data-type="object-small-int" not-null="false" default-value="0"/>
+	<column name="COM_INDSML_CODE" data-type="object-small-int" not-null="false" default-value="0"/>
+	<column name="COM_CUSTOMER_CODE" lname="Customer Code" data-type="c-mid-code" not-null="false" default-value="''" comment="mã khách hàng. Sau khi công ty đã được kiểm tra và xác minh thì sẽ cấp mã khách hàng"/>
+	
+	<column name="COM_LIMITED_CODE" data-type="small-int" not-null="false" default-value="0" comment="Quy định cách hiển thị trên công ty cùng với LTD hay JSC."/>
+	
+	<foreign-key parent-table="CAPTITAL_LEVEL_MST">
+		<column name="COM_CAPITAL_LEVEL" referColumn="CAL_LEVEL"/>
+	</foreign-key>
+	<foreign-key parent-table="INDUSTRY_BIG_MST">
+		<column name="COM_INDBIG_CODE" referColumn="BIG_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="ADDRESSPOINT_MST">
+		<column name="COM_POINT_CODE" referColumn="ADP_CODE"/>
+	</foreign-key>
+</table>

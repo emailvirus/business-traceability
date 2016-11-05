@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ACC_COM_FINANCE -->
+<table desc="Bảng thông tin tài chính, dự thảo sửa đổi">
+	<primary-key>
+		<column name="ID_FINANCE" lname="Financial info TBL ID" data-type="integer" not-null="true" comment="ID Thông tin tài chính"/>
+	</primary-key>
+	
+	<column name="ID_COM_ENTITY" lname="Company permanent info TBL ID" data-type="integer" not-null="true" comment="ID tên thương mại"/>
+	<column name="ID_CREDIT" lname="Credit score TBL ID" data-type="integer" not-null="false" default-value="NULL" comment="ID Thông tin doanh nghiệp"/>
+	<column name="Y_FCLOSE" lname="Year of finance closing" data-type="integer" not-null="false" comment="Kì quyết toán (Năm)"/>
+	<column name="M_FCLOSE" lname="Month of finance closing" data-type="integer" not-null="false" default-value="NULL" comment="Kì quyết toán (Tháng)"/>
+	<column name="SALES_AMOUNT" lname="Sales amount (per million yen)" data-type="integer" not-null="false" default-value="NULL" comment="Doanh thu (Triệu Yen)"/>
+	<column name="PRICE_COST" lname="Price cost (per million yen)" data-type="integer" not-null="false" default-value="NULL" comment="Giá thành (Triệu Yen)"/>
+	<column name="GROSS_PROFIT" lname="Gross profit (per million yen)" data-type="integer" not-null="false" default-value="NULL" comment="Lợi nhuận gộp (Triệu Yen)"/>
+	<column name="SGA_COST" lname="SG and A expenses (per million yen)" data-type="integer" not-null="false" default-value="NULL" comment="Chi phí quản lý, bán hàng(Triệu Yen)"/>
+	<column name="OP_PROFIT" lname="Operating profit (per million yen)" data-type="integer" not-null="false" default-value="NULL" comment="Lợi nhuận hoạt động(Triệu Yen)"/>
+	<column name="CURRENT_PROFIT" lname="Current profit (per million yen)" data-type="integer" not-null="false" default-value="NULL" comment="Lợi nhuận kinh doanh(Triệu Yen)"/>
+	<column name="PRETAX_PROFIT" lname="Pre-tax profit (per thousand yen)" data-type="integer" not-null="false" default-value="NULL" comment="Lợi nhuận trước thuế(Nghìn Yen)"/>
+	<column name="POSTTAX_PROFIT" lname="Post-tax net profit (per thousand yen)" data-type="integer" not-null="false" default-value="NULL" comment="Lợi nhuận (Sau thuế・Nghìn Yen)"/>
+	<column name="R_CAPITAL" lname="Status of existent/non-existent financial statement" data-type="integer" not-null="false" default-value="NULL" comment="Tỷ lệ vốn (%)"/>
+	<column name="FLG_FSTATEMENT" lname="" data-type="tiny-int" not-null="false" default-value="NULL" comment="Tình trạng báo cáo tài chính "/>
+	
+	<foreign-key parent-table="ACC_COM_CREDIT">
+		<column name="ID_CREDIT" referColumn="ID_CREDIT"/>
+	</foreign-key>
+	
+	<foreign-key parent-table="ACC_COM_ENTITY">
+		<column name="ID_COM_ENTITY" referColumn="ID_COM_ENTITY"/>
+	</foreign-key>
+</table>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PERSONNEL_AFFAIRS_INFO -->
+<table>
+	<primary-key>
+		<column name="PEA_BUSINESS_CODE" data-type="c-mid-code" not-null="true" default-value="null"/>
+		<column name="PEA_DATE" data-type="date" not-null="false" default-value="null"/>
+	</primary-key>
+	<column name="PEA_COMPPOINT_CODE" data-type="c-short-code" not-null="true" default-value="null"/>
+	<column name="PEA_EMPLOYEE_POST" data-type="name" not-null="false" default-value="null"/>
+	<column name="PEA_COMPEMP_NAME" data-type="name" not-null="false" default-value="null"/>	
+	<column name="PEA_EMP_CODE" data-type="integer" not-null="false" default-value="null"/>
+	<column name="PEA_EMP_ADPCODE" data-type="c-short-code" not-null="true" default-value="null"/>
+	<column name="PEA_DETAILS" data-type="description" not-null="false" default-value="null"/>
+	<column name="PEA_UPDATE_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+</table>

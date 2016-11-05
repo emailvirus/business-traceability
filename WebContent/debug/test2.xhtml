@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+                xmlns:o="http://omnifaces.org/ui" template="/WEB-INF/template/template.xhtml">
+    <ui:define name="content">
+	<h:form>
+		<ui:fragment>
+			<ui:include src="/WEB-INF/pages/summary_report/includes/header_monthly_report_summary.xhtml" />
+		</ui:fragment>
+		
+		<ui:fragment>
+			<ui:include src="/WEB-INF/pages/summary_report/includes/content_monthly_report_summary.xhtml" />
+		</ui:fragment>
+		
+		<ui:fragment>
+			<ui:include src="/WEB-INF/pages/summary_report/includes/comment_monthly_report_summary.xhtml" />
+		</ui:fragment>
+	</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- EMPLOYEE_MST -->
+<table desc="Thông tin nhân viên">
+	<primary-key>
+		<column name="EMP_CODE" data-type="integer" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="EMP_ADPCODE" data-type="c-short-code" not-null="true" default-value="null" comment="Chi nhánh"/>
+	<column name="EMP_NAME" data-type="name" not-null="true" default-value="null"/>
+    <column name="EMP_POSCODE" data-type="small-int" not-null="true" default-value="null" comment="Chức vụ"/>
+    <column name="EMP_POST" data-type="name" not-null="false" default-value="null"/>
+    <column name="EMP_ENTERY_DATE" data-type="date" not-null="false" default-value="null"/>
+    <column name="EMP_TEL" data-type="phone" not-null="false" default-value="null"/>
+    <column name="EMP_MOBILE" data-type="phone" not-null="false" default-value="null"/>
+    <column name="EMP_MAIL" data-type="email" not-null="false" default-value="null"/>
+    <column name="EMP_CONDI_CODE" data-type="c-flag" not-null="false" default-value="null" comment="Trạng thái làm việc: Đang làm việc hay nghỉ hưu"/>
+    <column name="EMP_SETTLE_AUTHORITY" data-type="small-int" not-null="true" default-value="0" comment="Quyền hạn"/>
+    <column name="EMP_SYSTEM_AUTHORITY" data-type="flag" not-null="true" default-value="false" comment="Là admin"/>
+    <column name="EMP_DELETE_FLG" data-type="flag" not-null="true" default-value="false"/>
+	<column name="EMP_UPDATE_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+	
+	<foreign-key parent-table="POSITION_MST">
+		<column name="EMP_POSCODE" referColumn="POS_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="ADDRESSPOINT_MST">
+		<column name="EMP_ADPCODE" referColumn="ADP_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="AUTHORITY_MST">
+		<column name="EMP_SETTLE_AUTHORITY" referColumn="AUT_CODE"/>
+	</foreign-key>
+</table>

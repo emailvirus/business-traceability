@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ABSTRACT_ENTITY -->
+<table abstract="true">
+	<column lname="Version of Object. Required by JPA" name="OBJECT_VERSION" data-type="object-version" not-null="true" disable-setter="true" default-value="0"/>
+	<column lname="Last time when record was updated" name="LAST_UPDATED_AT" data-type="timestamp" not-null="false" disable-setter="false" default-value="NULL" comment="Thời điểm update gần nhất"/>
+</table>

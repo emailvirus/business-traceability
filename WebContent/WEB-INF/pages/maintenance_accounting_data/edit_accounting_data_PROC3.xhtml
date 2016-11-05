@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+	<h3 class="title-data-customer">#{messages.trade_name}</h3>
+	<p:outputPanel id="dataCustomer"
+		rendered="#{maintenanceAccountingDataBean.renderSansanCompanyPanel}">
+		<br />
+		<h:inputHidden value="#{maintenanceAccountingDataBean.companyIdIntSansanMapWithAcc}" id="hiddenSanCompanyId"/>
+		<table>
+			<tr>
+				<td><label>#{messages.id_san_company_condition}</label></td>
+				<td class="proc3-width-col"><label id="displaySanCompanyId">#{maintenanceAccountingDataBean.companyIdSansanMapWithAcc}</label>
+				</td>
+				<td><label>#{messages.san_company_name}</label></td>
+				<td class="proc3-width-col"><label id="displayCompanyName">#{maintenanceAccountingDataBean.companyNameSansanMapWithAcc}</label>
+				</td>
+			</tr>
+			<tr>
+				<td><label class="mandatory">#{messages.indx_customer}</label>
+				</td>
+				<td class="proc3-width-col"><label>#{maintenanceAccountingDataBean.listSelectedComEntity.get(0).indx_customer}</label>
+				</td>
+				<td><label class="mandatory">#{messages.client_code_status}</label>
+				</td>
+				<td class="proc3-width-col"><p:selectOneMenu
+						styleClass="input-margin-line" widgetVar="client_code_status"
+						onchange="updateFreezeReason()"
+						value="#{maintenanceAccountingDataBean.displayCodeAccStatus}">
+						<f:selectItem itemValue="" itemLabel="#{messages.select}" />
+						<f:selectItems value="#{accComBugyoBean.listAccComBugyo90}"
+							var="accCom" itemValue="#{accCom.code}"
+							itemLabel="#{accCom.title}" />
+					</p:selectOneMenu></td>
+			</tr>
+			<tr>
+				<td><label class="mandatory">#{messages.company_name}</label></td>
+				<td class="proc3-width-col"><p:inputText
+						value="#{maintenanceAccountingDataBean.displayCompanyNameAccCom}"
+						maxlength="60">
+					</p:inputText></td>
+				<td id="freezeReasonLabel"><label class="mandatory">#{messages.client_code_prohibition}</label>
+				</td>
+				<td class="proc3-width-col" id="freezeReason"><p:selectOneMenu
+						widgetVar="freezeReason"
+						value="#{maintenanceAccountingDataBean.freezeReason}">
+						<f:selectItem itemValue="" itemLabel="#{messages.select}" />
+						<f:selectItems value="#{accComBugyoBean.listAccComBugyo91}"
+							var="accCom" itemValue="#{accCom.code}"
+							itemLabel="#{accCom.title}" />
+					</p:selectOneMenu></td>
+			</tr>
+			<tr>
+				<td><label class="mandatory">#{messages.company_name_in_kana}</label>
+				</td>
+				<td class="proc3-width-col"><p:inputText
+						styleClass="input-margin-line"
+						value="#{maintenanceAccountingDataBean.displayCompanyNameKanaAccCom}"
+						maxlength="60">
+					</p:inputText></td>
+				<td><label>#{messages.year_of_starting_business}</label></td>
+				<td class="proc3-width-col"><p:inputMask id="foundingYear"
+						styleClass="input-margin-line"
+						value="#{maintenanceAccountingDataBean.displayYearStartAccCom}"
+						label="#{messages['founding_year']}" autocomplete="false"
+						mask="9999">
+					</p:inputMask></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td><label>#{messages.year_of_official_establishment}</label></td>
+				<td class="proc3-width-col"><p:inputMask id="foundedYear"
+						value="#{maintenanceAccountingDataBean.displayYearEstAccCom}"
+						label="#{messages['founded_year']}" autocomplete="false" maxlength="4"
+						mask="9999"  >
+					</p:inputMask></td>
+
+
+			</tr>
+		</table>
+		<p:spacer height="5" />
+		<div>
+			<p:commandButton value="#{messages.cancel}" process="@this"
+				update="@this @([id$=proc2Panel])"
+				action="#{maintenanceAccountingDataBean.cancel}" icon="fa fa-close"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;PF('blockUIWidget').hide();enableBtnSelectAfterCancel()" />
+
+			<p:commandButton value="#{messages.save}" process="@form"
+				action="#{maintenanceAccountingDataBean.save}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+				icon="fa fa fa-save" />
+		</div>
+	</p:outputPanel>
+	<script>
+		//<![CDATA[
+		$(document).ready(function(){
+			loadFreezeReason();
+		});
+		 //]]>
+	</script>
+</ui:composition>

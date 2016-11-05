@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DAILY_ACTIVITY_TYPE -->
+<table desc="Mục đích đến thăm khách hàng">
+	<primary-key>
+		<column name="DAT_CODE" data-type="small-int" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="DAT_NAME" data-type="name" not-null="false" default-value="null"/>
+	<column name="DAT_ORDER" data-type="small-int" not-null="true" default-value="null" comment="Thứ tự hiển thị trên màn hình"/>
+</table>

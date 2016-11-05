@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- USER_LOGIN -->
+<table>
+	<primary-key>
+		<column name="UL_USER_CODE" data-type="integer" not-null="true" default-value="0"/>
+	</primary-key>
+	<column name="UL_PASSWORD" data-type="password" not-null="false" default-value="null"/>
+	<column name="UL_LOGIN_TIME" data-type="timestamp" not-null="false" default-value="null"/>
+	<column name="UL_SESSION_ID" data-type="code" not-null="false" default-value="null"/>
+	<column name="UL_LOCALE" data-type="code" not-null="false" default-value="null"/>
+	<column name="UL_PASSSALT" data-type="code" not-null="false" default-value="null"/>
+	<column name="UL_UPDATE_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+	
+	<foreign-key parent-table="EMPLOYEE_MST" lazy-loading="true">
+		<column name="UL_USER_CODE" referColumn="EMP_CODE"/>
+	</foreign-key>
+</table>

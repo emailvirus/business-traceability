@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" xmlns:h="http://java.sun.com/jsf/html" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:o="http://omnifaces.org/ui">
+
+	<o:importConstants type="arrow.businesstraceability.constant.MobilePageId" />
+	<pm:header title="#{messages.business_traceability_system}">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="#{messages.register}" icon="ui-icon-plus" action="#{notificationMobileBean.mobileViewReport(report)}" update=":editDailyReport">
+						<f:setPropertyActionListener value="#{true}" target="#{registerActivityMobileBean.choosedRegister}" />
+					</p:commandButton>
+					<p:commandButton value="#{messages.daily_reports}" icon="ui-icon-bullets" action="#{mobileScreenFlowBean.gotoPage(MobilePageId.DAILY_REPORTS)}" update=":dailyReport" />
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="#{messages.logout}" icon="ui-icon-power" action="#{authenticationBean.logout}" update="@all" />
+				</f:facet>
+			</p:toolbar>
+		</h:form>
+	</pm:header>
+	<pm:content>
+		<h:form id="dashboard">
+			<p:dataList value="#{notificationMobileBean.dashBoardNotification}" var="notificaton">
+				<f:facet name="header">
+					#{messages.notifications}
+				</f:facet>
+				<p:accordionPanel activeIndex="-1">
+					<p:tab
+						title="#{messages.employee_code}: #{notificaton.nc_target_employee},  
+						#{messages.employee_name}: #{notificationMobileBean.getEmployeeByCode(notificaton.nc_target_employee).emp_name},         
+						#{messages.branch}: #{notificationMobileBean.getEmployeeByCode(notificaton.nc_target_employee).addresspoint_mst.adp_name}, 
+						#{messages.new_items}: #{notificationMobileBean.getNumRowNotiUnread(notificaton)}"
+						rendered="#{notificationMobileBean.getNumRowNotiUnread(notificaton) != 0}">
+						<p:dataList value="#{notificationMobileBean.getAllReportInDashBoard(notificaton)}" var="report" pt:data-inset="true" id="reportListTable">
+							<f:facet name="header">
+						       	#{messages.list_of_reports}
+						    </f:facet>
+							<p:commandLink action="#{notificationMobileBean.mobileViewReport(report)}" update=":editDailyReport" process="@this" actionListener="#{notificationMobileBean.deleteNotificationData(report)}">
+								<p:panelGrid columns="2">
+									<p:panelGrid columns="1">
+										<p:outputLabel>#{messages.company}: #{report.company_mst.com_company_name}</p:outputLabel>
+										<p:outputLabel>#{messages.head_office}: #{report.company_mst.com_point_code}</p:outputLabel>
+									</p:panelGrid>
+									<p:panelGrid columns="2">
+										<p:outputLabel>#{messages.start_time}: <arrow:outputTime value="#{report.dai_work_stime}"></arrow:outputTime>
+										</p:outputLabel>
+										<p:outputLabel>#{messages.duration}: <arrow:outputTime value="#{report.dai_required_time}"></arrow:outputTime>
+										</p:outputLabel>
+										<p:outputLabel>#{messages.end_time}: <arrow:outputTime value="#{report.dai_work_etime}"></arrow:outputTime>
+										</p:outputLabel>
+									</p:panelGrid>
+								</p:panelGrid>
+								<f:setPropertyActionListener value="#{report.dto}" target="#{mobileScreenFlowBean.actionTarget}" />
+								<f:setPropertyActionListener value="registerActivityMobileBean.setCurrentReport(mobileScreenFlowBean.actionTargets[0])" target="#{mobileScreenFlowBean.callbackExpression}" />
+								<f:setPropertyActionListener value="#{true}" target="#{registerActivityMobileBean.viewReport}" />
+							</p:commandLink>
+							<f:facet name="footer">
+						        #{messages.list_of_reports}
+						    </f:facet>
+						</p:dataList>
+					</p:tab>
+				</p:accordionPanel>
+				<f:facet name="footer">
+					#{messages.notifications}
+				</f:facet>
+			</p:dataList>
+		</h:form>
+	</pm:content>
+</ui:composition>

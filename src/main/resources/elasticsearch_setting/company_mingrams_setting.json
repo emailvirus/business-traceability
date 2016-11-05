@@ -1,0 +1,11 @@
+{
+  "analysis": {
+    "analyzer": {
+      "domain": {
+        "type": "custom",
+        "stopwords": "_none_",
+        "tokenizer": "keyword"
+      }
+    }
+  }
+}

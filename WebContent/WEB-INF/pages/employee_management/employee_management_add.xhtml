@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:o="http://omnifaces.org/ui"
+    xmlns:arrow="http://arrow-tech.vn/arrow"
+    xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+    xmlns:p="http://primefaces.org/ui">
+    <h:form id="form">
+        <table>
+            <tr>
+                <td class="label">#{messages['employee_code']}</td>
+                <td>
+                	<p:inputText id="employee_add_code1" value="#{employeeManagementBean.currentEmployee.emp_code}" label="#{messages['code']}" 
+                        required="false" autocomplete="false" disabled="true" rendered="#{employeeManagementBean.currentEmployee.emp_code == 0}"/>
+                    <p:inputText id="employee_add_code" value="#{employeeManagementBean.currentEmployee.emp_code}" label="#{messages['code']}" 
+                        required="false" autocomplete="false" disabled="true" rendered="#{employeeManagementBean.currentEmployee.emp_code != 0}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="label mandatory">#{messages['base_location']}</td>
+                <td>
+						<p:autoComplete id="employee_add_head_office" value="#{employeeManagementBean.currentEmployee.addresspoint_mst}" converter="#{converterStorage.addressPointMstConverter}" title="#{messages.type_to_find_head_office}"
+								forceSelection="true" emptyMessage="#{messages.no_head_office}" cache="true" cacheTimeout="300" dropdown="true" scrollHeight="200"
+								var="head" itemLabel="#{head.adp_name}" itemValue="#{head}" completeMethod="#{employeeManagementBean.autoCompleteHeadOffice}" required="true" requiredMessage="#{messages['javax.faces.component.UIInput.REQUIRED']}">
+								
+							<p:ajax event="itemSelect" process="@this" update="@form" resetValues="true"/>
+							<p:column headerText="#{messages.head_office_code}">
+						    	<h:outputText value="#{head.adp_code}" />
+						    </p:column>
+						 
+				            <p:column headerText="#{messages.head_office_name}">
+				                <h:outputText value="#{head.adp_name}" />
+				            </p:column>
+					</p:autoComplete>
+                </td>
+            </tr>
+            <tr>
+                <td class="label mandatory">#{messages['position']}</td>
+                <td>
+                    <p:autoComplete required="true" id="employee_add_position" dropdown="true" value="#{employeeManagementBean.currentEmployee.position_mst}" editable="true" requiredMessage="#{messages['javax.faces.component.UIInput.REQUIRED']}"
+                        var="pos" itemLabel="#{pos.pos_name_DIRECT}" itemValue="#{pos}" completeMethod="#{employeeManagementBean.autoCompletePosition}" forceSelection="true" converter="#{converterStorage.positionMstConverter}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label mandatory">#{messages['authority']}</td>
+                <td>
+                    <p:autoComplete required="true" id="employee_add_authority" dropdown="true" value="#{employeeManagementBean.currentEmployee.authority_mst}" editable="true" requiredMessage="#{messages['javax.faces.component.UIInput.REQUIRED']}"
+                        var="author" itemLabel="#{author.aut_name_DIRECT}" itemValue="#{author}" completeMethod="#{employeeManagementBean.autoCompleteAuthority}" forceSelection="true" converter="#{converterStorage.authorityMstConverter}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label mandatory">#{messages['name']}</td>
+                <td>
+                    <ar:inputText id="employee_add_name" value="#{employeeManagementBean.currentEmployee.emp_name}" label="#{messages['name']}"
+                        required="true" autocomplete="false" maxlength="32"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="label mandatory"><p:outputLabel value="#{messages['hire_date']}" for="employee_add_hire_date" /></td>
+                <td>
+                	<ar:calendar id="employee_add_hire_date" value="#{employeeManagementBean.currentEmployee.emp_entery_date}"
+                		required="true" mask="true"/>
+                </td>
+            </tr>
+             <tr>
+                <td class="label">#{messages['tel']}</td>
+                <td>
+                     <p:inputText id="employee_add_tel" value="#{employeeManagementBean.currentEmployee.emp_tel}" validatorMessage="#{messages['invalid_tel_input']}" maxlength="13">
+					        <f:validateRegex pattern="^[0-9\-]*+$" />
+					</p:inputText>
+                </td>
+            </tr>
+             <tr>
+                <td class="label">#{messages['mobile']}</td>
+                <td>
+                	<p:inputText id="employee_add_mobile" value="#{employeeManagementBean.currentEmployee.emp_mobile}" validatorMessage="#{messages['invalid_mobile_input']}" maxlength="13">
+					        <f:validateRegex pattern="^[0-9\-]*+$" />
+					</p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="label mandatory">#{messages['email']}</td>
+                <td>
+                    <ar:inputText id="employee_add_email" value="#{employeeManagementBean.currentEmployee.emp_mail}" label="#{messages['email']}" 
+                        required="true" autocomplete="false" maxlength="32"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="label mandatory">#{messages['status']}</td>
+                <td>
+                    <p:selectOneRadio id="workingStatus" value="#{employeeManagementBean.currentEmployee.workingStatus}" layout="grid" columns="1" required="true">
+					     <f:selectItems value="#{sysConfig.employeeStatus}" />
+					     <p:ajax event="change" update="@this" />
+				    </p:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left">
+                	<p:commandButton value="#{messages['reset']}" update="@form" process="@this" actionListener="#{employeeManagementBean.reset}"  icon="fa fa-refresh"/>
+                    <p:commandButton id="btnInsertCompany" disabled="#{employeeManagementBean.currentEmployee.deleted}" value="#{messages['save']}" action="#{employeeManagementBean.saveEmployee()}" update=":contentPane" icon="fa fa-save" onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()"/>
+                    <p:commandButton id="deleteEmployee" process="@this" disabled="#{employeeManagementBean.currentEmployee.deleted}" value="#{messages['delete']}" action="#{employeeManagementBean.deleteEmployee}" update=":contentPane" icon="fa fa-trash" onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()">
+                    	<p:confirm header="#{messages.are_you_sure_to_delete}" message="#{messages.are_you_sure_to_delete}"></p:confirm>
+                    </p:commandButton>
+                    <p:commandButton id="btnclose" value="#{messages['close']}" action="#{employeeManagementBean.closeEmployee()}" update=":contentPane" immediate="true" icon="fa fa-remove" onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</ui:composition>

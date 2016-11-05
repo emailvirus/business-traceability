@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "com_company_name": {
+      "analyzer": "keyword_lowercase",
+      "type": "string"
+    },
+    "com_company_furigana": {
+      "analyzer": "keyword_lowercase",
+      "type": "string"
+    },
+    "com_customer_code": {
+      "analyzer": "keyword_lowercase",
+      "type": "string"
+    },
+    "com_url": {
+      "analyzer": "keyword_lowercase",
+      "type": "string"
+    },
+      "domain": {
+      "type": "string",
+      "analyzer": "domain"
+    }
+  }
+}

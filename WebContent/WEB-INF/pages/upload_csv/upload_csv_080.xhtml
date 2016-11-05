@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow">
+	
+	<h:form enctype="multipart/form-data">
+		<table>
+			<tr>
+				<td><p:outputLabel value="#{messages.select_month}:  " for="selectedMonth"/></td>
+				<td>
+					<p:selectOneMenu id="selectedMonth" value="#{uploadCsvBean.selectedMonth}">
+						<f:selectItems value="#{uploadCsvBean.listMonths}" var="month" itemLabel="#{month.label}" itemValue="#{month.value}" />
+						<p:ajax process="@this" update="@this"/>
+					</p:selectOneMenu>
+				</td>
+			</tr>
+		</table>
+		
+	    <p:fileUpload mode="advanced" skinSimple="true" allowTypes="#{uploadCsvBean.fileAllowType}" sizeLimit="#{uploadCsvBean.fileSizeLimit}" multiple="false" fileLimit="1"
+	    	invalidFileMessage="#{messages['invalid_type_csv_upload']}" invalidSizeMessage="#{messages['invalid_size_csv_upload']}" fileLimitMessage="#{messages['limit_file_csv_upload']}" auto="false" label="#{messages['chose_file_upload']}" 
+	    	uploadLabel="#{messages['upload']}" cancelLabel="#{messages['cancel']}" fileUploadListener="#{uploadCsvBean.uploadFileListener}" update="@this" widgetVar="upload">
+	    </p:fileUpload>
+	</h:form>
+	
+</ui:composition>

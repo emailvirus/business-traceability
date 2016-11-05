@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+     <h:form prependId="false">
+          <p:idleMonitor timeout="#{authenticationBean.sessionTimeOut}" onidle="startIdleMonitor()" />
+          <input type="hidden" id="isLoggedInId" value="#{userCredential.isLoggedIn()}" />
+          <p:dialog id="otherScreensTimeoutSession" header="#{messages.warning}" widgetVar="timeoutOtherScreensDialog" showEffect="fade"
+               hideEffect="fade" modal="true" closable="false" draggable="false" resizable="false" appendToBody="true">
+               <div>
+               		<h:outputLabel value="#{messages.session_timeout_message}" styleClass="text-warning" />		
+               </div>
+               <div>
+               		<h:outputLabel value="#{messages.session_timeout_reload_message}" styleClass="text-warning" />		
+               </div>
+            	<div align="center">
+                    <p:commandButton value="#{messages.keep_status}" action="#{authenticationBean.keepAlive()}" onclick="PF('timeoutOtherScreensDialog').hide()" />
+                    <p:commandButton id="hiddenLogout" action="#{authenticationBean.logout()}" process="@this" update="@all" style="display:none" />
+               </div>	
+          </p:dialog>
+          <p:dialog id="loginScreenTimeoutSession" header="#{messages.warning}" widgetVar="timeoutLoginScreenDialog" showEffect="fade"
+               hideEffect="fade" modal="true" closable="false" draggable="false" resizable="false" appendToBody="true">
+               <h:outputLabel value="#{messages.login_timeout_message}" styleClass="text-warning" />
+               <br />
+               <br />
+               <div align="center">
+                    <p:commandButton value="#{messages.ok}" oncomplete="location.reload(true)" />
+               </div>
+          </p:dialog>
+     </h:form>
+     <script type="text/javascript">
+						function startIdleMonitor() {
+							var isLoggedIn = document.getElementById("isLoggedInId").value;
+							if(isLoggedIn == 'true'){
+								PF('timeoutOtherScreensDialog').show();
+								countDownBeforeRefresh();
+							}else{
+								PF('timeoutLoginScreenDialog').show();
+							}
+						};
+
+						function countDownBeforeRefresh() {
+							setTimeout(function(){
+								if(PF('timeoutOtherScreensDialog').isVisible()){
+									$('#hiddenLogout').click();
+								}
+							},300000);
+						};
+					</script>
+</ui:composition>

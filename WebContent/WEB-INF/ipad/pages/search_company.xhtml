@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" xmlns:h="http://java.sun.com/jsf/html" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:o="http://omnifaces.org/ui">
+
+	<o:importConstants type="arrow.businesstraceability.constant.MobilePageId" />
+
+	<pm:header title="#{messages.daily_search_company}">
+	</pm:header>
+	<pm:content>
+		<h:form id="form_search_company">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton type="submit" action="#{mobileScreenFlowBean.goBack()}" value="#{messages.back}" icon="ui-icon-arrow-l" process="@this" styleClass="ui-btn-inline" update=":dailyReport, :home" />
+					<p:commandButton value="#{messages.home}" icon="ui-icon-home" action="#{mobileScreenFlowBean.gotoHome()}" update=":home" process="@this" />
+					<p:commandButton value="#{messages.daily_reports}" icon="ui-icon-bullets" action="#{mobileScreenFlowBean.gotoPage(MobilePageId.DAILY_REPORTS)}" update=":dailyReport" process="@this" />
+					<p:commandButton value="#{messages.select_company_and_back}" disabled="#{searchCompanyMobileBean.selectedCompany eq null}" icon="ui-icon-bullets" 
+						action="#{searchCompanyMobileBean.selectCompanyAndBackToParentScreen}" update=":editDailyReport" process="@this" />
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="#{messages.logout}" icon="ui-icon-power" action="#{authenticationBean.logout}" process="@this" update="@all" />
+				</f:facet>
+			</p:toolbar>
+			<p:panel>
+				<pm:field>
+					<table style="width: 100%;">
+						<tr>
+							<td class="mb-search-condition-label">
+								<p:outputLabel value="#{messages.search_condition}" for="conditionSearch" />
+							</td>
+							<td class="mb-search-condition-field">
+								<p:inputText id="conditionSearch" value="#{searchCompanyMobileBean.conditionSearch}" >
+									<p:ajax event="change" process="@this" update="btnSearch"></p:ajax>
+								</p:inputText>
+							</td>
+							<td class="mb-search-company-button">
+								<p:commandButton id="btnSearch" disabled="#{searchCompanyMobileBean.disableSearchButton()}" action="#{searchCompanyMobileBean.searchCompany}" value="#{messages.search}" process="@this" update="@form" />
+							</td>
+						</tr>
+					</table>
+				</pm:field>
+				<pm:field>
+					<p:outputLabel
+						rendered="#{searchCompanyMobileBean.totalResult ne null}"
+						value="  #{messages.total_result}: #{searchCompanyMobileBean.totalResult} #{messages.results}" />
+				</pm:field>
+				<arrow:dataTable id="companies" var="company" value="#{searchCompanyMobileBean.listCompanies}" 
+					selectionMode="single" selection="#{searchCompanyMobileBean.selectedCompany}" rowIndexVar="index" pageLinks="5"
+					rowKey="#{company.com_company_code}" paginator="true" rows="5" tableStyleClass="ui-table-columntoggle">
+					
+					<p:ajax event="rowSelect" listener="#{searchCompanyMobileBean.onRowSelect}" update="@form" />
+        			<p:ajax event="rowUnselect" listener="#{searchCompanyMobileBean.onRowUnselect}" update="@form" />
+        			
+					<p:column headerText="#{messages.no_}" >
+						<h:outputText value="#{index + 1}" />
+					</p:column>
+			        <p:column headerText="#{messages.company_code}" >
+			            <h:outputText value="#{company.com_company_code}" />
+			        </p:column>
+			        <p:column headerText="#{messages.company_customer_code}" >
+			            <h:outputText value="#{company.com_customer_code}" />
+			        </p:column>
+			        <p:column headerText="#{messages.company_name}">
+			            <h:outputText value="#{company.com_company_name}" />
+			        </p:column>
+			        <p:column headerText="#{messages.company_main_address}">
+			            <h:outputText value="#{company.addresspoint_mst.adp_name}" />
+			        </p:column>
+			    </arrow:dataTable>
+			</p:panel>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton type="submit" action="#{mobileScreenFlowBean.goBack()}" value="#{messages.back}" icon="ui-icon-arrow-l" process="@this" styleClass="ui-btn-inline" update=":dailyReport, :home" />
+					<p:commandButton value="#{messages.select_company_and_back}" disabled="#{searchCompanyMobileBean.selectedCompany eq null}" icon="ui-icon-bullets" 
+						action="#{searchCompanyMobileBean.selectCompanyAndBackToParentScreen}" update=":editDailyReport" process="@this" />
+					<p:commandButton value="#{messages.home}" icon="ui-icon-home" action="#{mobileScreenFlowBean.gotoHome()}" update=":home" process="@this" />
+					<p:commandButton value="#{messages.daily_reports}" icon="ui-icon-bullets" action="#{mobileScreenFlowBean.gotoPage(MobilePageId.DAILY_REPORTS)}" update=":dailyReport" process="@this" />
+					
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="#{messages.logout}" icon="ui-icon-power" action="#{authenticationBean.logout}" process="@this" update="@all" />
+				</f:facet>
+			</p:toolbar>
+			
+			<p:dialog header="#{messages.warning}" widgetVar="warningDialog_mobile" modal="true" styleClass="warning-mobile">
+				<table style="text-align: center; width: 100%">
+					<tr>
+						<td>
+							<h:outputText value="#{messages.warning_more_than_2000_records}" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p:commandButton value="#{messages.ok}" onclick="PF('warningDialog_mobile').hide()" />
+						</td>
+					</tr>
+				</table>
+			</p:dialog>
+		</h:form>
+	</pm:content>
+</ui:composition>

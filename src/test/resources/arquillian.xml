@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://jboss.org/schema/arquillian"
+            xsi:schemaLocation="
+        http://jboss.org/schema/arquillian
+        http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+    <defaultProtocol type="Servlet 3.0"/>
+    <!--<engine>-->
+    <!--&lt;!&ndash; Restaarts managd instance every 200 tests &ndash;&gt;-->
+    <!--<property name="maxTestClassesBeforeRestart">200</property>-->
+    <!--&lt;!&ndash; Save deploument to target direstory &ndash;&gt;-->
+    <!--<property name="deploymentExportPath">target/</property>-->
+    <!--</engine>-->
+    <container qualifier="wildfly-managed" default="true">
+        <configuration>
+            <property name="chameleonTarget">wildfly:8.2.1.Final:managed</property>
+            <property name="chameleonDistributionDownloadFolder">.</property>
+        </configuration>
+    </container>
+
+    <container qualifier="wildfly-managed2">
+        <configuration>
+            <!-- If you want to use an existing JBoss AS installation, change the value of this property to that path -->
+            <!-- If you've already set the JBOSS_HOME environment variable, you can remove this configuration block -->
+            <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=256m -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8787</property>
+            <property name="allowConnectingToRunningServer">true</property>
+            <property name="outputToConsole">true</property>
+        </configuration>
+    </container>
+
+    <extension qualifier="persistence">
+        <property name="defaultDataSource">java:jboss/datasources/test-business_traceability</property>
+        <property name="defaultCleanupPhase">NONE</property>
+        <property name="defaultDataSeedStrategy">INSERT</property>
+        <property name="defaultTransactionMode">DISABLED</property>
+        <!-- Uncomment these properties if you want to see database content during test execution -->
+        <!--<property name="dumpData">true</property>-->
+        <!--<property name="dumpDirectory">/tmp/showcase</property>-->
+    </extension>
+
+    <extension qualifier="persistence-dbunit">
+        <property name="datatypeFactory">org.dbunit.ext.postgresql.PostgresqlDataTypeFactory</property>
+        <property name="defaultDataSetFormat">EXCEL</property>
+        <property name="excludeTablesFromCleanup">Addresspoint_mst</property>
+        <!--<property name="useIdentityInsert">true</property>-->
+        <!--<property name="excludePoi">true</property>-->
+    </extension>
+
+
+    <extension qualifier="transaction">
+        <property name="manager">java:jboss/UserTransaction</property>
+    </extension>
+    <extension qualifier="persistence-script">
+        <property name="sqlStatementDelimiter">;</property>
+    </extension>
+
+
+</arquillian>

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions">
+		<h:form>
+			<table>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.indx_customer}</label>
+						<p:outputLabel id="customer_code_info" class="fa fa-info-circle"></p:outputLabel>
+						<pe:tooltip for="customer_code_info"
+							value="#{messages.customer_code_tooltip}" mouseTracking="false">
+						</pe:tooltip>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputText id="customer_code" maxlength="4"
+							value="#{inputAccountingDataBean.accComEntity.short_indx_customer}"
+							widgetVar="customer_code" disabled="#{inputAccountingDataBean.entityViewMode}"
+							required="true" requiredMessage="#{messages.indx_customer_is_required}"
+							validatorMessage="#{messages.customer_code_tooltip}"
+							onkeyup="upperCaseInputByWidgetVar('customer_code')"
+							onchange="upperCaseInputByWidgetVar('customer_code')"
+							styleClass="customer-code-input">
+							<f:validateRegex pattern="^[a-zA-Z](\d){3}$" />
+							<p:watermark value="#{messages.customer_code_place_holder}"
+								for="customer_code"></p:watermark>
+						</p:inputText>
+					</td>
+					<td>
+						<label class="mandatory">#{messages.client_code_status}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:selectOneMenu value="#{inputAccountingDataBean.accComEntity.code_acc_client}"
+							required="true" requiredMessage="#{messages.client_code_status_is_required}"
+							disabled="#{inputAccountingDataBean.entityViewMode}">
+							<f:selectItem itemValue="" itemLabel="#{messages.select}" />
+							<f:selectItems value="#{accComBugyoBean.listAccComBugyo90}" var="accCom" 
+								itemValue="#{accCom.code}" itemLabel="#{accCom.title}" />
+							<p:ajax event="change" update="@form" process="@this" listener="#{inputAccountingDataBean.changeCodeState}" />
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<p:outputPanel rendered="#{inputAccountingDataBean.accComEntity.temporalFreeze}">
+					<tr>
+						<td></td>
+						<td></td>
+						<td>
+							<label>#{messages.client_code_prohibition}</label>
+						</td>
+						<td colspan="3" class="proc3-width-col">
+							<p:selectOneMenu value="#{inputAccountingDataBean.freezeReason}"
+								disabled="#{inputAccountingDataBean.entityViewMode}">
+								<f:selectItem itemValue="" itemLabel="#{messages.select}" />
+								<f:selectItems value="#{accComBugyoBean.listAccComBugyo91}" var="accCom" 
+									itemValue="#{accCom.code}" itemLabel="#{accCom.title}" />
+								<p:ajax event="change" update="@this" />
+							</p:selectOneMenu>
+						</td>
+					</tr>
+				</p:outputPanel>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.company_name}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputText value="#{inputAccountingDataBean.accComEntity.name_company}"
+							required="true" requiredMessage="#{messages.company_name_is_required}"
+							disabled="#{inputAccountingDataBean.entityViewMode}"
+							maxlength="60">
+							<p:ajax event="change" update="@this" process="@this"></p:ajax>
+						</p:inputText>
+					</td>
+					<td>
+						<label>#{messages.year_of_starting_business}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputMask id="foundingYear" maxlength="4" value="#{inputAccountingDataBean.accComEntity.y_start}" 
+							  label="#{messages['founding_year']}" autocomplete="false" mask="9999"
+							  disabled="#{inputAccountingDataBean.entityViewMode}">
+                              <p:ajax process="@this" update="@this"></p:ajax>
+                         </p:inputMask>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.company_name_in_kana}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputText value="#{inputAccountingDataBean.accComEntity.name_com_kana}"
+							required="true" requiredMessage="#{messages.company_name_in_kana_is_required}"
+							disabled="#{inputAccountingDataBean.entityViewMode}"
+							maxlength="60">
+							<p:ajax event="change" update="@this" process="@this"></p:ajax>
+						</p:inputText>
+					</td>
+					<td>
+						<label>#{messages.year_of_official_establishment}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:inputMask id="foundedYear" maxlength="4" value="#{inputAccountingDataBean.accComEntity.y_establish}" 
+							  label="#{messages['founded_year']}" autocomplete="false" mask="9999"
+							  disabled="#{inputAccountingDataBean.entityViewMode}">
+                              <p:ajax process="@this" update="@this"></p:ajax>
+                         </p:inputMask>
+					</td>
+				</tr>
+			</table>
+			<p:spacer height="5" />
+			<div>
+				<p:commandButton value="#{messages.close}" action="#{inputAccountingDataBean.switchToFindDataNameCard()}" 
+					process="@this" update=":contentPane" icon="fa fa-close"
+					onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+				<p:commandButton id="createCreditBtn" value="#{messages.new_report}" action="#{inputAccountingDataBean.createCredit}" 
+					process="@form" update=":contentPane" icon="fa fa-plus"
+					onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+				<p:commandButton value="#{messages.edit}" process="@this" update=":contentPane"
+					rendered="#{inputAccountingDataBean.accComCredit.persisted and inputAccountingDataBean.accComCredit.draft}"
+					action="#{inputAccountingDataBean.updateCredit()}" icon="fa fa-edit"
+					onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+				<p:commandButton value="#{messages.view}" process="@this" update=":contentPane"
+					rendered="#{(inputAccountingDataBean.accComCredit ne null) and inputAccountingDataBean.accComCredit.approved}"
+					action="#{inputAccountingDataBean.updateCredit()}" icon="fa fa-eye"
+					onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+				<p:commandButton value="#{messages.modify}" process="@this" update=":contentPane"
+					rendered="#{(inputAccountingDataBean.accComCredit ne null) and inputAccountingDataBean.accComCredit.approved and inputAccountingDataBean.accComEntity.persisted}"
+					action="#{inputAccountingDataBean.modifyAction()}" icon="fa fa-copy"
+					onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			</div>
+			<p:spacer height="5" />
+		</h:form>
+</ui:composition>

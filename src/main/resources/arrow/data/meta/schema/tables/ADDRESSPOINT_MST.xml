@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ADDRESSPOINT_MST -->
+<table desc="Danh sách các tỉnh thành của Nhật, coi như là địa điểm của các chi nhánh">
+	<primary-key>
+		<column lname="Prefecture code" name="ADP_CODE" data-type="c-short-code" not-null="true" default-value="null"/>
+	</primary-key>
+	<column lname="Prefecture name" name="ADP_NAME" data-type="short-name" not-null="true" default-value="null"/>
+</table>

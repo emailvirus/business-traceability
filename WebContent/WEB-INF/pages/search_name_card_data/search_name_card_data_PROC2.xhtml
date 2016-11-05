@@ -1,0 +1,117 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:p="http://primefaces.org/ui">
+	<script type="text/javascript">
+          renderTableWithNoFilter();
+    </script>
+	<p:scrollPanel mode="native">
+		<h:form id="formNameCard">
+			<arrow:dataTable value="#{findDataNameCardBean.listCard}" styleClass="name-card-table"
+				paginator="true" rows="20" tableStyle="width:100% !important;" widgetVar="nameCardTable" rowKey="#{card.idCompany}"
+				paginatorPosition="bottom" id="nameCardTable" var="card" selection="#{findDataNameCardBean.listNameCard}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+				<p:ajax event="page" oncomplete="clearAfterChangePage('nameCardTable', 'buttonSelect');" />
+				<f:facet name="header">
+	                    #{messages.registered_company}
+	                  <p:commandButton id="toggler" type="button"
+						value="#{messages.toggle_column}" style="float:right"
+						icon="ui-icon-calculator" />
+					<p:columnToggler datasource="nameCardTable" trigger="toggler">
+						<p:ajax event="toggle" listener="#{toggleColumnBean.onToggle}" />
+					</p:columnToggler>
+					<br />
+				</f:facet>
+				<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+				<p:column styleClass="arrow-ui-name-column"
+					visible="#{toggleColumnBean.list[1]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.company_name}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.companyName}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[2]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.number_of_url}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.countUrlOfCompany}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[3]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.business_card_number}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.sumOfCard}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[4]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.numbers_of_owner}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.sumOfOwner}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[5]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.numbers_of_cust}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.sumOfClient}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[6]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.latest_changed}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.latestChanged}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[7]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.oldest_changed}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.oldestChanged}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[8]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.regular_contact}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.regularContact}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-number-column"
+					visible="#{toggleColumnBean.list[9]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.frequency_of_access}">
+						</ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{card.freqOfAccess}" />
+				</p:column>
+			</arrow:dataTable>
+			<p:commandButton value="#{messages.select}" id="buttonSelect" style="margin-top:5px;"
+				action="#{findDataNameCardBean.switchToInputAccountingData()}" icon="fa fa-hand-o-up"
+				update=":contentPane" onstart="PF('globalBlockUI_js').block(); selectedRowKey = null;"
+				oncomplete="PF('globalBlockUI_js').unblock();"
+				styleClass="select-name-card-button" widgetVar="buttonSelect"/>
+		</h:form>
+		
+		<script>
+			PrimeFaces.widgets['buttonSelect'].disable();
+			initDataTableSelectRow('formNameCard', 'nameCardTable', 'nameCardTable', 'buttonSelect');
+		</script>
+	</p:scrollPanel>
+</ui:composition>

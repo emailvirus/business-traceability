@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+     
+    <script type="text/javascript">
+          renderTableWithNoFilter();
+    </script>
+	<p:panel> 
+		<p:commandButton value="#{showAllButtonLabel}"
+			icon="#{showAllButtonIcon}"
+			action="#{registerActivitySearchEmployeeBean.toggleShowAllBusinessDetail}"
+			update="#{parentId}_reportTable @this" process="@this" immediate="true" />
+		<arrow:dataTable id="#{parentId}_reportTable" paginator="true" rows="20"
+			value="#{reports}" var="report"
+			expandedRow="#{registerActivitySearchEmployeeBean.showAllBusinessDetail}"
+			paginatorPosition="bottom" rowIndexVar="index"
+			>
+               <f:facet name="header">
+                    #{messages.daily_reports}
+                  <p:commandButton id="toggler" type="button" value="#{messages.toggle_column}" style="float:right" icon="ui-icon-calculator" />
+                  <p:columnToggler datasource="#{parentId}_reportTable" trigger="toggler" >
+                         <p:ajax event="toggle" listener="#{registerActivitySearchEmployeeBean.onToggle}" />
+                  </p:columnToggler>
+               </f:facet>
+			<p:column styleClass="arrow-row-branch" toggleable="false" visible="#{registerActivitySearchEmployeeBean.list[0]}">
+				<p:rowToggler />
+			</p:column>
+			<p:column styleClass="arrow-ui-select-column" toggleable="false" visible="#{registerActivitySearchEmployeeBean.list[1]}">
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.no_}" escape="false" rendered="#{!renderSelectBox}"></ar:columHeader>	
+				</f:facet>
+				<p:selectBooleanCheckbox value="#{report.selected}" rendered="#{renderSelectBox}"
+					disabled="#{disabledSelectReport}">
+					<p:ajax event="change"
+						update="#{parentId}_reportTable, @form:editButton, @form:leftDeleteButton"
+						listener="#{registerActivitySearchEmployeeBean.toggleSelection(report)}" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{index + 1}" rendered="#{!renderSelectBox}" />
+			</p:column>
+
+			<p:column styleClass="arrow-column-header arrow-ui-time-column" visible="#{registerActivitySearchEmployeeBean.list[2]}">
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.start_br_time}" escape="false">
+					</ar:columHeader>
+				</f:facet>
+				<arrow:outputTime value="#{report.dai_work_stime}"></arrow:outputTime>
+			</p:column>
+
+			<p:column styleClass="arrow-column-header arrow-ui-time-column" visible="#{registerActivitySearchEmployeeBean.list[3]}">
+			
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.end_br_time}" escape="false">
+					</ar:columHeader>
+				</f:facet>
+				<arrow:outputTime value="#{report.dai_work_etime}"></arrow:outputTime>
+			</p:column>
+
+			<p:column styleClass="arrow-column-header arrow-ui-time-column" visible="#{registerActivitySearchEmployeeBean.list[4]}">
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.duration_abbr}" />
+				</f:facet>
+				<arrow:outputTime value="#{report.dai_required_time}"></arrow:outputTime>
+			</p:column>
+
+			<p:column styleClass="arrow-column-header arrow-text-column" visible="#{registerActivitySearchEmployeeBean.list[5]}">
+					<f:passThroughAttribute name="my-attribute" value="myattributevalue"/>
+				<f:facet name="header">
+					<ar:columHeader value="#{messages.company_br_name}" escape="false" />
+				</f:facet>
+				<h:outputText value="#{report.company_mst.extendComName}" title="#{report.company_mst.extendComName}"/>
+			</p:column>
+
+			<p:column styleClass="arrow-column-header arrow-text-column" visible="#{registerActivitySearchEmployeeBean.list[6]}">
+                  <f:facet name="header">
+                      <ar:columHeader value="#{messages.department}" escape="false" />
+                  </f:facet>
+                  <h:outputText value="#{report.dai_employee_post}" title="#{report.dai_employee_post}"/>
+              </p:column>
+              
+			<p:column styleClass="arrow-column-header arrow-text-column" visible="#{registerActivitySearchEmployeeBean.list[7]}">
+                  <f:facet name="header">
+                      <ar:columHeader value="#{messages.person_in_charge}" escape="false" />
+                  </f:facet>
+                  <h:outputText value="#{report.dai_compemp_name}" title="#{report.dai_compemp_name}"/>
+              </p:column>
+
+              <p:column styleClass="arrow-column-header arrow-text-column" visible="#{registerActivitySearchEmployeeBean.list[8]}">
+                  <f:facet name="header">
+                      <ar:columHeader value="#{messages.purpose}" />
+                  </f:facet>
+                  <h:outputText value="#{report.daily_activity_type.dat_name}" />
+              </p:column>
+              
+              <p:column styleClass="arrow-column-header arrow-ui-date-column" visible="#{registerActivitySearchEmployeeBean.list[9]}">
+                  <f:facet name="header">
+                      <ar:columHeader value="#{messages.reminder_stime}" escape="false">
+                      </ar:columHeader>
+                  </f:facet>
+                  <arrow:outputDate value="#{report.dai_summary_stime}"></arrow:outputDate>
+              </p:column>
+              
+              <p:column styleClass="arrow-column-header arrow-ui-date-column" visible="#{registerActivitySearchEmployeeBean.list[10]}">
+                  <f:facet name="header">
+                      <ar:columHeader value="#{messages.reminder_etime}" escape="false">
+                      </ar:columHeader>
+                  </f:facet>
+                  <arrow:outputDate value="#{report.dai_summary_etime}"></arrow:outputDate>
+              </p:column>
+
+
+			<p:rowExpansion id="rowContent">
+				<h:panelGrid id="display" styleClass="list-branch">
+					<f:facet name="header">
+		                    #{messages['business_detail']}
+		                </f:facet>
+					<h:outputText value="#{report.dai_business_details}" />
+				</h:panelGrid>
+			</p:rowExpansion>
+		</arrow:dataTable>
+	</p:panel>
+</ui:composition>

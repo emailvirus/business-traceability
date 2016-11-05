@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TDB_DETAIL_INDUSTRY -->
+<table desc="">
+	<primary-key>
+		<column name="CODE" lname="Detail isdustry code" data-type="c-five-length" not-null="true" comment=""/>
+	</primary-key>
+	
+	<column name="PARENT_CODE" lname="Middle isdustry code" data-type="c-five-length" not-null="true" comment=""/>
+	<column name="TITLE" lname="Title big industry" data-type="huge-text" not-null="true" comment=""/>
+</table>

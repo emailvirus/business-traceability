@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DAILY_REPORT -->
+<table desc="Cấu hình việc nhận thông báo ">
+	<primary-key>
+		<column name="NC_EMPLOYEE_CODE" data-type="integer" not-null="true" default-value="null" comment="Mã của người quản lý"/>
+		<column name="NC_TARGET_EMPLOYEE" data-type="integer" not-null="true" default-value="null" comment="Mã nhân viên cần theo dõi"/>
+	</primary-key>
+	<column name="NC_TYPE" data-type="c-short-code" not-null="true" default-value="null" comment="Loại dữ liệu cần thông báo, hiện tại là Báo cáo ngày"/>
+	<column name="NC_ENABLE" data-type="flag" not-null="true" default-value="null" />
+	<foreign-key parent-table="EMPLOYEE_MST">
+		<column name="NC_EMPLOYEE_CODE" referColumn="EMP_CODE"/>
+	</foreign-key>
+</table>

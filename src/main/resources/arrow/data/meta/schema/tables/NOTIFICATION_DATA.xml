@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DAILY_REPORT -->
+<table desc="Danh sách thông báo">
+	<primary-key>
+		<column name="ND_EMPLOYEE_CODE" data-type="integer" not-null="true" default-value="null" comment="mã người quản lý"/>
+		<column name="ND_TARGET_EMPLOYEE" data-type="integer" not-null="true" default-value="null" comment="mã nhân viên"/>
+		<column name="ND_ITEM_KEY" data-type="integer" not-null="true" default-value="null" comment="Key của dữ liệu cần thông báo"/>
+	</primary-key>
+	<column name="ND_TYPE" data-type="c-short-code" not-null="true" default-value="null" comment="Loại dữ liệu của thông báo"/>
+	<foreign-key parent-table="EMPLOYEE_MST">
+		<column name="ND_EMPLOYEE_CODE" referColumn="EMP_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="NOTIFICATION_ITEM">
+		<column name="ND_ITEM_KEY" referColumn="NI_ITEM_KEY"/>
+	</foreign-key>
+</table>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAN_COM_INFO -->
+<table desc="Thông tin name card sansan">
+	<primary-key>
+		<column name="ID_CNUMBER" lname="Contact number TBL ID" data-type="integer" not-null="true" default-value="0" comment="ID địa chỉ liên lạc"/>
+	</primary-key>
+	
+	<column name="ID_COMPANY" lname="Sansan company ID" data-type="integer" not-null="true"  comment="ID công ty"/>
+	<column name="ID_BRANCH" lname="Branch TBL ID" data-type="integer" not-null="false" default-value="NULL" comment="ID bộ phận"/>
+	<column name="ID_SITE" lname="Site TBL ID" data-type="integer" not-null="false" default-value="NULL" comment="ID căn cứ"/>
+	<column name="TEL11" lname="Telephone number 1-1" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="TEL-1(1)"/>
+	<column name="FAX" lname="Fax number" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="FAX(1)"/>
+	<column name="N_DUPINFO" lname="Number of duplication count" data-type="integer" not-null="true" default-value="0" comment="Tính duplicate"/>
+	<column name="ID_CARD" lname="Card ID" data-type="integer" not-null="true"  comment="ID namecard mới nhất"/>
+	<column name="DATE_LATEST_EXCHANGE" lname="Latest date of card exchange" data-type="short-date" not-null="false" default-value="NULL" comment="Ngày chuyển đổi namecard mới nhất"/>
+	
+	<foreign-key parent-table="SAN_COM_INFO">
+		<column name="ID_COMPANY" referColumn="ID_COMPANY"/>
+	</foreign-key>
+	<foreign-key parent-table="SAN_CARD_DATA">
+		<column name="ID_CARD" referColumn="ID_CARD"/>
+	</foreign-key>
+	<foreign-key parent-table="SAN_COM_BRANCH">
+		<column name="ID_BRANCH" referColumn="ID_BRANCH"/>
+	</foreign-key>
+	<foreign-key parent-table="SAN_COM_SITE">
+		<column name="ID_SITE" referColumn="ID_SITE"/>
+	</foreign-key>
+</table>

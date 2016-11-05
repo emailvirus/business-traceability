@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:of="http://omnifaces.org/functions">
+
+<f:view contentType="text/html">
+	<!-- PrimeFaces require h:head. Plain HTML head tag won't work -->
+	<h:head>
+		<title>#{messages.business_traceability_system}</title>
+	</h:head>
+	<h:body id="contentPage" lang="#{localeSelector.locale}">
+		<h:outputText value="#{messages.kicked_out}" escape="false" />
+		<div style="overflow: auto; max-height: 500px;">
+			<a href="index.html">#{messages.click_here_to_return_home_page_and_try_again}</a>
+		</div>
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,5 @@
+(function(){var n,e,t,i,r,f,c,o,l
+if(!window.Offline)throw new Error("Offline Reconnect brought in without offline.js")
+i=Offline.reconnect={},f=null,r=function(){var n
+return null!=i.state&&"inactive"!==i.state&&Offline.trigger("reconnect:stopped"),i.state="inactive",i.remaining=i.delay=null!=(n=Offline.getOption("reconnect.initialDelay"))?n:3},e=function(){var n,e
+return n=null!=(e=Offline.getOption("reconnect.delay"))?e:Math.min(Math.ceil(1.5*i.delay),3600),i.remaining=i.delay=n},c=function(){if("connecting"!==i.state)return i.remaining-=1,Offline.trigger("reconnect:tick"),0===i.remaining?o():void 0},o=function(){if("waiting"===i.state)return Offline.trigger("reconnect:connecting"),i.state="connecting",Offline.check()},n=function(){if(Offline.getOption("reconnect"))return r(),i.state="waiting",Offline.trigger("reconnect:started"),f=setInterval(c,1e3)},l=function(){return null!=f&&clearInterval(f),r()},t=function(){if(Offline.getOption("reconnect"))return"connecting"===i.state?(Offline.trigger("reconnect:failure"),i.state="waiting",e()):void 0},i.tryNow=o,r(),Offline.on("down",n),Offline.on("confirmed-down",t),Offline.on("up",l)}).call(this)

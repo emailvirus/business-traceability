@@ -1,0 +1,254 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow">
+	<ui:param name="isMonthlyReport" value="#{summaryReportBean.monthlyReport}" />
+	
+	<p:tabView dynamic="true" activeIndex="#{summaryReportBean.tabIndex}" rendered="#{!summaryReportBean.showMonthlyReportSummary}" id="summaryReportTabView">
+		<p:ajax event="tabChange" listener="#{summaryReportBean.onTabChange}" update="@this" />
+		<p:tab title="#{messages.periodic_reports}" >
+			<h:form id="form">
+				<table>
+					<tr>
+						<td class="label" />
+						<td><p:selectOneRadio id="time" value="#{summaryReportBean.timeReport}" required="true">
+								<f:selectItems value="#{summaryReportBean.selectItemTimeReport}" />
+								<p:ajax event="change" update="@form" listener="#{summaryReportBean.enableEndDate()}" />
+							</p:selectOneRadio></td>
+					</tr>
+					<tr>
+						<td class="label">
+							<!-- <p:outputLabel for="monthly" rendered="#{isMonthlyReport}"
+								value="#{messages['monthly']}" />  -->
+                            <p:outputLabel rendered="#{isMonthlyReport}"
+                            value="#{messages['monthly']}" />
+							<p:outputLabel for="startDate" rendered="#{!isMonthlyReport}"
+								value="#{messages['start_date']}" /></td>
+						<td>
+							<!-- <p:calendar rendered="#{isMonthlyReport}" id="monthly" showOn="button" navigator="true" showButtonPanel="true" yearRange="-0:+20" mode="popup"
+								value="#{summaryReportBean.monthlyDate}" required="true" pattern="yyyy/MM" mask="true" >
+								<p:ajax event="dateSelect" process="@this" update="@form"/>
+								<p:ajax event="change" process="@this" update="@form"/>
+							</p:calendar> -->
+							<table >
+										<tr align="left">
+											<td>
+											<div style="width: 60px !important;">
+											<p:selectOneMenu id="yearPeriodic" value="#{summaryReportBean.yearPeriodic}" rendered="#{isMonthlyReport}"
+												disabled="#{registerActivityBean.currentReport eq null}" >
+												<f:selectItems value="#{sysConfig.yearSelectItems}"/>	
+												<p:ajax event="change" process="@this" update="@this"/>
+											</p:selectOneMenu>
+											</div>
+											</td>
+											<td>
+												<div style="width: 60px !important;">
+												<p:selectOneMenu id="monthPeriodic" value="#{summaryReportBean.monthPeriodic}"  rendered="#{isMonthlyReport}"
+													disabled="#{registerActivityBean.currentReport eq null}">
+													<f:selectItems value="#{sysConfig.monthSelectItems}"/>
+													<p:ajax event="change" process="@this" update="@this"/>
+												</p:selectOneMenu>
+												</div>
+											
+											</td>
+										</tr>
+									</table>
+							<p:calendar navigator="true" pattern="yyyy/MM/dd" mask="true" showButtonPanel="true" showOn="button"
+								rendered="#{!isMonthlyReport}" id="startDate" value="#{summaryReportBean.startDate}"
+								required="true" requiredMessage="#{messages['sum_007._start_date_is_required']}" >
+								<p:ajax event="dateSelect" listener="#{summaryReportBean.changeEndDate}" update="@form" resetValues="true" />
+								<p:ajax event="change" process="@this" listener="#{summaryReportBean.changeEndDate()}" update="@form" resetValues="true" />
+							</p:calendar>
+						</td>
+					</tr>
+					<ui:fragment rendered="#{!isMonthlyReport}">
+						<tr id="endDate">
+							<td class="label"><p:outputLabel for="endDate" rendered="#{!isMonthlyReport}"
+									value="#{messages['end_date']}" /></td>
+							<td>
+								<p:calendar rendered="#{!isMonthlyReport}" id="endDate" showButtonPanel="true" showOn="button"
+									value="#{summaryReportBean.endDate}" pattern="yyyy/MM/dd" disabled="#{summaryReportBean.disableEndDate}" mask="true"
+									required="true" requiredMessage="#{messages['sum_008_end_date_is_required']}" >
+									<p:ajax event="dateSelect" process="@this" update="@form" resetValues="true" />
+									<p:ajax event="change" process="@this" update="@form" resetValues="true" />
+								</p:calendar>
+							</td>
+						</tr>
+					</ui:fragment>
+					
+					<tr>
+						<td class="label">#{messages.branch}</td>
+						<td>
+							<div style="width:140px !important;">
+							<p:selectOneMenu value="#{summaryReportBean.branchCode}">
+								<f:selectItems value="#{summaryReportBean.listBranch}" />
+								<p:ajax event="change" update="selectEmployee generatePeriodicReport" listener="#{summaryReportBean.reloadListEmployee()}" />
+							</p:selectOneMenu>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="label"><p:outputLabel for="selectEmployee" value="#{messages.employee}"/></td>
+						<td>
+							<p:autoComplete id="selectEmployee" value="#{summaryReportBean.selectedEmployee}" 
+								converter="#{converterStorage.employeeConverter}" title="#{messages.type_to_find_employee}"
+								forceSelection="true" emptyMessage="#{messages.no_employee_found}" cache="true" cacheTimeout="300" dropdown="true" scrollHeight="200"
+								var="emp" itemLabel="#{emp.emp_name}" itemValue="#{emp}" completeMethod="#{summaryReportBean.filterEmployee}" 
+								required="true" requiredMessage="#{messages['sum_006_need_select_employee_for_report']}"
+								widgetVar="employee_wg_var">
+								
+								<p:ajax event="itemSelect" process="@this" update="@this generatePeriodicReport btnShowMonthlyReport" resetValues="true" />
+								<p:ajax event="change" process="@this" update="@this generatePeriodicReport btnShowMonthlyReport" onstart="if(PF('employee_wg_var').panel.is(':visible')) return false;" resetValues="true" />
+								<p:column headerText="#{messages.employee_code}">
+					                <h:outputText value="#{emp.emp_code}" />
+					            </p:column>
+					 
+					            <p:column headerText="#{messages.employee_name}">
+					                <h:outputText value="#{emp.emp_name}" />
+					            </p:column>
+							</p:autoComplete>	
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<p:commandButton disabled="#{summaryReportBean.disableGeneratePeriodicReport}" id="generatePeriodicReport"
+								value="#{messages.generate_report}" action="#{summaryReportBean.generatePeriodicReport()}" ajax="false"
+								oncomplete="PF('generateVisitedReportBtn').enable()" onstart="PF('generateVisitedReportBtn').disable()"
+								onclick="PrimeFaces.monitorDownload(start, stop);"
+								icon="ui-icon-arrowthickstop-1-s" rendered="#{!isMonthlyReport}"/>
+							<p:commandButton id="btnShowMonthlyReport" value="#{messages.generate_report}"
+								disabled="#{summaryReportBean.disableGeneratePeriodicReport}" rendered="#{isMonthlyReport}"
+								action="#{summaryReportBean.generatePeriodicReport()}" process="@this" update=":contentPane" />
+						</td>
+					</tr>
+				</table>
+
+			</h:form>
+		</p:tab>
+		<p:tab title="#{messages.visit_time_report}">
+			<h:form id="form1">
+				<table>
+					<tr>
+						<td class="label" />
+						<td><p:selectOneRadio id="time_1" value="#{summaryReportBean.timeReport}" required="true" >
+								<f:selectItems value="#{summaryReportBean.selectItemTimeReport}" />
+								<p:ajax event="change" update="@form" listener="#{summaryReportBean.enableEndDate()}" />
+							</p:selectOneRadio></td>
+					</tr>
+					<tr>
+						<td class="label">
+							<!-- <p:outputLabel for="monthlyDateVisited" rendered="#{isMonthlyReport}"
+								value="#{messages['monthly']}" />  -->
+                                <p:outputLabel rendered="#{isMonthlyReport}"
+                                value="#{messages['monthly']}" /> 
+							<p:outputLabel for="startDateVisited"
+								rendered="#{!isMonthlyReport}" value="#{messages['start_date']}" /></td>
+						<td>
+							<table >
+										<tr align="left">
+											<td>
+											<div style="width: 60px !important;">
+											<p:selectOneMenu id="yearToVisit" value="#{summaryReportBean.yearVisitTime}" rendered="#{isMonthlyReport}"
+												disabled="#{registerActivityBean.currentReport eq null}" >
+												<f:selectItems value="#{sysConfig.yearSelectItems}"/>	
+												<p:ajax event="change" process="@this" update="@this"/>
+											</p:selectOneMenu>
+											</div>
+											</td>
+											<td>
+												<div style="width: 60px !important;">
+												<p:selectOneMenu id="monthToVisit" value="#{summaryReportBean.monthVisitTime}"  rendered="#{isMonthlyReport}"
+													disabled="#{registerActivityBean.currentReport eq null}">
+													<f:selectItems value="#{sysConfig.monthSelectItems}"/>
+													<p:ajax event="change" process="@this" update="@this"/>
+												</p:selectOneMenu>
+												</div>
+											
+											</td>
+										</tr>
+									</table>
+							<p:calendar rendered="#{!isMonthlyReport}" id="startDateVisited"
+								navigator="true" showButtonPanel="true" showOn="button"
+								value="#{summaryReportBean.startDateVisited}" pattern="yyyy/MM/dd" mask="true"
+								required="true" requiredMessage="#{messages['sum_007_start_date_is_required']}">
+								<p:ajax event="dateSelect" update="@form" process="@this" listener="#{summaryReportBean.changeEndDateVisited}" resetValues="true"/>
+								<p:ajax event="change" update="@form" process="@this" listener="#{summaryReportBean.changeEndDateVisited}" resetValues="true"/>
+							</p:calendar></td>
+					</tr>
+					<tr>
+						<td class="label"><p:outputLabel for="endDateVisited" rendered="#{!isMonthlyReport}"
+								value="#{messages['end_date']}"/></td>
+						<td>
+							<p:calendar rendered="#{!isMonthlyReport}" id="endDateVisited"
+								navigator="true" showButtonPanel="true" showOn="button"
+								value="#{summaryReportBean.endDateVisited}" pattern="yyyy/MM/dd" disabled="#{summaryReportBean.disableEndDate}" mask="true"
+								required="true" requiredMessage="#{messages['sum_008_end_date_is_required']}">
+								<p:ajax event="dateSelect" update="@form" process="@this" resetValues="true" />
+								<p:ajax event="change" update="@form" process="@this" resetValues="true" />
+							</p:calendar></td>
+					</tr>
+					<tr>
+						<td class="label">
+							<p:outputLabel value="#{messages.min_count_visited}" for="countVisited" />
+						</td>
+						
+						<td>
+							<p:inputText id="countVisited" value="#{summaryReportBean.minVisitTimes}" converter="#{converterStorage.positiveNumberConverter}"
+								styleClass="input-count-visited">
+								<p:ajax event="change" process="@this" update="@this" />
+							</p:inputText>
+							<p:spacer height="5" />
+							<p:commandButton value="#{messages.daily_search_company}" process="@form" update="@this, companyTable"
+								action="#{summaryReportBean.searchCompany}"
+								onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()" />
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td>
+							<p:outputLabel value="#{messages.company}" styleClass="mandatory" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<arrow:dataTable value="#{summaryReportBean.companies}" var="comp" id="companyTable" rowIndexVar="index" paginator="true" rows="20"
+								paginatorPosition="bottom"
+								paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+								<p:column styleClass="arrow-column-header arrow-ui-select-column">
+									<f:facet name="header">
+										<p:selectBooleanCheckbox value="#{summaryReportBean.selectAllCompanies}">
+						                    <p:ajax event="change" update="@form" />
+						                </p:selectBooleanCheckbox>
+									</f:facet>
+									<p:selectBooleanCheckbox value="#{comp.selected}">
+										<p:ajax event="change" update="@form"/>
+									</p:selectBooleanCheckbox>
+								</p:column>
+								<p:column headerText="#{messages.company_no}" styleClass="arrow-ui-index-column">
+				                	#{index+1}
+				            	</p:column>
+				            	<p:column headerText="#{messages.company_code}" styleClass="arrow-ui-code-column">
+				            		#{comp.com_company_code}
+				            	</p:column>
+								<p:column headerText="#{messages.company_name}">
+				                	#{comp.com_company_name}
+				            	</p:column>
+							</arrow:dataTable></td>
+					</tr>
+				</table>
+				
+				<p:commandButton id="generateVisitedReportBtn" widgetVar="generateVisitedReportBtn" value="#{messages.generate_report}" disabled="#{summaryReportBean.disableGenerateVisitedReport}"
+					action="#{summaryReportBean.generateVisitTimeReport()}" ajax="false" update="@form" process="@this" oncomplete="PF('generateVisitedReportBtn').enable()" onstart="PF('generateVisitedReportBtn').disable()"
+					onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthickstop-1-s" />
+				
+			</h:form>
+		</p:tab>
+	</p:tabView>
+	
+	<h:form id="monthlyReportForm">
+	<ui:fragment id="monthlyReportSummaryPanel" rendered="#{summaryReportBean.showMonthlyReportSummary}">
+		<ui:include src="/WEB-INF/pages/summary_report/monthly_report_summary.xhtml" />
+	</ui:fragment>
+	</h:form>
+</ui:composition>

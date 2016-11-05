@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DAILY_REPORT -->
+<table desc="Báo cáo ngày">
+	<primary-key>
+		<column name="DAI_EMPLOYEE_CODE" data-type="integer" not-null="true" default-value="null" />
+		<column name="DAI_POINT_CODE" data-type="c-short-code" not-null="true" default-value="null" comment="Chi nhánh của nhân viên"/>
+		<column name="DAI_WORK_DATE" data-type="date" not-null="false" default-value="null" comment="Ngày làm việc"/>
+		<column name="DAI_WORK_STIME" data-type="time" not-null="false" default-value="null" comment="Thời điểm bắt đầu"/>
+		<column name="DAI_WORK_ETIME" data-type="time" not-null="false" default-value="null" comment="Thời điểm kết thúc"/>
+	</primary-key>
+
+	<column name="DAI_REQUIRED_TIME" data-type="time" not-null="false" default-value="null" comment="Khoảng thời gian=End time - Start Time"/>
+	<column name="DAI_WORK_TYPE" data-type="flag" not-null="false" default-value="null" comment="Loại hoạt động:Viếng thăm hay Khác"/>
+	<column name="DAI_WORK_TANCODE" data-type="small-int" not-null="false" default-value="null" comment="Mục đích đến thăm"/>
+	<column name="DAI_COMPANY_CODE" data-type="c-code" not-null="false" default-value="null" comment="Công ty khách hàng"/>
+	<column name="DAI_COMPPOINT_CODE" data-type="c-short-code" not-null="false" default-value="null" />
+	<column name="DAI_COMPEMP_NAME" data-type="name" not-null="false" default-value="null" comment="Đối tác"/>
+	<column name="DAI_EMPLOYEE_POST" data-type="name" not-null="false" default-value="null" comment="Chức vụ của đối tác"/>
+	<column name="DAI_RIMAINDAR_FLG" data-type="flag" not-null="false" default-value="null" comment="Bật/tắt nhắc nhở"/>
+	<column name="DAI_SUMMARY_STIME" data-type="date" not-null="false" default-value="null" comment="Thời điểm bắt đầu nhắc nhở"/>
+	<column name="DAI_SUMMARY_ETIME" data-type="date" not-null="false" default-value="null" comment="Thời điểm kết thúc nhắc nhở"/>
+	<column name="DAI_ANKEN_FLG" data-type="flag" not-null="false" default-value="null" comment="Liên quan đến dự án"/>
+	<column name="DAI_MATTER_FLG" data-type="flag" not-null="false" default-value="null" comment="Đang xử lý"/>
+	<column name="DAI_BUSINESS_DETAILS" data-type="free-text" not-null="true" default-value="null" comment="Chi tiết công việc"/>
+	<column name="DAI_BUS_CODE" data-type="small-int" not-null="false" default-value="null" comment="Lĩnh vực hoạt động trong lần đến thăm"/>
+	<column name="DAI_UPDATE_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+
+	<foreign-key parent-table="EMPLOYEE_MST">
+		<column name="DAI_EMPLOYEE_CODE" referColumn="EMP_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="ADDRESSPOINT_MST">
+		<column name="DAI_POINT_CODE" referColumn="ADP_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="COMPANY_MST">
+		<column name="DAI_COMPANY_CODE" referColumn="COM_COMPANY_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="DAILY_ACTIVITY_TYPE">
+		<column name="DAI_WORK_TANCODE" referColumn="DAT_CODE"/>
+	</foreign-key>
+</table>

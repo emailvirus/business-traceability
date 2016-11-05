@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow">
+	<o:importConstants
+		type="arrow.businesstraceability.constant.SummaryReportConstants.OperationType" />
+
+	<p:outputPanel id="resultSurvey">
+		<br />
+		<div class="title">
+			<p:outputLabel value="５．#{messages.surveyResults}" />
+		</div>
+		<br />
+		<p:outputLabel value="A ; #{messages.causesOfMonth}"
+			styleClass="output-label-comment" />
+		<br />
+
+		<p:inputTextarea rows="4" styleClass="text-area comment"
+			disabled="#{readOnly}"
+			value="#{summaryReportBean.monthlyReportRevision.no_kekka_ni_kansuru_genin}"
+			required="#{not empty param[summaryReportBean.submit.clientId]}"
+			requiredMessage="#{messages.cause_current_month_required}" />
+		<br />
+		<br />
+		<p:outputLabel value="B ; #{messages.reasonA}"
+			styleClass="output-label-comment" />
+		<br />
+		<p:inputTextarea rows="4" styleClass="text-area comment"
+			disabled="#{readOnly}"
+			value="#{summaryReportBean.monthlyReportRevision.sono_genin_ga_shoujita_riyuu}"
+			required="#{not empty param[summaryReportBean.submit.clientId]}"
+			requiredMessage="#{messages.reason_a_required}" />
+		<br />
+		<br />
+		<p:outputLabel value="C ; #{messages.concreteAction}"
+			styleClass="output-label-comment" />
+		<br />
+		<p:inputTextarea rows="4" styleClass="text-area comment"
+			disabled="#{readOnly}"
+			value="#{summaryReportBean.monthlyReportRevision.jigetsuno_mokuhyou}"
+			required="#{not empty param[summaryReportBean.submit.clientId]}"
+			requiredMessage="#{messages.concrete_action_required}" />
+		<br />
+	</p:outputPanel>
+
+	<p:outputPanel id="visitedCompanies">
+		<br />
+		<div class="title">
+			<p:outputLabel value="6．#{messages.listBussinessVisited}" />
+		</div>
+		<br />
+		<p:inputTextarea rows="4" disabled="true"
+			value="#{summaryReportBean.monthlyReportRevision.houmon_saki_kigyou_ichiran}"
+			styleClass="sub-title6 text-area" />
+		<br />
+	</p:outputPanel>
+
+	<p:outputPanel id="branchHeadComment">
+		<br />
+		<div class="title">
+			<p:outputLabel value="7．#{messages.remarksBranchManager}" />
+		</div>
+		<br />
+		<p:inputTextarea rows="4" styleClass="text-area comment"
+			disabled="#{!summaryReportBean.monthlyReportPermission.hasApprovePermission()}"
+			value="#{summaryReportBean.monthlyReportRevision.shochou_no_soukatsu}" />
+	</p:outputPanel>
+
+
+	<p:outputPanel id="oldCommentReasonReject"
+		rendered="#{summaryReportBean.showLastComment}">
+		<br />
+		<br />
+		<hr />
+		<br />
+		<div class="title">
+			<p:outputLabel value="#{messages.last_comment}" />
+		</div>
+		<br />
+		<p:inputTextarea rows="4" styleClass="text-area comment"
+			disabled="true" value="#{summaryReportBean.oldComment}" />
+	</p:outputPanel>
+
+
+</ui:composition>

@@ -1,0 +1,299 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow">
+	<o:importConstants
+		type="arrow.businesstraceability.constant.SummaryReportConstants.OperationType" />
+	<o:importFunctions type="arrow.framework.util.DateUtils"
+		var="DateUtils" />
+	<div>
+		<div class="monthly-report-button-left-panel">
+			<p:commandButton value="#{messages.submit}"
+				binding="#{summaryReportBean.submit}"
+				action="#{summaryReportBean.showConfirmSubmitMonthlyReport()}"
+				rendered="#{summaryReportBean.monthlyReportPermission.hasSubmitPermission()}">
+				<p:ajax
+					process="@this workingDayPanel resultSurvey confirmSubmitDialog" />
+			</p:commandButton>
+
+			<p:commandButton value="#{messages.approve}"
+				rendered="#{summaryReportBean.monthlyReportPermission.hasApprovePermission()}"
+				action="#{summaryReportBean.saveMonthlyReport(OperationType.APPROVAL)}"
+				update=":contentPane"></p:commandButton>
+
+			<p:commandButton value="#{messages.reject}"
+				rendered="#{summaryReportBean.monthlyReportPermission.hasApprovePermission()}"
+				onstart="start();" oncomplete="stop();" process="@this"
+				update=":dialogPanel" immediate="true"
+				action="#{popupPanelBean.show}">
+				<f:setPropertyActionListener target="#{popupPanelBean.includeSrc}"
+					value="/WEB-INF/pages/summary_report/includes/comment_dialog.xhtml" />
+			</p:commandButton>
+
+			<p:commandButton value="#{messages.reOpen}"
+				rendered="#{summaryReportBean.monthlyReportPermission.hasReOpenPermission()}"
+				onstart="start();" oncomplete="stop();" process="@this"
+				update=":dialogPanel" immediate="true"
+				action="#{popupPanelBean.show}">
+				<f:setPropertyActionListener target="#{popupPanelBean.includeSrc}"
+					value="/WEB-INF/pages/summary_report/includes/comment_dialog.xhtml" />
+			</p:commandButton>
+
+			<p:outputLabel
+				value=" #{summaryReportBean.yearPeriodic}年#{summaryReportBean.monthPeriodic}月"></p:outputLabel>
+		</div>
+		<div class="monthly-report-button-right-panel">
+			<p:commandButton value="#{messages.temporarilySave}"
+				rendered="#{summaryReportBean.monthlyReportPermission.hasSubmitPermission() or summaryReportBean.monthlyReportPermission.hasApprovePermission()}"
+				action="#{summaryReportBean.saveMonthlyReport(OperationType.TEMPORARY_SAVE)}"
+				update=":contentPane" />
+			<p:commandButton value="#{messages.exportReport}"
+				action="#{summaryReportBean.exportMonthlyReport()}" ajax="false"
+				oncomplete="PF('generateVisitedReportBtn').enable()"
+				onstart="PF('generateVisitedReportBtn').disable()"
+				onclick="PrimeFaces.monitorDownload(start, stop);" />
+			<p:commandButton value="#{messages.cancel}">
+				<p:ajax process="@this" update=":contentPane"
+					listener="#{summaryReportBean.closeMonthlyReport()}" />
+			</p:commandButton>
+		</div>
+	</div>
+
+	<div>
+		<div class="monthly-report-info-left-panel">
+			<p:outputPanel
+				rendered="#{summaryReportBean.approvalAndSubmissionInfo.numberOfSubmissions > 0 }">
+
+				<div class="ui-grid-col-4">
+					<table>
+						<tr>
+							<td><p:outputLabel value="#{messages.numberOfSubmissions}" /></td>
+							<td><p:outputLabel
+									value=": #{summaryReportBean.approvalAndSubmissionInfo.numberOfSubmissions}" />
+							</td>
+							<td><p:commandLink id="track"
+									onclick="PF('toolTipTrack_js').show();">
+									<i class="fa fa-question-circle"></i>
+								</p:commandLink> <p:tooltip id="toolTipTrack" for="track" trackMouse="true"
+									widgetVar="toolTipTrack_js">
+									<ui:include src="tooltip.xhtml">
+										<ui:param name="actionAtLabel" value="#{messages.lastEdited}" />
+										<ui:param name="actionAt"
+											value="#{summaryReportBean.approvalAndSubmissionInfo.dateSubmissions}" />
+										<ui:param name="actionByLabel" value="" />
+										<ui:param name="hideActionBy" value="true" />
+									</ui:include>
+								</p:tooltip></td>
+						</tr>
+						<p:outputPanel
+							rendered="#{summaryReportBean.approvalAndSubmissionInfo.numberOfReject > 0}">
+
+							<tr>
+								<td><p:outputLabel value="#{messages.numberOfRejections}" /></td>
+								<td><p:outputLabel
+										value=": #{summaryReportBean.approvalAndSubmissionInfo.numberOfReject}" /></td>
+
+								<td><p:commandLink id="track2"
+										onclick="PF('toolTipTrack2_js').show();">
+										<i class="fa fa-question-circle"></i>
+									</p:commandLink> <p:tooltip id="toolTipTrack2" for="track2" trackMouse="true"
+										widgetVar="toolTipTrack2_js">
+										<ui:include src="tooltip.xhtml">
+											<ui:param name="actionAtLabel"
+												value="#{messages.lastRejected}" />
+											<ui:param name="actionAt"
+												value="#{summaryReportBean.approvalAndSubmissionInfo.dateReject}" />
+											<ui:param name="actionByLabel" value="#{messages.rejectedBy}" />
+											<ui:param name="actionBy"
+												value="#{summaryReportBean.approvalAndSubmissionInfo.rejectedBy}" />
+										</ui:include>
+									</p:tooltip></td>
+							</tr>
+						</p:outputPanel>
+
+						<p:outputPanel
+							rendered="#{summaryReportBean.approvalAndSubmissionInfo.numberOfApprove > 0}">
+							<tr>
+								<td><p:outputLabel value="#{messages.numberOfApproval}" /></td>
+								<td><p:outputLabel
+										value=": #{summaryReportBean.approvalAndSubmissionInfo.numberOfApprove}" /></td>
+
+								<td><p:commandLink id="track3"
+										onclick="PF('toolTipTrack3_js').show();">
+										<i class="fa fa-question-circle"></i>
+									</p:commandLink> <p:tooltip id="toolTipTrack3" for="track3" trackMouse="true"
+										widgetVar="toolTipTrack3_js">
+										<ui:include src="tooltip.xhtml">
+											<ui:param name="actionAtLabel"
+												value="#{messages.lastApproved}" />
+											<ui:param name="actionAt"
+												value="#{summaryReportBean.approvalAndSubmissionInfo.dateApproval}" />
+											<ui:param name="actionByLabel" value="#{messages.approver}" />
+											<ui:param name="actionBy"
+												value="#{summaryReportBean.approvalAndSubmissionInfo.approver}" />
+										</ui:include>
+									</p:tooltip></td>
+							</tr>
+						</p:outputPanel>
+
+
+						<p:outputPanel
+							rendered="#{summaryReportBean.approvalAndSubmissionInfo.numberOfReOpen > 0}">
+							<tr>
+								<td><p:outputLabel value="#{messages.numberOfReopen}" /></td>
+								<td><p:outputLabel
+										value=": #{summaryReportBean.approvalAndSubmissionInfo.numberOfReOpen}" /></td>
+
+								<td><p:commandLink id="track4"
+										onclick="PF('toolTipTrack4_js').show();">
+										<i class="fa fa-question-circle"></i>
+									</p:commandLink> <p:tooltip id="toolTipTrack4" for="track4" trackMouse="true"
+										widgetVar="toolTipTrack4_js">
+										<ui:include src="tooltip.xhtml">
+											<ui:param name="actionAtLabel"
+												value="#{messages.lastReOpened}" />
+											<ui:param name="actionAt"
+												value="#{summaryReportBean.approvalAndSubmissionInfo.dateReOpen}" />
+											<ui:param name="actionByLabel" value="#{messages.reOpenBy}" />
+											<ui:param name="actionBy"
+												value="#{summaryReportBean.approvalAndSubmissionInfo.reOpenedBy}" />
+										</ui:include>
+									</p:tooltip></td>
+							</tr>
+						</p:outputPanel>
+					</table>
+				</div>
+			</p:outputPanel>
+
+
+
+		</div>
+		<div class="monthly-report-info-right-panel">
+			<table>
+				<tr>
+					<td><p:outputLabel value="#{messages.branchName}" /></td>
+					<td><p:outputLabel
+							value=": #{summaryReportBean.selectedEmployee.addresspoint_mst.adp_name}" /></td>
+				</tr>
+				<tr>
+					<td><p:outputLabel value="#{messages.position}" /></td>
+					<td><p:outputLabel
+							value=": #{summaryReportBean.selectedEmployee.position_mst.pos_name}" /></td>
+				</tr>
+				<tr>
+					<td><p:outputLabel value="#{messages.creator}" /></td>
+					<td><p:outputLabel value=": #{summaryReportBean.creator}" /></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div style="clear: both;">
+		<p:outputPanel id="workingDayPanel">
+			<table width="100%" cellspacing="0">
+				<tr class="title">
+					<th colspan="2" width="50%"
+						class="monthly-report-header-cell-border-right">#{messages.dailyInput}</th>
+					<th colspan="2" width="50%">#{messages.secondedPersons}</th>
+				</tr>
+				<tr>
+					<td class="monthly-report-header-cell"><p:outputLabel
+							value="#{messages.workingDays}" for="workindDays" /> <p:inputText
+							id="workindDays"
+							required="#{not empty param[summaryReportBean.submit.clientId]}"
+							requiredMessage="#{messages.standard_working_day_required}"
+							value="#{summaryReportBean.monthlyReportRevision.kadou_nissuu}"
+							styleClass="small-input" disabled="#{readOnly}"
+							convertTo="Integer"
+							converter="#{converterStorage.integerConverter}"
+							converterMessage="#{messages.positiveIntegerFormatMessage}"
+							validatorMessage="#{messages.minimum_day_input_is} 1. #{messages.maximum_day_input_is} #{summaryReportBean.numberDaysInMonth}"
+							maxlength="4">
+							<p:ajax process="@this" update="@this" resetValues="true" />
+							<f:validateDoubleRange minimum="1"
+								maximum="#{summaryReportBean.numberDaysInMonth}" />
+							<f:convertNumber integerOnly="true" />
+						</p:inputText></td>
+					<td
+						class="monthly-report-header-cell monthly-report-header-cell-border-right">
+						<p:outputLabel value="#{messages.numberOfDaysInput} "
+							for="numberOfDaysInput" /> <p:inputText id="numberOfDaysInput"
+							value="#{summaryReportBean.monthlyReportRevision.nyuryoku_nissuu}"
+							styleClass="small-input" disabled="true"
+							converter="#{converterStorage.integerConverter}"
+							converterMessage="#{messages.positiveIntegerFormatMessage}"
+							maxlength="4"></p:inputText>
+					</td>
+					<td class="monthly-report-header-cell"><p:outputLabel
+							value="#{messages.monthTheFirst} " for="monthTheFirst" /> <p:inputText
+							id="monthTheFirst"
+							required="#{not empty param[summaryReportBean.submit.clientId]}"
+							requiredMessage="#{messages.at_first_this_month_required}"
+							value="#{summaryReportBean.monthlyReportRevision.tougetsu_tsuitachi_kara_no_haken_shain_suu}"
+							styleClass="small-input" disabled="#{readOnly}"
+							converter="#{converterStorage.integerConverter}"
+							converterMessage="#{messages.positiveIntegerFormatMessage}"
+							validatorMessage="#{messages.monthTheFirst}. #{messages.monthly_report_min_value_input}"
+							maxlength="4">
+							<p:ajax event="change" process="@this" update="@this"
+								resetValues="true" />
+							<f:validateDoubleRange minimum="0" />
+							<f:convertNumber integerOnly="true" />
+						</p:inputText></td>
+					<td class="monthly-report-header-cell"><p:outputLabel
+							value="#{messages.nextMonthTheFirst} " for="nextMonthTheFirst" />
+						<p:inputText id="nextMonthTheFirst"
+							required="#{not empty param[summaryReportBean.submit.clientId]}"
+							requiredMessage="#{messages.at_first_following_month_required}"
+							value="#{summaryReportBean.monthlyReportRevision.jigetsu_tsuitachi_kara_no_haken_shain_suu}"
+							styleClass="small-input" disabled="#{readOnly}"
+							converter="#{converterStorage.integerConverter}"
+							converterMessage="#{messages.positiveIntegerFormatMessage}"
+							validatorMessage="#{messages.nextMonthTheFirst}. #{messages.monthly_report_min_value_input}"
+							maxlength="4">
+							<p:ajax event="change" process="@this" update="@this"
+								resetValues="true" />
+							<f:validateDoubleRange minimum="0" />
+							<f:convertNumber integerOnly="true" />
+						</p:inputText></td>
+				</tr>
+			</table>
+		</p:outputPanel>
+	</div>
+
+	<p:confirmDialog id="confirmCloseDialog" global="true"
+		widgetVar="confirmCloseDialog"
+		message="#{messages.confirmCloseWhenNotSaveModifiedData}">
+		<p:outputPanel styleClass="dialog-confirm">
+			<p:commandButton value="#{messages.yes}">
+				<p:ajax process="@this" update=":contentPane"
+					listener="#{summaryReportBean.cleanMonthlyReportState()}"
+					oncomplete="PF('confirmCloseDialog').hide();" />
+			</p:commandButton>
+			<p:commandButton value="#{messages.no}"
+				onclick="PF('confirmCloseDialog').hide();"></p:commandButton>
+		</p:outputPanel>
+	</p:confirmDialog>
+
+	<p:confirmDialog id="confirmSubmitDialog" global="true"
+		rendered="#{!facesContext.validationFailed}"
+		widgetVar="confirmSubmitDialog"
+		message="#{messages.confirmSubmitMonthlyReport}">
+		<p:outputPanel styleClass="dialog-confirm">
+			<p:commandButton value="#{messages.yes}">
+				<p:ajax process="@this" update=":contentPane"
+					listener="#{summaryReportBean.saveMonthlyReport(OperationType.SUBMISSION)}"
+					oncomplete="PF('confirmSubmitDialog').hide();" />
+			</p:commandButton>
+			<p:commandButton value="#{messages.no}"
+				onclick="PF('confirmSubmitDialog').hide();"></p:commandButton>
+		</p:outputPanel>
+	</p:confirmDialog>
+
+
+
+</ui:composition>

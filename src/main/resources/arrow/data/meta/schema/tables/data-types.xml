@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Type name: get from TYPE_NAME -->
+<!-- jdbcType: target SQL data type -->
+<!-- columnSize: size of column. 0 if don't need to specific -->
+<data-types>
+	<!-- Text -->
+	<type name="code" jdbcType="VARCHAR" columnSize="256" />
+	<type name="email" jdbcType="VARCHAR" columnSize="256" />
+	<type name="url" jdbcType="VARCHAR" columnSize="256" />
+	<type name="name" jdbcType="VARCHAR" columnSize="32" />
+	<type name="short-name" jdbcType="VARCHAR" columnSize="16" />
+	<type name="long-name" jdbcType="VARCHAR" columnSize="128" />
+	<type name="phone" jdbcType="VARCHAR" columnSize="13" />
+	<type name="password" jdbcType="VARCHAR" columnSize="10" />
+	<type name="free-text" jdbcType="TEXT" columnSize="10485760" />
+	<type name="description" jdbcType="VARCHAR" columnSize="128" />
+	<type name="long-text" jdbcType="VARCHAR" columnSize="250" />
+	<type name="huge-text" jdbcType="VARCHAR" columnSize="255" />
+	<type name="giga-text" jdbcType="VARCHAR" columnSize="1000" />
+
+	<!-- Character -->
+	<type name="c-flag" jdbcType="CHAR" columnSize="1"/>
+	<type name="c-short-code" jdbcType="CHAR" columnSize="2" />
+	<type name="c-code" jdbcType="CHAR" columnSize="10" />
+	<type name="c-mid-code" jdbcType="CHAR" columnSize="4" />
+	<type name="c-five-length" jdbcType="CHAR" columnSize="5" />
+	<type name="c-twelfth-length" jdbcType="CHAR" columnSize="12" />
+	<type name="c-thirteen-length" jdbcType="CHAR" columnSize="13" />
+	<type name="c-sixteen-length" jdbcType="CHAR" columnSize="16" />
+	<type name="c-twenty-length" jdbcType="CHAR" columnSize="20" />
+	<type name="c-thirty-length" jdbcType="CHAR" columnSize="30" />
+	<type name="c-thirty-two-length" jdbcType="CHAR" columnSize="32" />
+	<type name="c-forty-length" jdbcType="CHAR" columnSize="40" />
+	<type name="c-sixty-length" jdbcType="CHAR" columnSize="60" />
+	<type name="c-long-code" jdbcType="CHAR" columnSize="64" />
+	<type name="c-big-code" jdbcType="CHAR" columnSize="250" />
+	<type name="c-huge-code" jdbcType="CHAR" columnSize="255" />
+
+	<!-- Integer -->
+	<type name="serial" jdbcType="INTEGER" columnSize="0" />
+	<type name="integer" jdbcType="INTEGER" columnSize="4" />
+	<type name="object-integer" jdbcType="INTEGER" columnSize="4" />
+	<type name="object-version" jdbcType="INTEGER" columnSize="4" />
+
+	<!-- small int -->
+	<type name="small-int" jdbcType="SMALLINT" columnSize="2" />
+	<type name="object-small-int" jdbcType="SMALLINT" columnSize="2"/>
+	<type name="tiny-int" jdbcType="SMALLINT" columnSize="1" />
+
+	<!-- temporal -->
+	<type name="date" jdbcType="DATE" columnSize="4" />
+	<type name="time" jdbcType="TIME" columnSize="8" />
+	<type name="timestamp" jdbcType="TIMESTAMP" columnSize="8" />
+	<type name="short-date" jdbcType="DATE" columnSize="3" />
+
+	<!-- boolean -->
+	<type name="flag" jdbcType="BOOLEAN" columnSize="1" />
+	
+	<!-- Double -->
+	<type name="cost" jdbcType="DOUBLE" columnSize="8"/>
+	<type name="numeric" jdbcType="DOUBLE" columnSize="8"/>
+
+</data-types>

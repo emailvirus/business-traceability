@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" xmlns:h="http://java.sun.com/jsf/html" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:o="http://omnifaces.org/ui">
+	<o:importConstants type="arrow.businesstraceability.constant.MobilePageId" />
+	<pm:header title="#{messages.daily_reports}">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton action="#{mobileScreenFlowBean.goBack()}" value="#{messages.back}" icon="ui-icon-arrow-l" styleClass="ui-btn-inline" process="@this" update=":home" />
+					<p:commandButton value="#{messages.home}" icon="ui-icon-home" action="#{mobileScreenFlowBean.gotoHome()}" update=":home" process="@this" />
+					<p:commandButton value="#{messages.register}" icon="ui-icon-plus" action="#{notificationMobileBean.mobileViewReport(report)}" update=":editDailyReport">
+						<f:setPropertyActionListener value="#{true}" target="#{registerActivityMobileBean.choosedRegister}" />
+					</p:commandButton>
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="#{messages.logout}" icon="ui-icon-power" action="#{authenticationBean.logout}" update="@all" />
+				</f:facet>
+			</p:toolbar>
+		</h:form>
+	</pm:header>
+	<pm:content>
+		<p:messages for="deleteReport" id="sGrowl" autoUpdate="true" styleClass="ui-messages-info"></p:messages>
+		<h:form>
+			<p:outputLabel for="workDate" value="#{messages.work_date}"></p:outputLabel>
+			<p:inputText type="date" value="#{registerActivityMobileBean.selectedDate}" id="workDate">
+				<p:ajax event="change" update="reportListTable" />
+			</p:inputText>
+
+			<p:dataList value="#{registerActivityMobileBean.allReport}" var="report" pt:data-inset="true" id="reportListTable">
+				<f:facet name="header">
+			       #{messages.list_of_reports}
+			    </f:facet>
+				<p:commandLink action="#{notificationMobileBean.mobileViewReport(report)}" update=":editDailyReport">
+					<p:panelGrid columns="2">
+						<p:panelGrid columns="1">
+							<p:outputLabel>#{messages.company}: #{report.company_mst.com_company_name}</p:outputLabel>
+							<p:outputLabel>#{messages.head_office}: #{report.company_mst.addresspoint_mst.adp_name}</p:outputLabel>
+						</p:panelGrid>
+						<p:panelGrid columns="2">
+							<p:outputLabel>#{messages.start_time}: <arrow:outputTime value="#{report.dai_work_stime}"></arrow:outputTime>
+							</p:outputLabel>
+							<p:outputLabel>#{messages.duration}: <arrow:outputTime value="#{report.dai_required_time}"></arrow:outputTime>
+							</p:outputLabel>
+							<p:outputLabel>#{messages.end_time}: <arrow:outputTime value="#{report.dai_work_etime}"></arrow:outputTime>
+							</p:outputLabel>
+						</p:panelGrid>
+					</p:panelGrid>
+					<f:setPropertyActionListener value="#{report.dto}" target="#{mobileScreenFlowBean.actionTarget}" />
+					<f:setPropertyActionListener value="registerActivityMobileBean.setCurrentReport(mobileScreenFlowBean.actionTargets[0])" target="#{mobileScreenFlowBean.callbackExpression}" />
+					<f:setPropertyActionListener value="#{true}" target="#{report.selected}" />
+					<f:setPropertyActionListener value="#{false}" target="#{registerActivityMobileBean.viewReport}" />
+				</p:commandLink>
+				<f:facet name="footer">
+			        #{messages.list_of_reports}
+			    </f:facet>
+			</p:dataList>
+		</h:form>
+	</pm:content>
+</ui:composition>

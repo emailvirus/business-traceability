@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:o="http://omnifaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+	<ui:define name="content">
+		<script>
+   	$(function(){
+   		$.getJSON(location.origin + "/business_traceability/rest/dailyreport/pivot/test", function(data) {
+            $("#output").pivotUI(data ,{
+                onRefresh: function(config) {
+                	var columnHeaders = $('.pvtAxisLabel');
+                    for(var i = 0; i &lt; columnHeaders.length; i++) {
+                        var currentLabel = columnHeaders[i].firstChild.textContent;
+                        columnHeaders[i].firstChild.textContent = messages[currentLabel];
+                    }
+                }
+            , menuLimit: data.length});
+            
+            var elements = $('.pvtAttr');
+            for(var i = 0; i &lt; elements.length; i++) {
+                var currentLabel = elements[i].firstChild.textContent;
+                elements[i].firstChild.textContent = messages[currentLabel];
+            }
+	    });
+     });
+		</script>
+		<h:form>
+			<div id="output"></div>
+		</h:form>
+	</ui:define>
+</ui:composition>

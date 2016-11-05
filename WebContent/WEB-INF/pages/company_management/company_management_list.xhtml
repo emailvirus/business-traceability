@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:o="http://omnifaces.org/ui"
+    xmlns:arrow="http://arrow-tech.vn/arrow"
+    xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+    xmlns:p="http://primefaces.org/ui">
+    <script type="text/javascript">
+          renderTableWithFilter();
+    </script>
+    <h:form>
+    	<ui:param name="showAllButtonLabel" value="#{companyManagementBean.showAllCompanyInfo ? messages.collapse_company_info : messages.show_all_company_info}" />
+    	<ui:param name="showAllButtonIcon" value="ui-icon-circle-triangle-#{companyManagementBean.showAllCompanyInfo ? 'e' : 's'}" />
+        <p:panel>
+            <p:commandButton value="#{messages.add}" icon="fa fa-file" action="#{companyManagementBean.addNewCompany}" update=":contentPane"
+            	onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()" />
+            <p:commandButton value="#{messages.edit}" icon="fa fa-edit" action="#{companyManagementBean.editCompany()}" 
+            	update=":contentPane" disabled="#{!companyManagementBean.enableEdit}"
+            	onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()" />
+            <p:commandButton value="#{messages.delete}" icon="fa fa-trash" action="#{companyManagementBean.deleteCompany()}" 
+            	update=":contentPane" disabled="#{!companyManagementBean.enableDelete}" 
+            	onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()" />
+            <p:commandButton value="#{showAllButtonLabel}" icon="#{showAllButtonIcon}" action="#{companyManagementBean.toggleShowAllCompanyInfo}" 
+            	update="companyTable, @this" process="@this" immediate="true" />
+  			<p:commandButton id="exportCompany" value="#{messages.export}" action="#{companyManagementBean.getFile()}" ajax="false" icon="fa fa-bar-chart"
+  				onstart="PF('exportCompany').disable()" oncomplete="PF('exportCompany').enable()"
+  				onclick="PrimeFaces.monitorDownload(start, stop);"
+  	  			rendered="#{companyManagementBean.headOfficeUser}" />
+        </p:panel>
+        <arrow:dataTable value="#{companyManagementBean.listCompanies}" var="comp" rows="20" id="companyTable" rowIndexVar="index" paginator="true"
+            paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+            expandedRow="#{companyManagementBean.showAllCompanyInfo}">
+            <f:facet name="header">
+                    #{messages.company}
+                  <p:commandButton id="toggler" type="button" value="#{messages.toggle_column}" style="float:right" icon="ui-icon-calculator" />
+                  <p:columnToggler datasource="companyTable" trigger="toggler" >
+                         <p:ajax event="toggle" listener="#{toggleColumnBean.onToggle}" />
+                  </p:columnToggler>
+            </f:facet>
+        <p:column styleClass="arrow-row-branch" toggleable="false" visible="#{toggleColumnBean.list[0]}" >
+            <p:rowToggler />
+        </p:column>
+            <p:column styleClass="arrow-column-header arrow-ui-select-column" toggleable="false" visible="#{toggleColumnBean.list[1]}">
+                <p:selectBooleanCheckbox value="#{comp.selected}">
+                    <p:ajax event="change" update=":contentPane" listener="#{companyManagementBean.toggleSelection(comp)}" />
+                </p:selectBooleanCheckbox>
+            </p:column>
+            <p:column headerText="#{messages.company_no}" styleClass="arrow-ui-index-column" toggleable="false" visible="#{toggleColumnBean.list[2]}">
+                #{index+1}
+            </p:column>
+            <p:column styleClass="arrow-ui-name-column not-show-at-start" headerText="#{messages.company_name}" visible="#{toggleColumnBean.list[3]}">
+                <f:facet name="header">
+                    <ar:columHeader value="#{messages.company_name}"
+                        parentTable="companyTable"
+                        sorter="#{companyManagementBean.listCompanies.sort('company_name')}"
+                        filter="#{companyManagementBean.listCompanies.filter('company_name')}">
+                    </ar:columHeader>
+                </f:facet>
+                #{comp.extendComName}
+            </p:column>
+            <p:column styleClass="arrow-ui-code-column" visible="#{toggleColumnBean.list[4]}">
+                <f:facet name="header">
+                    <ar:columHeader value="#{messages.customer_br_code}" escape="false"
+                        parentTable="companyTable"
+                        sorter="#{companyManagementBean.listCompanies.sort('company_customer_code')}"
+                        filter="#{companyManagementBean.listCompanies.filter('company_customer_code')}">
+                    </ar:columHeader>
+                </f:facet>
+                #{comp.com_customer_code}
+            </p:column>
+            <p:column styleClass="arrow-ui-code-column" visible="#{toggleColumnBean.list[5]}">
+                <f:facet name="header">
+                    <p:commandLink styleClass="sorter" value="#{messages.company_main_address}" 
+                    action="#{companyManagementBean.listCompanies.sort('company_head_office')}" immediate="true" process="@this"
+                    update="companyTable" />
+                    <br />
+                    <p:selectOneMenu styleClass="ui-column-filter"
+                        value="#{companyManagementBean.listCompanies.filter('company_head_office').value}">
+                        <f:selectItem itemValue="" itemLabel="" />
+                        <f:selectItems
+                            value="#{companyManagementBean.listAddresses}" var="item" itemValue="#{item.pk.adp_code}" itemLabel="#{item.adp_name}"/>
+                        <p:ajax event="change" update="companyTable" process="@this" />
+                    </p:selectOneMenu>
+                    
+                </f:facet>
+                #{comp.addresspoint_mst.adp_name}
+            </p:column>
+            <p:column styleClass="arrow-ui-code-column" visible="#{toggleColumnBean.list[6]}">
+                <f:facet name="header">
+                    <p:commandLink styleClass="sorter" value="#{messages.company_type_of_work}" 
+                    action="#{companyManagementBean.listCompanies.sort('company_type_of_work')}" 
+                    update="companyTable" />
+                    <br />
+                    <p:selectOneMenu  styleClass="ui-column-filter"
+                        value="#{companyManagementBean.listCompanies.filter('company_type_of_work').value}" >
+                        <f:selectItem itemValue="" itemLabel="" />
+                        <f:selectItems
+                            value="#{companyManagementBean.listBusinessTypes}" var="item" itemValue="#{item.big_code}" itemLabel="#{item.big_name}" />
+                        <p:ajax event="change" update="companyTable" process="@this" />
+                    </p:selectOneMenu>
+                </f:facet>
+                #{comp.industry_big_mst.big_name}
+            </p:column>
+            <p:column styleClass="arrow-ui-code-column" visible="#{toggleColumnBean.list[7]}">
+                <f:facet name="header">
+                <p:commandLink styleClass="sorter" value="#{messages.company_listed}" 
+                    action="#{companyManagementBean.listCompanies.sort('company_listed')}" 
+                    update="companyTable" />
+                    <br />
+                    <p:selectOneMenu styleClass="ui-column-filter"
+                        value="#{companyManagementBean.listCompanies.filter('company_listed').value}">
+                        <f:selectItem itemValue="" itemLabel="" noSelectionOption="true"/>
+                        <f:selectItems
+                            value="#{companyManagementBean.selectItemListedCodes}" />
+                        <p:ajax event="change" update="companyTable" process="@this" />
+                    </p:selectOneMenu>
+                </f:facet>
+                <p:outputLabel value="#{companyManagementBean.getListedLabel(comp.com_listed_code)}" />
+            </p:column>
+            <p:column styleClass="arrow-ui-name-column" visible="#{toggleColumnBean.list[8]}">
+                <f:facet name="header">
+                    <ar:columHeader value="#{messages.company_url}"
+                        parentTable="companyTable"
+                        sorter="#{companyManagementBean.listCompanies.sort('company_url')}"
+                        filter="#{companyManagementBean.listCompanies.filter('company_url').value}">
+                    </ar:columHeader>
+                </f:facet>
+                #{comp.com_url}
+            </p:column>
+            <p:rowExpansion id="rowContent">
+                <h:panelGrid id="display" styleClass="list-branch">
+                    <f:facet name="header">
+                    #{messages['company_all_branch']}
+                </f:facet>
+                    <h:outputText value="#{(not empty comp.allBranch) ? comp.allBranch : messages.there_is_no_branch}" />
+                </h:panelGrid>
+            </p:rowExpansion>
+        </arrow:dataTable>
+    </h:form>
+</ui:composition>

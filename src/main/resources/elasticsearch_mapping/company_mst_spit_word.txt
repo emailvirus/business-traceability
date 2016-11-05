@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "com_customer_code": {
+      "analyzer": "my_ngram_analyzer",
+      "type": "string"
+    }
+  }
+}

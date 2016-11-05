@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:composite="http://java.sun.com/jsf/composite">
+
+	<composite:interface>
+	    <composite:attribute name="value" />
+		<composite:attribute name="id" />
+		<composite:attribute name="update" default="@this"/>
+	    <composite:attribute name="process"/>
+	    <composite:attribute name="comPointCode"/>
+	    <composite:attribute name="companyCode"/>
+	    <composite:attribute name="onSelect" method-signature="void test()"/>
+	    <composite:attribute name="valueChangeListener" method-signature="void listener(javax.faces.event.AjaxBehaviorEvent)"/>
+	    <composite:attribute name="disabled"/>
+	</composite:interface>
+
+<composite:implementation>
+
+	<p:outputPanel id="compositePanel">
+		<script type="text/javascript">
+	        $(function() {
+	            var personAutocomplete = {
+	                showHeader: true,
+					resizeEvenColumn: true,
+	                columns: [{
+	                    name: '#{messages.employee_name}',
+	                    width: 200,
+	                    valueField: 'dai_compemp_name'
+	                }, {
+	                    name: '#{messages.department}',
+	                    width: 200,
+	                    valueField: 'dai_employee_post'
+	                }],
+	                minLength: 1,
+	                source: function (request, response) {
+	                    $.ajax({
+	                    	beforeSend: function (request) {
+	                            request.setRequestHeader("comPointCode", $(".person-suggestion").attr("comPointCode"));
+	                            request.setRequestHeader("companyCode", $(".person-suggestion").attr("companyCode"));
+	                        },
+	                        dataType: "json",
+	                        url: location.origin + "/business_traceability/rest/dailyreport/suggest/employee/" + request.term,
+	                        success: function (data) {
+	                            response(data);
+	                        }
+	                    });
+
+	                },
+	                search: function () {
+	                    // custom minLength
+	                    var term = extractLast(this.value);
+	                },
+	                focus: function (event, ui) {
+						$(event.currentTarget).find('tr').removeClass('ui-state-highlight');
+						$(event.currentTarget).find('tr').filter('#' + ui.item.id).addClass('ui-state-highlight');
+	                    // prevent value inserted on focus
+	                    this.value = !!ui.item ? ui.item.dai_compemp_name : null;
+	                    return false;
+	                },
+	                select: function (event, ui) {
+	                    this.value = !!ui.item ? ui.item.dai_compemp_name : null;
+	                    setDepartmentName([{name: 'departmentName',value: ui.item.dai_employee_post},{name: 'employeeName',value: ui.item.dai_compemp_name}]);
+	                    return false;
+	                }
+	            };
+
+	            var allSuggestions = $(".person-suggestion");
+	            $.each(allSuggestions, function(index, value){
+					SetCaretAtEnd(value);
+	            });
+	            $(".person-suggestion")
+	            // don't navigate away from the field on tab when selecting an item
+	            .bind( "keydown", disableMenuFunction)
+	            .mcautocomplete(personAutocomplete);
+	        });
+	    </script>
+
+		<p:inputText styleClass="person-suggestion" id="#{cc.attrs.id}" value="#{cc.attrs.value}" disabled="#{cc.attrs.disabled}"
+			pt:comPointCode="#{cc.attrs.comPointCode}" pt:companyCode="#{cc.attrs.companyCode}" maxlength="32">
+			<p:ajax event="change" process="#{cc.attrs.process}" update="#{cc.attrs.update}" listener="#{cc.attrs.valueChangeListener}"/>
+		</p:inputText>
+	
+		<p:remoteCommand name="setDepartmentName" action="#{cc.attrs.onSelect}" process="#{cc.attrs.process}" update="#{cc.attrs.update}"/>
+	    </p:outputPanel>
+	</composite:implementation>
+
+</html>

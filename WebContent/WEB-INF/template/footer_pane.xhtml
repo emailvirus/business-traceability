@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+>
+	
+<!-- 	<div  id="systemMark"> -->
+<!-- 		<a href="http://"> -->
+<!-- 		<h:graphicImage value="/resources/images/title_256x50-32.gif" /> -->
+<!-- 		</a>	 -->
+<!-- 	</div> -->
+	<span style="float:left; position:absolute; bottom:0px;"><font
+			size="0.2em">#{sysConfig.currentRevision}</font></span>
+	<div id="companyTradeMark">
+
+		<a href="http://">
+		<h:graphicImage value="/resources/images/triarrow-logo.png" />
+		</a>
+		<h4 style="color:black; position:absolute; right: 100px; bottom: 0px;">
+			Copyright (C) TRI-ARROW Corporation.All rights reserved.
+			<br/>
+			<font size="0.5em">Business Tracebility System version Alpha 02 rev. #{sysConfig.currentVersion}</font>
+			<br/>
+
+		</h4>
+	</div>
+</ui:composition>

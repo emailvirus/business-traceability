@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ACC_COM_FINANCE -->
+<table desc="Đề nghị thay đổi, bảng kinh doanh tương ứng">
+	<primary-key>
+		<column name="ID_COM_RELATION" lname="Company relation TBL ID" data-type="integer" not-null="true" comment="ID doanh nghiệp quan hệ"/>
+	</primary-key>
+	
+	<column name="ID_COM_ENTITY" lname="Company permanent info TBL ID" data-type="integer" not-null="true" comment="ID tên thương mại"/>
+	<column name="ID_CREDIT" lname="Credit score TBL ID" data-type="integer" not-null="false" default-value="NULL" comment="ID Thông tin doanh nghiệp"/>
+	<column name="ENUM_COM_RELATION" lname="Status of company relation category" data-type="c-flag" not-null="true" comment="Loại quan hệ"/>
+	<column name="NAME_COM_RELATION" lname="Name of related company" data-type="c-sixty-length" not-null="true" comment="Tên quan hệ"/>
+	
+	<foreign-key parent-table="ACC_COM_CREDIT">
+		<column name="ID_CREDIT" referColumn="ID_CREDIT"/>
+	</foreign-key>
+	
+	<foreign-key parent-table="ACC_COM_ENTITY">
+		<column name="ID_COM_ENTITY" referColumn="ID_COM_ENTITY"/>
+	</foreign-key>
+</table>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ACC_COM_ENTITY -->
+<table desc="Dự thảo thay đổi, bảng tên thương mại công ty">
+	<primary-key>
+		<column name="ID_COM_ENTITY" lname="Company permanent info TBL ID" data-type="integer" not-null="true" comment=""/>
+	</primary-key>
+	
+	<column name="ID_INT_SAN_COMPANY" lname="Sansan company ID" data-type="integer" not-null="false" default-value="NULL" comment="ID integer mapping company"/>
+	<column name="INDX_CUSTOMER" lname="Customer code (index)" data-type="c-thirteen-length" not-null="true" comment="Mã khách hàng"/>
+	<column name="NAME_COM_KANA" lname="Company name in Kana" data-type="c-sixty-length" not-null="true" comment="Phiên âm khách hàng"/>
+	<column name="NAME_COMPANY" lname="Company name" data-type="c-sixty-length" not-null="true" comment="Tên khách hàng 1"/>
+	<column name="CODE_ACC_CLIENT" lname="Client_code status code" data-type="c-thirteen-length" not-null="true" comment="90: mã quản lý tình trạng khách hàng"/>
+	
+	<column name="MYNUM_COM" lname="Company my number (national unique number)" data-type="c-thirty-two-length" not-null="false" default-value="NULL" comment="Số pháp nhân"/>
+	<column name="ID_CREDIT" lname="Latest credit information ID" data-type="integer" not-null="false" default-value="NULL" comment="ID điều tra tín dụng mới nhất"/>
+	<column name="Y_START" lname="Year of starting business" data-type="integer" not-null="false" default-value="NULL" comment="Năm sáng lập"/>
+	<column name="Y_ESTABLISH" lname="Year of official establishment" data-type="integer" not-null="false" default-value="NULL" comment="Năm thành lập"/>
+	<column name="DATE_CREATION" lname="Date of record creation" data-type="timestamp" not-null="false" comment="Ngày khởi tạo"/>
+	
+	<column name="AC_CREATION" lname="Date of lastest survey update" data-type="integer" not-null="false" default-value="NULL" comment="Người tạo (tài khoản user)"/>
+	<column name="TS_EXPORT" lname="Last timestamp of export" data-type="timestamp" not-null="false" comment="Thời điểm export lần cuối"/>
+	<column name="TS_UPDATE" lname="Last timestamp of update" data-type="timestamp" not-null="false" comment="Thời điểm update lần cuối"/>
+	<column name="AC_UPDATE" lname="Last update user account" data-type="integer" not-null="false" default-value="NULL" comment="Người update cuối cùng (tài khoản user)）"/>
+	
+	<foreign-key parent-table="SAN_COM_INFO">
+		<column name="ID_INT_SAN_COMPANY" referColumn="ID_COMPANY"/>
+	</foreign-key>
+</table>

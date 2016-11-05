@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAN_COM_SITE -->
+<table desc="Thông tin name card sansan">
+	<primary-key>
+		<column name="ID_SITE" lname="Site TBL ID" data-type="integer" not-null="true" default-value="0" comment="ID căn cứ"/>
+	</primary-key>
+	
+	<column name="ID_COMPANY" lname="Sansan company ID" data-type="integer" not-null="true"  comment="ID công ty"/>
+	<column name="ID_BRANCH" lname="Branch TBL ID" data-type="integer" not-null="false" default-value="NULL" comment="ID bộ phận"/>
+	<column name="CODE_ZIP" lname="Zip code" data-type="c-twelfth-length" not-null="false" default-value="NULL" comment="Mã bưu điện (1)"/>
+	<column name="ADDR_ALL" lname="Address (all)" data-type="giga-text" not-null="false" default-value="NULL" comment="Địa chỉ(1)［toàn bộ］"/>
+	<column name="ADDR_PREF" lname="Address (prefecture level)" data-type="c-long-code" not-null="false" default-value="NULL" comment="Địa chỉ(1)［tỉnh/thành phố］"/>
+	<column name="ADDR_CITY" lname="Address (city level)" data-type="c-long-code" not-null="false" default-value="NULL" comment="Địa chỉ(1)［quận huyện /phường xã］"/>
+	<column name="ADDR_BLOCK" lname="Address (block number)" data-type="huge-text" not-null="false" default-value="NULL" comment="Địa chỉ(1)［khu/tổ］"/>
+	<column name="ADDR_BLDG" lname="Address (building name)" data-type="huge-text" not-null="false" default-value="NULL" comment="Đại chỉ(1)［tên tòa nhà］"/>
+	<column name="N_DUPINFO" lname="Number of duplication count" data-type="integer" not-null="true" default-value="0" comment="Tính duplicate"/>
+	<column name="ID_CARD" lname="Card ID" data-type="integer" not-null="true" comment="ID namecard mới nhất"/>
+	<column name="DATE_LATEST_EXCHANGE" lname="Latest date of card exchange" data-type="short-date" not-null="false" default-value="NULL" comment="Ngày chuyển đổi namecard mới nhất"/>
+	
+	<foreign-key parent-table="SAN_COM_INFO">
+		<column name="ID_COMPANY" referColumn="ID_COMPANY"/>
+	</foreign-key>
+	<foreign-key parent-table="SAN_CARD_DATA">
+		<column name="ID_CARD" referColumn="ID_CARD"/>
+	</foreign-key>
+	<foreign-key parent-table="SAN_COM_BRANCH">
+		<column name="ID_BRANCH" referColumn="ID_BRANCH"/>
+	</foreign-key>
+</table>

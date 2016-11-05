@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table desc="BRANCH_POSITION">
+	<primary-key>
+		<column name="POS_ID" data-type="serial" not-null="true"  comment="Số nguyên dương -- Ví dụ: 1"/>
+	</primary-key>
+	<column lname="Prefecture code" name="ADP_CODE" data-type="c-short-code" not-null="true"  />
+	<column name="EMPLOYEE_CODE" data-type="integer" not-null="true"  />
+	<column lname="Position Code" name="POS_CODE" data-type="small-int" not-null="true"  comment="101 là trưởng chi nhánh, 102 là phó."/>
+	<column name="DELETE_FLG" data-type="flag" not-null="false"  />
+
+	<foreign-key parent-table="EMPLOYEE_MST">
+		<column name="EMPLOYEE_CODE" referColumn="EMP_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="ADDRESSPOINT_MST">
+		<column name="ADP_CODE" referColumn="ADP_CODE"/>
+	</foreign-key>
+	<foreign-key parent-table="POSITION_MST">
+		<column name="POS_CODE" referColumn="POS_CODE"/>
+	</foreign-key>
+</table>

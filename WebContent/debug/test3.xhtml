@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:o="http://omnifaces.org/ui"
+	template="/WEB-INF/template/template.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<p:growl></p:growl>
+			<p:messages></p:messages>
+			<p:tooltip />
+			<!-- To access constants -->
+			<o:importConstants type="arrow.framework.faces.message.MessageCode" />
+sancardData		
+
+			<p:commandButton icon="fa fa-building"
+				value="push setting Sancard data"
+				action="#{debugBean.pushSancardDataIndex()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+
+			<p:commandButton icon="fa fa-building" value="readCsv"
+				action="#{sansanImportFileDataBean.readCsv()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+
+			<p:commandButton icon="fa fa-building" value="push SanCardData"
+				action="#{debugBean.pushSanCardData()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<br />
+
+			<p:commandButton icon="fa fa-building" value="importData"
+				action="#{sansanImportFileDataBean.importData()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+
+			<p:commandButton icon="fa fa-building" value="push all"
+				action="#{debugBean.pushAll()	}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<p:commandButton icon="fa fa-building" value="search"
+				action="#{debugBean.search()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+				
+company
+				<p:commandButton icon="fa fa-building" value="setMapingAndIndex"
+				action="#{debugBean.testSetMappingAndIndex()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+
+
+			<p:autoComplete value="#{debugBean.selectedCompanyMst}" title="abc"
+				forceSelection="true" cache="true" cacheTimeout="300"
+				dropdown="true" scrollHeight="200" var="com"
+				itemLabel="#{com.com_company_name}"
+				itemValue="#{com.com_company_code}" widgetVar="company_wiget_var"
+				completeMethod="#{debugBean.autoCompleteCompany}"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;">
+
+				<p:column headerText="customer code">
+					<h:outputText value="#{com.com_customer_code}" />
+				</p:column>
+				<p:column headerText="code">
+					<h:outputText value="#{com.com_company_code}" />
+				</p:column>
+
+				<p:column headerText="name">
+					<h:outputText value="#{com.com_company_name}" />
+				</p:column>
+				<p:column headerText="furigana">
+					<h:outputText value="#{com.com_company_furigana}" />
+				</p:column>
+				<p:column headerText="url">
+					<h:outputText value="#{com.com_url}" />
+				</p:column>
+				<p:column headerText="work type">
+					<h:outputText value="#{com.worktype}" />
+				</p:column>
+				<p:column headerText="listed">
+					<h:outputText value="#{com.listed}" />
+				</p:column>
+			</p:autoComplete>
+			<br />
+			<p:inputTextarea value="#{debugBean.dbScanOutput}" id="output">
+
+			</p:inputTextarea>
+			person in charge
+			<p:autoComplete value="#{debugBean.selectedCustomer}" title="abc"
+				forceSelection="true" cache="true" cacheTimeout="300"
+				dropdown="true" scrollHeight="200" var="cus"
+				itemLabel="#{cus.dai_compemp_name}"
+				itemValue="#{cus.dai_compemp_name}" widgetVar="person_wiget_var"
+				completeMethod="#{debugBean.autoCompletePersonInCharge}">
+				<p:column headerText="customer code">
+					<h:outputText value="#{cus.dai_compemp_name}" />
+				</p:column>
+			</p:autoComplete>
+
+			<p:commandButton icon="fa fa-building" value="fire-event"
+				action="#{debugBean.testDataChange()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<br></br>
+			<p:commandButton icon="fa fa-building" value="testDeleteCompany"
+				action="#{debugBean.testDeleteCompanymst()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<p:commandButton icon="fa fa-building" value="push company mingram"
+				action="#{debugBean.pushCompanyMingram()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<p:commandButton icon="fa fa-building" value="dbScan"
+				action="#{debugBean.dbScan()}" rendered="true"
+				onstart="PF('globalBlockUI_js').block()" process="@this"
+				update="output"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<br />
+pushAddresPointMstToElasticSearch
+			<p:commandButton icon="fa fa-building"
+				value="pushAddresPointMstToElasticSearch"
+				action="#{debugBean.pushAddresPointMstToElasticSearch()}"
+				rendered="true" onstart="PF('globalBlockUI_js').block()"
+				process="@this"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+			<br />
+			<br />
+			<br />
+autocompleteAddresspoint				
+			<p:autoComplete value="#{debugBean.addrespoint}" title="input"
+				forceSelection="true" cache="true" cacheTimeout="300"
+				dropdown="true" scrollHeight="200" var="addrespoint"
+				itemLabel="#{addrespoint.adp_name}"
+				itemValue="#{addrespoint}" 
+				converter="#{converterStorage.addressPointMstConverter}"
+				completeMethod="#{debugBean.autoCompleteAddressPointMst}">
+				<p:column headerText="customer code">
+					<h:outputText value="#{addrespoint.adp_code}" />
+				</p:column>
+				<p:column headerText="customer code">
+					<h:outputText value="#{addrespoint.adp_name}" />
+				</p:column>
+				<p:ajax event="change" process="@this" update="@this selectEmployee"/>
+				<p:ajax event="itemSelect" process="@this" update="@this selectEmployee"/>
+				
+			</p:autoComplete>
+			<br />
+autocompleteEmployee
+			<p:autoComplete id="selectEmployee" value="#{debugBean.employee}" 
+				title="#{messages.type_to_find_employee}" forceSelection="true"
+				converter="#{converterStorage.employeeConverter}"
+				emptyMessage="#{messages.no_employee_found}" cache="true"
+				cacheTimeout="300" dropdown="true" scrollHeight="200" var="emp"
+				itemLabel="#{emp.emp_name}" itemValue="#{emp}"
+				completeMethod="#{debugBean.autocompleteEmployee}"
+				disabled="#{debugBean.addrespoint eq null}"
+				required="true" requiredMessage="#{messages.applicant_is_required}"
+				widgetVar="employee_wg_var">
+
+				<p:column headerText="#{messages.employee_code}">
+					<h:outputText value="#{emp.emp_code}" />
+				</p:column>
+
+				<p:column headerText="#{messages.employee_name}">
+					<h:outputText value="#{emp.emp_name}" />
+				</p:column>
+			</p:autoComplete>
+			
+
+		</h:form>
+		
+		<br/>
+		<h:form>
+			<p:commandButton value="Compare San Card Data" action="#{debugBean.testCompareSanCard()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+			
+			<p:commandButton value="Compare San IdMap Card" action="#{debugBean.testCompareSanIdMapCard()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+				
+			<p:commandButton value="Compare San IdMap Company" action="#{debugBean.testCompareSanIdMapCompany()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+				
+			<p:commandButton value="Compare San IdMap Person" action="#{debugBean.testCompareSanIdMapPerson()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+			<br/>
+			<p:commandButton value="Compare San Com Branch" action="#{debugBean.testCompareSanComBranch()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+				
+			<p:commandButton value="Compare San Com MDomain" action="#{debugBean.testCompareSanComMDomain()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+				
+			<p:commandButton value="Compare San Com UDomain" action="#{debugBean.testCompareSanComUDomain()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+			<br/>
+			<p:commandButton value="Compare San Com Whole Card" action="#{debugBean.testCompareSanComWholeCard()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+			<p:commandButton value="Compare San Com Live Owner" action="#{debugBean.testCompareSanComLiveOwner()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+			<p:commandButton value="Compare San Com Live Stat" action="#{debugBean.testCompareSanComLiveStat()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+			<br/>
+			<p:commandButton value="Compare San Com Live Client" action="#{debugBean.testCompareSanComLiveClient()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+			<p:commandButton value="Compare San Com Site" action="#{debugBean.testCompareSanComSite()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+			<p:commandButton value="Compare San Com CNumber" action="#{debugBean.testCompareSanComCNumber()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+			<br/>
+			<p:commandButton value="Compare San Card Tag" action="#{debugBean.testCompareSanCardTag()}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+				
+		</h:form>
+	</ui:define>
+</ui:composition>

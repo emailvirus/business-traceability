@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow">
+
+	<ui:param name="showAllButtonLabel"
+		value="#{registerActivityHistorySearchBean.hasExpandAllContentReport ? messages.collapse_history_search : messages.show_all_history_search}" />
+	<ui:param name="showAllButtonIcon"
+		value="ui-icon-circle-triangle-#{registerActivityHistorySearchBean.hasExpandAllContentReport ? 'e' : 's'}" />
+     
+    <script type="text/javascript">
+          renderTableWithNoFilter();
+    </script>
+	<h:form id="formList">
+		<p:panel>
+			<p:commandButton value="#{messages.search_conditions}" icon="ui-icon-search"
+				process="@this"
+				action="#{popupPanelBean.show()}"
+				update=":dialogPanel" immediate="true">
+				<f:setPropertyActionListener target="#{popupPanelBean.includeSrc}"
+					value="/WEB-INF/pages/search_history_daily_report/search_history_daily_report_form.xhtml" />
+			</p:commandButton>
+			<p:commandButton value="#{showAllButtonLabel}"
+				icon="#{showAllButtonIcon}"
+				action="#{registerActivityHistorySearchBean.toggleExpandAllContentReport}"
+				update="historyTable, @this" process="@this" immediate="true" />
+			<p:outputLabel styleClass="history-result"
+				rendered="#{registerActivityHistorySearchBean.totalResult ne null}"
+				value="  #{messages.total_result}: #{registerActivityHistorySearchBean.totalResult} #{messages.results}" />
+		</p:panel>
+		<p:panel>
+			<arrow:dataTable id="historyTable" paginator="true" rows="20"
+				value="#{registerActivityHistorySearchBean.allReport}"
+				emptyMessage="#{messages.no_records_found}" var="report"
+				rowIndexVar="indexRow"
+				expandedRow="#{registerActivityHistorySearchBean.hasExpandAllContentReport}"
+				paginatorPosition="bottom" rowsPerPageTemplate="10,20"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				selectionMode="single" selection="#{registerActivityHistorySearchBean.selectedReport}" 
+				rowKey="#{report.dai_employee_code} #{report.dai_point_code} #{report.dai_work_date} #{report.dai_work_stime} #{report.dai_work_etime}">
+				<f:facet name="header">
+                    #{messages.search_history_daily_report}
+                  <p:commandButton id="toggler" type="button" value="#{messages.toggle_column}" style="float:right" icon="ui-icon-calculator" />
+                  <p:columnToggler datasource="historyTable" trigger="toggler" >
+                         <p:ajax event="toggle" listener="#{registerActivityHistorySearchBean.onToggle}" />
+                  </p:columnToggler>
+               </f:facet>
+				<p:ajax event="rowSelect" listener="#{registerActivityHistorySearchBean.onRowSelect}" update="@form" oncomplete="PF('userReports_dlg').show();" />
+				
+				<p:column styleClass="arrow-row-branch" toggleable="false" visible="#{registerActivityHistorySearchBean.list[0]}">
+					<p:rowToggler />
+				</p:column>
+
+				<p:column styleClass="arrow-ui-index-column"
+					visible="#{registerActivityHistorySearchBean.list[1]}" toggleable="false">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.no_}" escape="false"></ar:columHeader>
+					</f:facet>
+					<h:outputText value="#{indexRow + 1}" />
+				</p:column>
+
+				<p:column styleClass="arrow-ui-date-column"
+					visible="#{registerActivityHistorySearchBean.list[2]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.work_date}" escape="false" parentTable="historyTable" />
+					</f:facet>
+					<arrow:outputDate value="#{report.dai_work_date}" />
+				</p:column>
+				<p:column styleClass="arrow-text-column" visible="#{registerActivityHistorySearchBean.list[3]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.employee_name}" escape="false">
+						</ar:columHeader>
+					</f:facet>
+					#{report.employee_mst.emp_name}
+				</p:column>
+				
+				<p:column styleClass="arrow-ui-time-column" visible="#{registerActivityHistorySearchBean.list[4]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.start_br_time}" escape="false">
+						</ar:columHeader>
+					</f:facet>
+					<arrow:outputTime value="#{report.dai_work_stime}"></arrow:outputTime>
+				</p:column>
+
+				<p:column styleClass="arrow-ui-time-column" visible="#{registerActivityHistorySearchBean.list[5]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.end_br_time}" escape="false">
+						</ar:columHeader>
+					</f:facet>
+					<arrow:outputTime value="#{report.dai_work_etime}"></arrow:outputTime>
+				</p:column>
+
+				<p:column styleClass="arrow-ui-time-column" visible="#{registerActivityHistorySearchBean.list[6]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.duration_abbr}" />
+					</f:facet>
+					<arrow:outputTime value="#{report.dai_required_time}"></arrow:outputTime>
+				</p:column>
+
+				<p:column styleClass="arrow-text-column"
+					style="width: 20%;" visible="#{registerActivityHistorySearchBean.list[7]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.company_br_name}" escape="false" />
+					</f:facet>
+					<h:outputText value="#{report.company_mst.extendComName}" />
+				</p:column>
+
+				<p:column styleClass="arrow-text-column"
+					style="width: 20%;" visible="#{registerActivityHistorySearchBean.list[8]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.head_br_office}" escape="false" />
+					</f:facet>
+					<h:outputText
+						value="#{report.company_mst.addresspoint_mst.adp_name}" />
+				</p:column>
+				
+				<p:column styleClass="arrow-text-column"
+					style="width: 20%;" visible="#{registerActivityHistorySearchBean.list[10]}">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.person_in_charge}" />
+					</f:facet>
+					<h:outputText value="#{report.dai_compemp_name}" />
+				</p:column>
+                <p:column styleClass="arrow-column-header arrow-text-column"
+                         style="width: 20%;" visible="#{registerActivityHistorySearchBean.list[11]}">
+                         <f:facet name="header">
+                              <ar:columHeader value="#{messages.department}" />
+                         </f:facet>
+                         <h:outputText value="#{report.dai_employee_post}" />
+                </p:column>
+                
+                <p:column styleClass="arrow-column-header arrow-text-column" visible="#{registerActivityHistorySearchBean.list[12]}">
+                  <f:facet name="header">
+                      <ar:columHeader value="#{messages.purpose}" />
+                  </f:facet>
+                  <h:outputText value="#{report.daily_activity_type.dat_name}" />
+              </p:column>
+              
+              <p:column styleClass="arrow-column-header arrow-ui-date-column" visible="#{registerActivityHistorySearchBean.list[13]}">
+                  <f:facet name="header">
+                      <ar:columHeader value="#{messages.reminder_stime}" escape="false">
+                      </ar:columHeader>
+                  </f:facet>
+                  <arrow:outputDate value="#{report.dai_summary_stime}"></arrow:outputDate>
+              </p:column>
+              
+              <p:column styleClass="arrow-column-header arrow-ui-date-column" visible="#{registerActivityHistorySearchBean.list[14]}">
+                  <f:facet name="header">
+                      <ar:columHeader value="#{messages.reminder_etime}" escape="false">
+                      </ar:columHeader>
+                  </f:facet>
+                  <arrow:outputDate value="#{report.dai_summary_etime}"></arrow:outputDate>
+              </p:column>
+
+				<p:rowExpansion id="rowContent">
+					<h:panelGrid id="display" styleClass="list-branch">
+						<f:facet name="header">
+		                    #{messages['business_detail']}
+		                </f:facet>
+						<h:outputText value="#{report.dai_business_details}" />
+					</h:panelGrid>
+				</p:rowExpansion>
+				
+				
+              
+			</arrow:dataTable>
+		</p:panel>
+		<p:dialog header="#{messages.warning}" widgetVar="warningDialog" modal="true"
+			appendTo="@(body)" minHeight="100">
+			<table style="text-align: center;">
+				<tr>
+					<td>
+						<h:outputText value="#{messages.warning_more_than_2000_records}" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p:commandButton value="#{messages.ok}" process="@this"
+							update=":contentPane" oncomplete="PF('warningDialog').hide()" />
+					</td>
+				</tr>
+			</table>
+		</p:dialog>
+		
+		<p:dialog header="#{messages.report_of_the_day}: #{registerActivityHistorySearchBean.selectedReport.employee_mst.emp_name} - #{commonReportBean.showDateWithFormat(registerActivityHistorySearchBean.selectedReport.dai_work_date)}" 
+			widgetVar="userReports_dlg" modal="true" position="top"
+			appendTo="@(body)" minHeight="100" closeOnEscape="true" height="auto">
+				<ui:include src="/WEB-INF/pages/includes/result_search_employee_daily_report.xhtml">
+					<ui:param name="reports" value="#{commonReportBean.getReportsOfSelectedUser(registerActivityHistorySearchBean.selectedReport)}" />
+					<ui:param name="renderSelectBox" value="false" />
+					<ui:param name="parentId" value="historyScreenId" />
+				</ui:include>
+		</p:dialog>
+	</h:form>
+</ui:composition>

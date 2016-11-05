@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+                xmlns:o="http://omnifaces.org/ui" template="/WEB-INF/template/template.xhtml">
+    <ui:define name="content">
+        <h:form>
+            <p:growl></p:growl>
+            <p:messages></p:messages>
+            <p:tooltip/>
+            <!-- To access constants -->
+            <o:importConstants type="arrow.framework.faces.message.MessageCode"/>
+            <p:growl id="growl" autoUpdate="true" showDetail="false" showSummary="true" escape="false"/>
+            <ar:inputText id="username" value="#{debugAction.inputValue1}" label="#{messages['username']}" errorCodes="#{MessageCode.auth_001_invalid_user_or_password}" autocomplete="false"/>
+
+            <ar:inputText id="username2" value="#{debugAction.inputValue1}" label="#{messages['username']}" errorCodes="#{MessageCode.auth_001_invalid_user_or_password}" autocomplete="false"/>
+            <p:commandButton value="show messages" action="#{debugAction.testIdGenerator}" update="@all"/>
+            <p:commandButton value="test insert" action="#{debugAction.insertData}" update="@all"/>
+
+            <p:commandButton value="test Fetch Lazy" action="#{debugAction.fetchLazy}" update="@all"></p:commandButton>
+
+            <p:commandButton value="clear Entity Manager" action="#{debugAction.clearEntityManager}" update="@all"/>
+
+            <p:commandButton value="Fire Exception" action="#{debugAction.fireException}" update="@all"/>
+
+            <p:commandButton value="Fire View Expired Exception" action="#{debugAction.fireViewExpirtedException}" update="@all"/>
+
+            <p:commandButton value="Fire NonexistentConversationException exception" action="#{debugAction.fireNonexistentConversationException}" update="@all"/>
+            <p:commandButton value="Run Schedule Job" action="#{debugAction.startJob}" update="@all"/>
+
+            <p:commandButton value="test Send Mail" action="#{debugAction.testEmail}" update="@all"/>
+            <p:commandButton value="test Push" action="#{debugAction.publishNewReport}" update="@all"/>
+        </h:form>
+
+        <h:form>
+            <p:inputText id="input1" required="true" value="#{debugAction.inputValue1}"></p:inputText>
+            <!-- 			<p:message for="input1" display="tooltip"></p:message> -->
+            <p:inputText id="input2" required="true" value="#{debugAction.inputValue1}"></p:inputText>
+            <p:message for="input2" display="tooltip"></p:message>
+            <p:commandButton value="test tooltip" action="#{donothingBean.donothingMethod}" update="@all"/>
+        </h:form>
+        <h:form>
+            <p:commandButton value="Correct UL_Passsalt" action="#{debugAction.correctUlPasssaltColumn}" update="@all"/>
+        </h:form>
+
+        <h:form>
+            <p:inputText value="#{debugAction.userCode}"/>
+            <p:commandButton value="Kick User" action="#{debugAction.kickUser}" process="@form"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

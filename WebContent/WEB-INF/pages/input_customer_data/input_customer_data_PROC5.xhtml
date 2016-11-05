@@ -1,0 +1,147 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent">
+	<h:form id="inputCustomerDataProc5" class="layout-noborder">
+
+		<div id="mainInputCustomerDataProc5">
+			<div style="width: 36%; float: left;">
+
+				<p:fieldset legend="#{messages.input_related_company}"
+					id="panelRelatedCompany">
+
+					<table style="width: 100%;">
+						<tr>
+
+							<td style="text-align: center;"><p:inputTextarea
+									disabled="#{inputCustomerDataBean.viewMode}"
+									id="inputRelatedCompany" style="width:95%;" rows="10"
+									value="#{inputCustomerDataBean.inputRelatedCompany}">
+									<p:ajax event="change" process="@this" update="buttonGenerate"></p:ajax>
+									<p:ajax event="keyup" process="@this" update="buttonGenerate"></p:ajax>
+								</p:inputTextarea></td>
+						</tr>
+
+						<tr>
+							<td><p:selectOneRadio style="margin: 0 auto;"
+									disabled="#{inputCustomerDataBean.viewMode}"
+									value="#{inputCustomerDataBean.option}">
+									<f:selectItem itemLabel="#{messages.customer}"
+										itemValue="#{inputCustomerDataBean.valueCustomer}" />
+									<f:selectItem itemLabel="#{messages.related_companies}"
+										itemValue="#{inputCustomerDataBean.valueRelatedCompanies}" />
+									<f:selectItem itemLabel="#{messages.provider}"
+										itemValue="#{inputCustomerDataBean.valueProvider}" />
+									<p:ajax event="change" update="@this buttonGenerate" />
+								</p:selectOneRadio></td>
+						</tr>
+
+						<tr>
+							<td style="text-align: center;"><p:commandButton
+                                    style="margin: 0 auto;"
+                                    process="@this"
+                                    icon="fa fa-close"
+                                    immediate="true"
+                                    action="#{inputCustomerDataBean.cancelEdit()}"
+                                    disabled="#{inputCustomerDataBean.isDisableCancelEdit}"
+                                    id="buttonCancel" value="#{messages.cancel}"
+                                    update="@this @([id$=customerTable]) btnPanel panelRelatedCompany buttonGenerate"
+                                    onstart="PF('globalBlockUI_js').block()"
+                                    oncomplete="PF('globalBlockUI_js').unblock();"></p:commandButton>
+							</td>
+						</tr>
+
+
+					</table>
+				</p:fieldset>
+			</div>
+			<div class="layout-buttonMiddle">
+				<p:commandButton styleClass="buttonMiddle"
+                                 disabled="#{inputCustomerDataBean.disableButton()}"
+                                 id="buttonGenerate" icon="fa fa-forward"
+                                 action="#{inputCustomerDataBean.generateCompanyFromInput()}"
+                                 update="@this @([id$=customerTable]) btnPanel panelRelatedCompany"
+                                 onstart="PF('globalBlockUI_js').block()"
+                                 process="@this"
+                                 oncomplete="PF('globalBlockUI_js').unblock(); "></p:commandButton>
+
+
+			</div>
+			<div style="width: 58%; float: right">
+				<script type="text/javascript">
+				          renderTableWithNoFilter();
+				    </script>
+				<p:scrollPanel mode="native">
+					<arrow:dataTable paginator="true" rows="20"
+						value="#{inputCustomerDataBean.listCustomer}" var="customer"
+						tableStyle="width:100% !important;" paginatorPosition="bottom"
+						id="customerTable"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+						<f:facet name="header">
+				                    #{messages.commercial_distribution_data_list}
+						</f:facet>
+						<p:column headerText="#{messages.select}"
+							styleClass="arrow-ui-minimum-select-column" toggleable="false"
+							visible="#{toggleColumnBean.list[0]}">
+							<p:selectBooleanCheckbox value="#{customer.selected}"
+								disabled="#{inputCustomerDataBean.isDisableSelectColumn()}">
+								<p:ajax event="change"
+									update="@this customerTable  @([id$=btnPanel])"
+									listener="#{inputCustomerDataBean.toggleSelection(customer)}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column styleClass="arrow-ui-classify-column"
+							visible="#{toggleColumnBean.list[2]}">
+							<f:facet name="header">
+								<ar:columHeader value="#{messages.classify}">
+								</ar:columHeader>
+							</f:facet>
+							<p:outputLabel
+								value="#{messages.get('classify.'.concat(customer.enum_com_relation))}" />
+						</p:column>
+						<p:column styleClass="arrow-ui-name-column"
+							visible="#{toggleColumnBean.list[3]}">
+							<f:facet name="header">
+								<ar:columHeader value="#{messages.company_name}">
+								</ar:columHeader>
+							</f:facet>
+							<p:outputLabel value="#{customer.name_com_relation}" />
+						</p:column>
+					</arrow:dataTable>
+				</p:scrollPanel>
+				<p:outputPanel id="btnPanel">
+					<table>
+						<tr>
+							<td><p:commandButton value="#{messages.edit}"
+                                                 disabled="#{inputCustomerDataBean.disableEditAndDelete}"
+                                                 process="@this" icon="fa fa-edit"
+                                                 onstart="PF('globalBlockUI_js').block()"
+                                                 oncomplete="PF('globalBlockUI_js').unblock();"
+                                                 update="btnPanel @([id$=panelRelatedCompany]) @([id$=customerTable]) buttonGenerate"
+                                                 action="#{inputCustomerDataBean.editRecord()}"></p:commandButton>
+
+								<p:commandButton value="#{messages.delete}" icon="fa fa-trash"
+									disabled="#{inputCustomerDataBean.disableEditAndDelete}"
+									process="@this" update="@this @([id$=customerTable])  @([id$=btnPanel])"
+									action="#{inputCustomerDataBean.deleteRecord()}">
+									<p:confirm header="#{messages.confirmation}"
+										message="#{messages.are_you_sure_to_delete}"
+										icon="ui-icon-alert" />
+								</p:commandButton> 
+							</td>
+								
+
+
+						</tr>
+					</table>
+				</p:outputPanel>
+			</div>
+		</div>
+		<div style="clear: both;"></div>
+	</h:form>
+</ui:composition>

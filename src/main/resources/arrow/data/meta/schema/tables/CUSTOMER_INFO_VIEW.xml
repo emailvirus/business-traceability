@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table desc="custom_info_view">
+	<primary-key>
+		<column name="id" data-type="serial" not-null="true" />
+	</primary-key>
+	<column name="com_company_code" data-type="password" />
+	<column name="com_company_furigana" data-type="long-name" />
+	<column name="com_company_name" data-type="long-name" />
+	<column name="com_customer_code" data-type="c-mid-code" />
+	<column name="com_indbig_code" data-type="small-int" />
+	<column name="field_name" data-type="name" />
+	<column name="com_limited_code" data-type="small-int" />
+	<column name="com_listed_code" data-type="small-int" />
+	<column name="com_point_code" data-type="c-short-code" />
+	<column name="base_office" data-type="short-name" />
+	<column name="com_update_date" data-type="timestamp" />
+	<column name="com_url" data-type="url" />
+	<column name="branch_point_code" data-type="c-short-code" />
+	<column name="branch_office" data-type="short-name" />
+	<column name="dai_compemp_name" data-type="name" />
+	<column name="dai_employee_post" data-type="name" />
+	<query>
+SELECT row_number() OVER () AS id,
+   c.com_company_code,
+   c.com_company_furigana,
+   c.com_company_name,
+   c.com_customer_code,
+   c.com_indbig_code,
+   c.field_name,
+   c.com_limited_code,
+   c.com_listed_code,
+   c.com_point_code,
+   c.base_office,
+   c.com_remarks,
+   c.com_update_date,
+   c.com_url,
+   c.last_updated_at,
+   c.object_version,
+   c.branch_point_code,
+   c.branch_office,
+   c.dai_compemp_name,
+   c.dai_employee_post
+  FROM ( SELECT c_1.com_company_code,
+           c_1.com_company_furigana,
+           c_1.com_company_name,
+           c_1.com_customer_code,
+           c_1.com_indbig_code,
+           i.big_name AS field_name,
+           c_1.com_limited_code,
+           c_1.com_listed_code,
+           c_1.com_point_code,
+           a.adp_name AS base_office,
+           c_1.com_remarks,
+           c_1.com_update_date,
+           c_1.com_url,
+           c_1.last_updated_at,
+           c_1.object_version,
+           b.com_point_code AS branch_point_code,
+           ab.adp_name AS branch_office,
+           d.dai_compemp_name,
+           d.dai_employee_post
+          FROM company_mst c_1
+            JOIN industry_big_mst i ON i.big_code = c_1.com_indbig_code
+            JOIN addresspoint_mst a ON a.adp_code = c_1.com_point_code
+            LEFT JOIN ( SELECT a_1.com_company_code,
+                   a_1.com_point_code
+                  FROM ( SELECT c_2.com_point_code,
+                           c_2.com_company_code
+                          FROM company_mst c_2
+                       UNION
+                        SELECT b_1.bas_point_code,
+                           b_1.bas_company_code
+                          FROM basepoint_info b_1
+                            JOIN company_mst c_2 ON c_2.com_company_code = b_1.bas_company_code
+                         WHERE b_1.bas_delete_flg = false) a_1
+                 ORDER BY a_1.com_company_code, a_1.com_point_code) b ON b.com_company_code = c_1.com_company_code
+            LEFT JOIN addresspoint_mst ab ON ab.adp_code = b.com_point_code
+            LEFT JOIN ( SELECT DISTINCT d_1.dai_company_code,
+                   d_1.dai_comppoint_code,
+                   d_1.dai_compemp_name,
+                   d_1.dai_employee_post
+                  FROM daily_report d_1) d ON d.dai_company_code = c_1.com_company_code AND d.dai_comppoint_code = b.com_point_code
+         WHERE c_1.com_delete_flg = false
+         ORDER BY c_1.com_company_code, b.com_point_code, d.dai_compemp_name, d.dai_employee_post) c
+ ORDER BY row_number() OVER ()
+	</query>
+</table>

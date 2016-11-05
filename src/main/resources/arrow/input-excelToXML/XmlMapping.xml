@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<workbook>
+	<worksheet idx="0">
+		<section endRow="0" startRow="0"/>
+		<loop items="listColumn" var="dataObject"
+			varType="arrow.project.bluearrow.dto.DataObject">
+			<section>
+				<mapping cell="B1">dataObject.logicalName</mapping>
+				<mapping cell="C1">dataObject.physicalName</mapping>
+				<mapping cell="D1">dataObject.dataType</mapping>
+				<mapping cell="E1">dataObject.dataSize</mapping>
+				<mapping cell="F1">dataObject.nullAble</mapping>
+				<mapping cell="G1">dataObject.defaultValue</mapping>
+				<mapping cell="H1">dataObject.isPk</mapping>
+				<mapping cell="I1">dataObject.format</mapping>
+				<mapping cell="J1">dataObject.comment</mapping>
+				<mapping cell="K1">dataObject.isSerial</mapping>
+			</section>
+			 <loopbreakcondition>
+                    <rowcheck offset="0">
+                        <cellcheck offset="1"></cellcheck>
+                    </rowcheck>
+                </loopbreakcondition>
+		</loop>
+		<section endRow="2" startRow="0"/>
+				<loop items="listForeignKey" var="foreignKey"
+			varType="arrow.project.bluearrow.dto.ForeignKeyExcel">
+			<section >
+				<mapping cell="B1">foreignKey.constraintName</mapping>
+				<mapping cell="C1">foreignKey.columnName</mapping>
+				<mapping cell="D1">foreignKey.parentTableName</mapping>
+				<mapping cell="F1">foreignKey.columnReferString</mapping>
+				
+			</section>
+			 <loopbreakcondition>
+                    <rowcheck offset="0">
+                        <cellcheck offset="1"></cellcheck>
+                    </rowcheck>
+                </loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

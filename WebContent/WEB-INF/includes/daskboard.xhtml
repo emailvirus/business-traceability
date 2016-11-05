@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form>
+		<p:growl id="growl_dashboard" widgetVar="growl_dashboard_js" autoUpdate="false" showDetail="true" escape="false" />
+		
+		<!-- Listen a channel, when got message call a javascript function to process -->
+		<!-- impact performance too much -->
+<!-- 		<p:socket onMessage="handleMessage" channel="/newReport" /> -->
+		
+		<!--  allow to call backing bean methods. -->
+<!-- 		<p:remoteCommand name="rc" update="@form:daskboardMessage" actionListener="#{daskboardBean.reloadMessage}" /> -->
+<!-- 		<p:commandButton value="Reload data" action="#{daskboardBean.reloadMessage()}"/> -->
+		<script type="text/javascript">
+			function handleMessage(data) {
+				// data will be a string, we have to build a message to Growl can use.
+				var message = {summary:data, detail:data, severity:'info'};
+				// call remote method, call backed-bean method.
+// 				rc();
+				PF('growl_dashboard_js').renderMessage(message);
+	        }
+		</script>
+		<p:dashboard id="daskboard" model="#{daskboardBean.model}">
+			<p:panel id="notification" header="#{messages.notification}">
+				<ui:include src="/WEB-INF/pages/notification/notification_051.xhtml" />
+			</p:panel>
+		</p:dashboard>
+	</h:form>
+</ui:composition>

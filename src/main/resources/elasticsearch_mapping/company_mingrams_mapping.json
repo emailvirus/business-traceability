@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "domain": {
+      "type": "string",
+      "analyzer": "domain"
+    }
+  }
+}

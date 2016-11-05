@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+>
+		<h:form>
+			<table>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.information_source}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:selectOneMenu value="#{inputAccountingDataBean.accComCredit.code_acc_surveyer}"
+							required="true" requiredMessage="#{messages.information_source_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode}">
+							<f:selectItem itemValue="" itemLabel="#{messages.select}" />
+							<f:selectItems value="#{accComBugyoBean.listAccComBugyo16}" var="accCom" 
+								itemValue="#{accCom.code}" itemLabel="#{accCom.title}" />
+							<p:ajax event="change"
+									update="@this @([id$=mainIndustryCode]) @([id$=industryForm]) @([id$=subIndustryCode]) @([id$=mainIndustryName]) @([id$=industryName])"
+									listener="#{inputAccountingDataBean.changeSourceListener}"/>
+						</p:selectOneMenu>
+					</td>
+					<td>
+						<label class="mandatory">#{messages.branch_of_request_user}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:autoComplete id="selectBranch" value="#{inputAccountingDataBean.accComCredit.addresspoint_mst}" 
+								converter="#{converterStorage.addressPointMstConverter}" title="#{messages.type_to_find_branch}"
+								forceSelection="true" emptyMessage="#{messages.no_branch_found}" cache="true" dropdown="true" scrollHeight="200"
+								var="branch" itemLabel="#{branch.adp_name}" itemValue="#{branch}" completeMethod="#{inputAccountingDataBean.filterBranch}" 
+								required="true" requiredMessage="#{messages.branch_of_request_user_is_required}"
+								widgetVar="branch_wg_var" disabled="#{inputAccountingDataBean.viewMode}">
+								
+								<p:ajax event="itemSelect" process="@this" update="@this @([id$=selectEmployee])" resetValues="true"
+									listener="#{inputAccountingDataBean.reloadListApplicant()}" />
+								<p:ajax event="change" process="@this" update="@this @([id$=selectEmployee])" 
+									onstart="if(PF('branch_wg_var').panel.is(':visible')) return false;" resetValues="true"
+									listener="#{inputAccountingDataBean.reloadListApplicant()}" />
+				                <p:column headerText="#{messages.branch_code}">
+					                <h:outputText value="#{branch.adp_code}" />
+					            </p:column>
+					 
+					            <p:column headerText="#{messages.branch_name}">
+					                <h:outputText value="#{branch.adp_name}" />
+					            </p:column>
+							</p:autoComplete>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.survey_date}</label>
+					</td>
+					<td class="proc3-width-col">
+						<ar:calendar value="#{inputAccountingDataBean.accComCredit.date_survey}"
+	                		mask="true" required="true" requiredMessage="#{messages.survey_date_is_required}"
+	                		disabled="#{inputAccountingDataBean.viewMode}" />
+					</td>
+					<td>
+						<label class="mandatory">#{messages.request_user_account}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:autoComplete id="selectEmployee" value="#{inputAccountingDataBean.accComCredit.employee_mst}" 
+							converter="#{converterStorage.employeeConverter}" title="#{messages.type_to_find_employee}"
+							forceSelection="true" emptyMessage="#{messages.no_employee_found}" cache="true" dropdown="true" scrollHeight="200"
+							var="emp" itemLabel="#{emp.emp_name}" itemValue="#{emp}" completeMethod="#{inputAccountingDataBean.filterApplicant}" 
+							required="true" requiredMessage="#{messages.request_user_account_is_required}"
+							widgetVar="employee_wg_var" disabled="#{(inputAccountingDataBean.accComCredit.addresspoint_mst eq null) or inputAccountingDataBean.viewMode}">
+							
+							<p:ajax event="itemSelect" process="@this" update="@this" resetValues="true" />
+							<p:ajax event="change" process="@this" update="@this" 
+								onstart="if(PF('employee_wg_var').panel.is(':visible')) return false;" resetValues="true"/>
+							<p:column headerText="#{messages.employee_code}">
+				                <h:outputText value="#{emp.emp_code}" />
+				            </p:column>
+				 
+				            <p:column headerText="#{messages.employee_name}">
+				                <h:outputText value="#{emp.emp_name}" />
+				            </p:column>
+						</p:autoComplete>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					</td>
+					<td>
+					</td>
+					<td>
+						<label class="mandatory">#{messages.index_accounting_system}</label>
+					</td>
+					<td class="proc3-width-col">
+                		<p:inputText value="#{inputAccountingDataBean.accComCredit.indx_acc}"
+							required="true" requiredMessage="#{messages.index_accounting_system_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode}"
+							maxlength="10">
+							<p:ajax event="change" update="@this" process="@this"></p:ajax>
+						</p:inputText>
+					</td>
+				</tr>
+			</table>
+		</h:form>
+</ui:composition>

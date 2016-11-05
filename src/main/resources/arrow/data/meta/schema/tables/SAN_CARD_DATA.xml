@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAN_CARD_DATA -->
+<table desc="Thông tin name card sansan">
+	<primary-key>
+		<column name="ID_SAN_CARD" lname="Card ID" data-type="c-long-code" not-null="true" default-value="''" comment="ID namecard"/>
+	</primary-key>
+	
+	<column name="NAME_COMPANY" lname="Company name" data-type="c-big-code" not-null="false" default-value="NULL" comment="Tên công ty"/>
+	<column name="NAME_COM_ENG" lname="Company name in English" data-type="c-big-code" not-null="false" default-value="NULL" comment="Tên công ty(Tiếng Anh)"/>
+	<column name="NAME_COM_KANA" lname="Company name in Kana" data-type="c-big-code" not-null="false" default-value="NULL" comment="Tên công ty( Kana)"/>
+	<column name="NAME_BRANCH" lname="Branch name" data-type="long-text" not-null="false" default-value="NULL" comment="Tên chi nhánh"/>
+	<column name="POSITION" lname="Position and title" data-type="long-text" not-null="false" default-value="NULL" comment="Chức vụ"/>
+	<column name="NAME_CLIENT_PERSON" lname="Name" data-type="c-long-code" not-null="true" default-value="''" comment="Tên"/>
+	<column name="NAME_CL_FIRST" lname="First name" data-type="c-big-code" not-null="true" default-value="''" comment="Họ"/>
+	<column name="NAME_CL_LAST" lname="Last name" data-type="c-big-code" not-null="false" default-value="NULL" comment="Tên "/>
+	<column name="NAME_CL_KANA" lname="Name in Kana" data-type="c-long-code" not-null="false" default-value="NULL" comment="Tên(kana)"/>
+	<column name="NAME_CL_FIRST_KANA" lname="First name in Kana" data-type="c-big-code" not-null="false" default-value="NULL" comment="Họ(kana)"/>
+	<column name="NAME_CL_LAST_KANA" lname="Last name in Kana" data-type="c-big-code" not-null="false" default-value="NULL" comment="Tên(kana)"/>
+	<column name="CODE_ZIP" lname="Zip code" data-type="c-twelfth-length" not-null="false" default-value="NULL" comment="Mã bưu điện"/>
+	<column name="ADDR_ALL" lname="Address (all)" data-type="giga-text" not-null="false" default-value="NULL" comment="Địa chỉ(1)［Toàn bộ］"/>
+	<column name="ADDR_PREF" lname="Address (prefecture level)" data-type="c-long-code" not-null="false" default-value="NULL" comment="Địa chỉ(1)［tỉnh/thành phố］"/>
+	<column name="ADDR_CITY" lname="Address (city level)" data-type="c-long-code" not-null="false" default-value="NULL" comment="Địa chỉ(1)［quận huyện/phường xã］"/>
+	<column name="ADDR_BLOCK" lname="Address (block number)" data-type="huge-text" not-null="false" default-value="NULL" comment="Địa chỉ(1)［khu /tổ］"/>
+	<column name="ADDR_BLDG" lname="Address (building name)" data-type="huge-text" not-null="false" default-value="NULL" comment="Địa chỉ(1)［tên tòa nhầ］"/>
+	<column name="TEL11" lname="Telephone number 1-1" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="TEL-1(1)"/>
+	<column name="TEL12" lname="Telephone number 1-2" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="TEL-2(1)"/>
+	<column name="FAX" lname="Fax number" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="FAX(1)"/>
+	<column name="MPHONE" lname="Mobile phone number" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="Số điện thoại (1)"/>
+	<column name="EMAIL" lname="E-mail address" data-type="c-big-code" not-null="false" default-value="NULL" comment="e-mail(1)"/>
+	<column name="EMAIL_NAME" lname="E-mail name part" data-type="c-long-code" not-null="false" default-value="NULL" comment="e-mail(1_name)"/>
+	<column name="EMAIL_DOMAIN" lname="E-mail domain part" data-type="c-long-code" not-null="false" default-value="NULL" comment="e-mail(1_domain)"/>
+	<column name="URL" lname="URL" data-type="c-big-code" not-null="false" default-value="NULL" comment="URL(1)"/>
+	<column name="URL_DOMAIN" lname="URL domain part" data-type="c-huge-code" not-null="false" default-value="NULL" comment="URL(1_domain)"/>
+	<column name="ZIPCODE2" lname="Zip code 2" data-type="c-twelfth-length" not-null="false" default-value="NULL" comment="Mã bưu điện(2)"/>
+	<column name="ADDR_ALL2" lname="Address 2 (all)" data-type="giga-text" not-null="false" default-value="NULL" comment="Địa chỉ(2)［Toàn bộ］"/>
+	<column name="ADDR_PREF2" lname="Address 2 (prefecture level)" data-type="c-long-code" not-null="false" default-value="NULL" comment="Địa chỉ(2)［tỉnh/thành phố］"/>
+	<column name="ADDR_CITY2" lname="Address 2 (city level)" data-type="c-long-code" not-null="false" default-value="NULL" comment="Địa chỉ(2)［quận huyện/phường xã］"/>
+	<column name="ADDR_BLOCK2" lname="Address 2 (block number)" data-type="huge-text" not-null="false" default-value="NULL" comment="Địa chỉ(2)［khu /tổ］"/>
+	<column name="ADDR_BLDG2" lname="Address 2 (building name)" data-type="huge-text" not-null="false" default-value="NULL" comment="Địa chỉ(2)［Tên tòa nhà］"/>
+	<column name="TEL21" lname="Telephone number 2-1" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="TEL-1(2)"/>
+	<column name="TEL22" lname="Telephone number 2-2" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="TEL-2(2)"/>
+	<column name="FAX2" lname="Fax number 2" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="FAX(2)"/>
+	<column name="MPHONE2" lname="Mobile phone number 2" data-type="c-thirty-length" not-null="false" default-value="NULL" comment="Số điện thoại2)"/>
+	<column name="EMAIL2" lname="E-mail address 2" data-type="c-big-code" not-null="false" default-value="NULL" comment="e-mail(2)"/>
+	<column name="EMAIL_NAME2" lname="E-mail name part 2" data-type="c-long-code" not-null="false" default-value="NULL" comment="e-mail(2_name)"/>
+	<column name="EMAIL_DOMAIN2" lname="E-mail domain part 2" data-type="c-long-code" not-null="false" default-value="NULL" comment="e-mail(2_domain)"/>
+	<column name="URL2" lname="URL 2" data-type="c-code" not-null="false" default-value="NULL" comment="URL(2)"/>
+	<column name="URL_DOMAIN2" lname="URL domain part 2" data-type="c-big-code" not-null="false" default-value="NULL" comment="URL(2_domain)"/>
+	<column name="PCATEGORY" lname="Priority category" data-type="c-huge-code" not-null="false" default-value="NULL" comment="Phân loại độ quan trọng"/>
+	<column name="VP" lname="View point" data-type="integer" not-null="false" default-value="NULL" comment="VP"/>
+	<column name="CP" lname="Contact point" data-type="integer" not-null="false" default-value="NULL" comment="CP"/>
+	<column name="FILEOUT" lname="File output record" data-type="huge-text" not-null="false" default-value="NULL" comment="Hoàn thành output file"/>
+	<column name="TAGS" lname="Tags" data-type="huge-text" not-null="false" default-value="NULL" comment="Tag"/>
+	<column name="DATE_REGISTER" lname="Date of card register" data-type="short-date" not-null="true" default-value="0" comment="Ngày đăng kí"/>
+	<column name="DATE_EXCHANGE" lname="Date of card exchange" data-type="short-date" not-null="false" default-value="NULL" comment="Ngày trao đổi namecard"/>
+	<column name="FLG_UDELIVERY_ADDR" lname="Undelivery flag (address)" data-type="tiny-int" not-null="false" default-value="NULL" comment="Bảng Non-delivery(Địa chỉ)"/>
+	<column name="FLG_UDELIVERY_TEL" lname="Undelivery flag (tel)" data-type="tiny-int" not-null="false" default-value="NULL" comment="Bảng Non-delivery(TEL)"/>
+	<column name="FLG_UDELIVERY_FAX" lname="Undelivery flag (fax)" data-type="tiny-int" not-null="false" default-value="NULL" comment="Bảng Non-delivery(FAX)"/>
+	<column name="FLG_UDELIVERY_EMAIL" lname="Undelivery flag (e-mail)" data-type="tiny-int" not-null="false" default-value="NULL" comment="Bảng Non-delivery(email)"/>
+	<column name="MEMO" lname="Memo" data-type="free-text" not-null="false" default-value="NULL" comment="Memo"/>
+	<column name="AUTOMEMO" lname="Auto memo" data-type="free-text" not-null="false" default-value="NULL" comment="Memo thêm tự động"/>
+	<column name="AC_USER" lname="User ID of card owner" data-type="c-thirty-two-length" not-null="true" default-value="''" comment="ID user sở hữu namecard"/>
+	<column name="NAME_USER" lname="Card owner name" data-type="c-thirty-two-length" not-null="true" default-value="''" comment="Tên người sở hữu namecard"/>
+	<column name="CONT_DATE" lname="Date of contact" data-type="c-thirty-two-length" not-null="false" default-value="NULL" comment="Ngày liên hệ"/>
+	<column name="CONT_CAT" lname="Contact category" data-type="c-thirty-two-length" not-null="false" default-value="NULL" comment="Phân loại"/>
+	<column name="CONT_TITLE" lname="Contact title" data-type="huge-text" not-null="false" default-value="NULL" comment="Title"/>
+	<column name="CONT_LOCATION" lname="Contact location" data-type="huge-text" not-null="false" default-value="NULL" comment="Địa điểm"/>
+	<column name="CONT_MEMO" lname="Contact memo" data-type="free-text" not-null="false" default-value="NULL" comment="Memo liên hệ"/>
+	<column name="ID_SAN_PERSON" lname="Person ID" data-type="c-long-code" not-null="false" default-value="NULL" comment="ID nhân vật "/>
+	<column name="ID_SAN_COMPANY" lname="Sansan company ID" data-type="c-long-code" not-null="false" default-value="NULL" comment="ID công ty"/>
+	<column name="ENUM_INFO_VALIDATION" lname="Status of information validation and other process" data-type="c-flag" not-null="true" default-value="0" comment="Trạng thái quá trình xử lý thông tin"/>
+	<column name="ENUM_IMPORT_PROC" lname="Status of import process" data-type="c-flag" not-null="true" default-value="0" comment="Trạng thái quá trình import"/>
+	<column name="TS_CREATE" lname="Timestamp of record creation" data-type="timestamp" not-null="true" default-value="0" comment="Ngày giờ tạo record"/>
+	<column name="TS_COM_CREATION" lname="Timestamp of company info creation " data-type="timestamp" not-null="true" default-value="0" comment="Ngày giờ tạo thông tin công ty"/>
+	<column name="CN_FILEIMPORT" lname="Cumulative number of file import" data-type="integer" not-null="true" default-value="0" comment="Lũy kế số lần import file"/>
+	<column name="CN_APIIMPORT" lname="Cumulative number of API import" data-type="integer" not-null="true" default-value="0" comment="Lũy kế số lần import API"/>
+	<column name="CN_COMID_UPDATE" lname="Cumulative number of company ID update" data-type="integer" not-null="true" default-value="0" comment="Lũy kế số lần update ID công ty"/>
+	<column name="CN_CARDINFO_UPDATE" lname="Cumulative number of other attributes update" data-type="integer" not-null="true" default-value="0" comment="Lũy kế số lần update thông tin card"/>
+	<column name="ID_PERSON" data-type="integer" not-null="false" comment="ID nhân vật "/>
+	<column name="ID_CARD" lname="Card ID" data-type="integer" comment="ID namecard"/>
+	<column name="ID_COMPANY" data-type="integer" not-null="false"  comment="ID công ty"/>
+	<foreign-key parent-table="SAN_COM_INFO">
+		<column name="ID_SAN_COMPANY" referColumn="ID_SAN_COMPANY"/>
+	</foreign-key>
+</table>

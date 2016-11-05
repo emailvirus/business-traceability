@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- INDUSTRY_BIG_MST -->
+<table desc="Lĩnh vực hoạt động">
+	<primary-key>
+		<column name="BIG_CODE" data-type="small-int" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="BIG_NAME" data-type="name" not-null="true" default-value="null"/>
+</table>

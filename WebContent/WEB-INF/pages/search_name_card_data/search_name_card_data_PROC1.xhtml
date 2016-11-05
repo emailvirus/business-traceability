@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<p:tabView id="searchCustomerTabView"
+		onTabShow="checkSearchButtonStatus(index)"
+		activeIndex="#{findDataNameCardBean.tabIndex}">
+		<p:tab title="#{messages.find_by_customerCode}">
+			<h:form id="formSearchCustomerByCode">
+				<table>
+					<tr>
+						<td><label class="customer-code-label">#{messages.customer_code}</label>
+							<p:outputLabel id="customer_code_info" class="fa fa-info-circle"></p:outputLabel>
+							<pe:tooltip for="customer_code_info"
+								value="#{messages.customer_code_tooltip}" mouseTracking="false">
+							</pe:tooltip></td>
+						<td><p:inputText id="customer_code" maxlength="4"
+								value="#{findDataNameCardBean.inputCustomerCode}"
+								widgetVar="customer_code"
+								onkeyup="checkBtnSearchNameCardSearch(); upperCaseInputByWidgetVar('customer_code')"
+								onchange="checkBtnSearchNameCardSearch(); upperCaseInputByWidgetVar('customer_code')"
+								styleClass="customer-code-input">
+								<f:validateRegex pattern="^[a-zA-Z](\d){3}$" />
+								<p:watermark value="#{messages.customer_code_place_holder}"
+									for="customer_code"></p:watermark>
+							</p:inputText></td>
+						<td><p:commandButton id="searchButtonCustomerCode"
+								widgetVar="searchButtonCustomerCode" icon="fa fa-search"
+								value="#{messages.search}"
+								action="#{findDataNameCardBean.searchByCustomerCode()}"
+								update="@this @([id$=nameCardTable])"
+								onstart="PF('globalBlockUI_js').block()"
+								oncomplete="PF('globalBlockUI_js').unblock();disableSelectButton();">
+							</p:commandButton></td>
+
+					</tr>
+				</table>
+			</h:form>
+		</p:tab>
+		<p:tab title="#{messages.find_by_other_conditions}">
+			<h:form id="formSearchByOtherConditions">
+				<table>
+					<tr>
+						<td><label>#{messages.id_name_card}</label></td>
+						<td><p:inputText style="margin-bottom: 5px;"
+								id="inputIdNameCard"
+								value="#{findDataNameCardBean.inputIdNameCard}"
+								onkeyup="updateNamecardSearchButton();"
+								onchange="updateNamecardSearchButton();"
+								widgetVar="inputIdNameCard" maxlength="64">
+							</p:inputText></td>
+					</tr>
+					<tr>
+						<td><label>#{messages.companyName}</label></td>
+						<td><p:inputText id="inputCompanyName"
+								value="#{findDataNameCardBean.inputCompanyName}"
+								onkeyup="updateNamecardSearchButton();"
+								onchange="updateNamecardSearchButton();"
+								widgetVar="inputCompanyName" maxlength="250">
+							</p:inputText></td>
+						<td><p:commandButton id="searchButton" icon="fa fa-search"
+								value="#{messages.search}" widgetVar="searchButton"
+								action="#{findDataNameCardBean.search()}"
+								update="@this @([id$=nameCardTable])"
+								onstart="PF('globalBlockUI_js').block()"
+								oncomplete="PF('globalBlockUI_js').unblock();disableSelectButton();"></p:commandButton></td>
+					</tr>
+				</table>
+			</h:form>
+		</p:tab>
+	</p:tabView>
+
+	<script>
+		//<![CDATA[
+			var btnSearchCustomer = PrimeFaces.widgets["searchButtonCustomerCode"];
+			$(document).ready(function(){
+				if(!!PrimeFaces.widgets["customer_code"].jq[0].value)
+					PrimeFaces.widgets["searchButtonCustomerCode"].enable();
+				else
+					PrimeFaces.widgets["searchButtonCustomerCode"].disable();
+			});
+			function checkBtnSearchNameCardSearch(){
+				var inputCustomer = PrimeFaces.widgets["customer_code"];
+				if(inputCustomer.jq[0].value.length > 0 && customerCodeRegex.test(inputCustomer.jq[0].value)){
+					btnSearchCustomer.enable();
+				}
+				else 
+					btnSearchCustomer.disable();
+			}
+
+			checkSearchButtonStatus = function(index) {
+				if(index == 1){
+					updateNamecardSearchButton();
+				}
+			}
+
+			updateNamecardSearchButton = function() {
+				var searchButton = PrimeFaces.widgets["searchButton"];
+				var inputIdNameCard = PrimeFaces.widgets["inputIdNameCard"];
+				var inputCompanyName = PrimeFaces.widgets["inputCompanyName"];
+
+				if(inputIdNameCard.jq[0].value.length > 0 || inputCompanyName.jq[0].value.length > 0){
+					searchButton.enable();
+				} else {
+					searchButton.disable();
+				}
+			};
+
+			disableSelectButton = function() {
+				PrimeFaces.widgets['buttonSelect'].disable();
+			};
+		 //]]>
+	</script>
+	<ui:include
+		src="/WEB-INF/pages/search_name_card_data/search_name_card_data_PROC2.xhtml" />
+</ui:composition>

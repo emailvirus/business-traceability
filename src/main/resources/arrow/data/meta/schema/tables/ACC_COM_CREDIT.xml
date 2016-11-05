@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ACC_COM_CREDIT -->
+<table desc="Bảng thông tin hạn mức tín dụng, dự thảo thay đổi">
+	<primary-key>
+		<column name="ID_CREDIT" lname="Credit score TBL ID" data-type="integer" not-null="true" comment="ID thông tin credit"/>
+	</primary-key>
+	
+	<column name="ID_COM_ENTITY" lname="Company permanent info TBL ID" data-type="integer" not-null="true" comment="ID tên thương mại"/>
+	<column name="NAME_COMPANY2" lname="Company name 2" data-type="c-forty-length" not-null="false" default-value="NULL" comment="Tên khách hàng2"/>
+	<column name="DATE_VALID_FROM" lname="Valid date (from)" data-type="date" not-null="false" comment="Ngày có hiệu lực (bắt đầu từ)"/>
+	<column name="DATE_VALID_TO" lname="Valid date (to)" data-type="date" not-null="false" comment="Ngày có hiệu lực (cho tới)"/>
+	<column name="INDX_ACC" lname="Index for accounting system" data-type="c-code" not-null="true" default-value="NULL" comment="Index"/>
+	<column name="CODE_ZIP" lname="Zip code of HQ" data-type="c-code" not-null="false" default-value="NULL" comment="Mã bưu điện"/>
+	<column name="ADDR_ALL_HQ" lname="Address of HQ (all)" data-type="c-sixty-length" not-null="false" default-value="NULL" comment="Địa chỉ 1"/>
+	<column name="ADDR_ALL_HQ2" lname="Address 2 of HQ (all)" data-type="c-sixty-length" not-null="false" default-value="NULL" comment="Địa chỉ 2"/>
+	<column name="TEL_HQ" lname="Telephone number of HQ" data-type="c-twenty-length" not-null="false" default-value="NULL" comment="Số điện thoại"/>
+	<column name="FAX_HQ" lname="Fax number of HQ" data-type="c-twenty-length" not-null="false" default-value="NULL" comment="Số FAX"/>
+	<column name="CODE_ACC_CAPITAL" lname="Capital stock category code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã phân loại vốn"/>
+	<column name="CODE_ACC_FISCALMONTH" lname="Fiscal closing month code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã phân loại tháng quyết toán"/>
+	<column name="CODE_ACC_MARKET" lname="Listing market category code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã lên sàn, không lên sàn"/>
+	<column name="CODE_ACC_TRADECOND" lname="Trading condition category code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã phân loại điều kiện khách hàng"/>
+	<column name="CODE_ACC_CREDITSCORE" lname="Credit score rank code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã xếp hạng điểm đánh giá"/>
+	<column name="CODE_ACC_RESURVEY" lname="Re-survey cause category  code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã phân loại tái điều tra"/>
+	<column name="CODE_ACC_SUVERYSITE" lname="Latest survey site category  code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã phân loại nơi điều tra cuối cùng"/>
+	<column name="CODE_ACC_SURVEYER" lname="Survey institute and information source code" data-type="c-thirteen-length" not-null="true" comment="Mã nguồn thông tin"/>
+	<column name="CODE_ACC_PROHIBITCAUSE" lname="Client_code prohibition code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã nguyên nhân đóng băng code"/>
+	<column name="CODE_ACC_PAYMENT" lname="Payment place category code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã phân loại nơi thanh toán"/>
+	<column name="CODE_ACC_BANKACC" lname="Bank account category code" data-type="c-thirteen-length" not-null="false" default-value="NULL" comment="Mã phân loại tài khoản ngân hàng"/>
+	<column name="MEMO1" lname="Memo 1" data-type="c-forty-length" not-null="false" default-value="NULL" comment="Memo 1"/>
+	<column name="MEMO2" lname="Memo 2" data-type="c-forty-length" not-null="false" default-value="NULL" comment="Memo 2"/>
+	<column name="MEMO3" lname="Memo 3" data-type="c-forty-length" not-null="false" default-value="NULL" comment="Memo 3"/>
+	<column name="INDX_COM" lname="Company index of research institute" data-type="c-long-code" not-null="false" comment="INDEX cơ quan điều tra"/>
+	<column name="AC_REQUEST" lname="Request user account" data-type="integer" not-null="true" comment="Người đăng ký (user account)"/>
+	<column name="AC_REQUEST_BRANCH" lname="Request user account" data-type="c-short-code" not-null="true" comment="Cơ sở cuối cùng"/>
+	<column name="AC_MIDDLE_AUTHORIZE" lname="Authorizer in the middle of flow" data-type="integer" not-null="false" default-value="NULL" comment="Người approval trung gian (user account)"/>
+	<column name="AC_FINAL_AUTHORIZE" lname="Final authorizer" data-type="integer" not-null="false" comment="Người approval cuối cùng (user account)"/>
+	<column name="CAUSE_DECISION" lname="Cause of decision" data-type="free-text" not-null="false" default-value="NULL" comment="Lý do approval"/>
+	<column name="OTHER_DIRECTION" lname="Additional direction" data-type="free-text" not-null="false" default-value="NULL" comment="Ghi chú"/>
+	<column name="ACC_DIRECTION" lname="Accountant direction" data-type="free-text" not-null="false" default-value="NULL" comment="Sửa đổi kế toán"/>
+	<column name="DATE_SURVEY" lname="Date of survey" data-type="date" not-null="true" comment="Ngày điều tra"/>
+	<column name="DATE_AUTHORIZE" lname="Date of authorize" data-type="date" not-null="false" comment="Ngày approval"/>
+	<column name="SCORE_CREDIT" lname="Credit score number" data-type="integer" not-null="false" default-value="NULL" comment="Điểm đánh giá (trị số)"/>
+	<column name="ADDR_PREF" lname="Address (prefecture level)" data-type="c-long-code" not-null="false" default-value="NULL" comment="Địa chỉ 1 (tỉnh/ thành phố)"/>
+	<column name="ADDR_CITY" lname="Address (city level)" data-type="c-long-code" not-null="false" default-value="NULL" comment="Địa chỉ 1 (huyện, xã/ quận, phường)"/>
+	<column name="CAPITAL" lname="Capital fund (per thousand yen)" data-type="integer" not-null="false" default-value="NULL" comment="Vốn (nghìn yên)"/>
+	<column name="N_EMPLOYEE" lname="Number of employees" data-type="integer" not-null="false" default-value="NULL" comment="Số nhân viên"/>
+	<column name="URL" lname="URL" data-type="c-big-code" not-null="false" default-value="NULL" comment="Homepage trụ sở chính"/>
+	<column name="PATH_REPORT" lname="File path including file name to the research report file" data-type="c-huge-code" not-null="false" default-value="NULL" comment="File path bản điều tra"/>
+	<column name="STATUS" lname="Status of credit" data-type="c-flag" not-null="false" default-value="'D'" comment="D-draft, S-saved" />
+	<foreign-key parent-table="ACC_COM_ENTITY">
+		<column name="ID_COM_ENTITY" referColumn="ID_COM_ENTITY"/>
+	</foreign-key>
+	
+	<foreign-key parent-table="ADDRESSPOINT_MST">
+		<column name="AC_REQUEST_BRANCH" referColumn="ADP_CODE"/>
+	</foreign-key>
+	
+	<foreign-key parent-table="EMPLOYEE_MST">
+		<column name="AC_REQUEST" referColumn="EMP_CODE"/>
+	</foreign-key>
+</table>

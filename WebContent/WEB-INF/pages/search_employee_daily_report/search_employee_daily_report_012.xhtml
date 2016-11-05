@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<!-- To access constants -->
+	<o:importConstants type="arrow.businesstraceability.control.helper.ScreenContext" />
+	<ui:param name="showAllButtonLabel"
+		value="#{registerActivitySearchEmployeeBean.showAllBusinessDetail ? messages.collapse_history_search : messages.show_all_history_search}" />
+	<ui:param name="showAllButtonIcon"
+		value="ui-icon-circle-triangle-#{registerActivitySearchEmployeeBean.showAllBusinessDetail ? 'e' : 's'}" />
+	<ui:param name="hasNotPermissionToEditReport" value="#{registerActivitySearchEmployeeBean.hasNotPermissionEditReport}" />
+	<h:form>
+		<p:panel>
+			<table class="search-conditions" width="100%">
+				<tr>
+					<td>
+					<table width="100%">
+						<tr>
+							<td>
+								#{messages['date']}
+							</td>
+							<td>
+								<ar:calendar value="#{registerActivitySearchEmployeeBean.selectedDate}" navigator="true" mask="true" required="true" requiredMessage="#{messages.calendar_is_not_null}"/>
+							</td>
+							<td>
+								<p:outputLabel value="#{messages.company_branch}" for="company_base" />	
+							</td>
+							<td>
+								<p:selectOneMenu id="company_base" value="#{registerActivitySearchEmployeeBean.selectBranch}" label="#{messages.company_base}"  required="true" requiredMessage="#{messages.please_select_company}">
+									<f:selectItem itemLabel="#{messages.please_select}" itemValue="" noSelectionOption="true"/>
+									<f:selectItems value="#{registerActivitySearchEmployeeBean.listBranch}" var="addresspoint" itemValue="#{addresspoint.adp_code}" itemLabel="#{addresspoint.adp_name}"/>
+									<p:ajax update="listEmployee" listener="#{registerActivitySearchEmployeeBean.renderListEmployee}" event="change"/>
+									<p:ajax update="listEmployee" event="select"/>
+								</p:selectOneMenu>	
+							</td>
+							<td>
+                               	<p:selectBooleanCheckbox id="toggleRetiredEmployee" value="#{registerActivitySearchEmployeeBean.includeRetiredEmployee}">
+                               		<p:ajax process="@this" update="@this, @([id$='listEmployee'])"></p:ajax>
+                               	</p:selectBooleanCheckbox>
+                               </td>
+                               <td>
+                               	#{messages.include_retired_employee}
+                               </td> 
+							<td>
+								<p:outputLabel value="#{messages.employee_name}" for="listEmployee" />	
+							</td>
+							<td>
+								<p:autoComplete id="listEmployee" value="#{registerActivitySearchEmployeeBean.selectedEmployee}" converter="#{converterStorage.employeeConverter}" title="#{messages.type_to_find_employee}"
+											forceSelection="true" emptyMessage="#{messages.no_employee_found}" cache="true" cacheTimeout="300" dropdown="true" scrollHeight="200"
+											var="emp" itemLabel="#{emp.emp_name}" itemValue="#{emp}" completeMethod="#{registerActivitySearchEmployeeBean.filterEmployee}" required="true" requiredMessage="#{messages.please_select_employee}">
+											<!-- don't use onChange event, after OnChange event the data will be input data which is not complete, so EntityConverter cannot find the correct entity -->
+									<p:ajax event="itemSelect" process="@this" update="@form"/>
+									<p:column headerText="#{messages.employee_code}">
+								    	<h:outputText value="#{emp.emp_code}" />
+								    </p:column>
+								 
+						            <p:column headerText="#{messages.employee_name}">
+						                <h:outputText value="#{emp.emp_name}" />
+						            </p:column>
+								</p:autoComplete>							
+							</td>
+						</tr>
+					</table>
+					</td>
+					<td  align="right">
+						<p:commandButton value="#{messages.search}" update="@form" icon="ui-icon-search" 
+							action="#{registerActivitySearchEmployeeBean.searchEmployeeReport}" process="@form" 
+							onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()"/>
+						<p:commandButton id="editButton" value="#{messages.edit}" 
+							disabled="#{hasNotPermissionToEditReport or !registerActivitySearchEmployeeBean.hasReportSelected}"
+							update=":contentPane" icon="ui-icon-pencil" process="@this" action="#{registerActivitySearchEmployeeBean.swithToScreenDailyReport}"
+							onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()">
+						</p:commandButton>
+						<p:commandButton id="leftDeleteButton" value="#{messages.delete}" 
+							disabled="#{hasNotPermissionToEditReport or !registerActivitySearchEmployeeBean.hasReportSelected}" 
+							action="#{registerActivitySearchEmployeeBean.deleteEmployeeReport}"
+							update="@form" icon="ui-icon-trash" process="@this"
+							onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()" />
+					</td>
+				</tr>
+			</table>
+		</p:panel>
+		<ui:include src="/WEB-INF/pages/includes/result_search_employee_daily_report.xhtml" >
+			<ui:param name="reports" value="#{registerActivitySearchEmployeeBean.allReport}" />
+			<ui:param name="renderSelectBox" value="true" />
+			<ui:param name="parentId" value="employeeScreenId" />
+			<ui:param name="disabledSelectReport" value="#{hasNotPermissionToEditReport}" />
+		</ui:include>
+	</h:form>
+
+</ui:composition>

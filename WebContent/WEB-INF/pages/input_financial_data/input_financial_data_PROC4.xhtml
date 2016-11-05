@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent">
+    <h:form id="tableAccData">
+        <p:scrollPanel mode="native">
+	        <arrow:dataTable value="#{inputFinancialDataBean.listFinance}" paginator="true" paginatorPosition="bottom" id="financialTable" editable="true" editMode="row" widgetVar="financialTable"
+	        	paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" var="data" rowKey="#{data.id_finance}"
+	        	selection="#{inputFinancialDataBean.selectedFinance}" rows="20" styleClass="arrow-ui-table">
+	        	<p:ajax event="rowSelectRadio" listener="#{inputFinancialDataBean.triggerCancelEditRow}" update="@this financialTable @([id$=btnPanel])"/>  
+	        	
+	        	<p:ajax event="rowEdit" listener="#{inputFinancialDataBean.saveToMapEdited}" update="financialTable @([id$=btnPanel])" resetValues="true"
+	        		onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>   
+	        	<p:ajax event="rowEditCancel" listener="#{inputFinancialDataBean.triggerCancelEditRow}" update="financialTable @([id$=btnPanel])"/>
+	        	<p:ajax  event="cellEdit" update="financialTable" immediate="true" process="@this" />
+	        	
+	            <f:facet name="header">
+	                    #{messages.financial_data}
+<!-- 	                	<p:commandButton id="toggler" type="button" value="#{messages.toggle_column}" style="float: right;" icon="ui-icon-calculator" /> -->
+<!-- 						<p:columnToggler datasource="financialTable" trigger="toggler" /> -->
+<!-- 					<div style="clear: both;"/> -->
+	            </f:facet>
+	            
+	            <p:column styleClass="arrow-ui-radio-column" selectionMode="single" rendered="#{!inputFinancialDataBean.viewMode and !(inputFinancialDataBean.editMode and inputFinancialDataBean.isRowSelected(data))}">
+	            </p:column>
+	
+				<p:column styleClass="arrow-ui-radio-column" rendered="#{!inputFinancialDataBean.viewMode and inputFinancialDataBean.editMode and inputFinancialDataBean.isRowSelected(data)}">
+					<p:rowEditor></p:rowEditor>
+				</p:column>
+	            
+	            <p:column styleClass="arrow-ui-index-column" >
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.settlement_period} (#{messages.anno_domini})" />
+	            	</f:facet>
+	            	<p:cellEditor>
+	            		<f:facet name="output"><p:outputLabel value="#{data.y_fclose}"/></f:facet>
+	            		<f:facet name="input">
+	            			<p:inputText value="#{data.y_fclose}" maxlength="4" styleClass="arrow-fit-container" converter="#{converterStorage.integerConverter}" 
+	            				converterMessage="#{messages.settlement_period}. #{messages.positiveIntegerFormatMessage}" validatorMessage="#{messages.settlement_period}. #{messages.monthly_report_min_value_input}">
+	            				<p:ajax event="change" process="@this" update="@this" resetValues="false" />
+								<f:validateDoubleRange minimum="0" />
+								<f:convertNumber integerOnly="true" />
+							</p:inputText>
+						</f:facet>
+	            	</p:cellEditor>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-index-column" >
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.fiscal_closing_month}" />
+                    </f:facet>
+	            	<p:cellEditor>
+	            		<f:facet name="output"><p:outputLabel value="#{data.m_fclose}"/></f:facet>
+	            		<f:facet name="input">
+	            			<p:inputText value="#{data.m_fclose}" converter="#{converterStorage.integerConverter}" converterMessage="#{messages.fiscal_closing_month}. #{messages.positiveIntegerFormatMessage}"
+								validatorMessage="#{messages.fiscal_closing_month}. #{messages.month_validate_message}" styleClass="arrow-fit-container">
+								<p:ajax event="change" process="@this" update="@this" resetValues="false" />
+								<f:validateDoubleRange minimum="1" maximum="12"/>
+								<f:convertNumber integerOnly="true" />	
+							</p:inputText>
+						</f:facet>
+	            	</p:cellEditor>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-currency-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.turnover}" />
+                    </f:facet>
+	            	<p:cellEditor>
+	            		<f:facet name="output"><h:outputLabel value="#{data.sales_amount}" converter="#{converterStorage.currencyConverter}"/></f:facet>
+	            		<f:facet name="input">
+	            			<p:inputText value="#{data.sales_amount}" converter="#{converterStorage.integerConverter}" converterMessage="#{messages.turnover}. #{messages.positiveIntegerFormatMessage}"
+								validatorMessage="#{messages.turnover}. #{messages.integer_validate_message}" styleClass="arrow-fit-container">
+								<p:ajax event="change" process="@this" update="@this" resetValues="false" />
+								<f:validateDoubleRange minimum="0" maximum="2147483647"/>
+								<f:convertNumber integerOnly="true" />
+							</p:inputText>
+						</f:facet>
+	            	</p:cellEditor>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-currency-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.selling_expenses_and_management}" />
+                    </f:facet>
+	            	<p:cellEditor>
+	            		<f:facet name="output"><h:outputLabel value="#{data.sga_cost}" converter="#{converterStorage.currencyConverter}"/></f:facet>
+	            		<f:facet name="input">
+	            			<p:inputText value="#{data.sga_cost}" converter="#{converterStorage.integerConverter}" converterMessage="#{messages.selling_expenses_and_management}. #{messages.positiveIntegerFormatMessage}"
+								validatorMessage="#{messages.selling_expenses_and_management}. #{messages.integer_validate_message}" styleClass="arrow-fit-container">
+								<p:ajax event="change" process="@this" update="@this" resetValues="false" />
+								<f:validateDoubleRange minimum="0" maximum="2147483647"/>
+								<f:convertNumber integerOnly="true" />
+							</p:inputText>
+						</f:facet>
+	            	</p:cellEditor>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-currency-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.income_generally}" />
+                    </f:facet>
+	            	<p:cellEditor>
+	            		<f:facet name="output"><h:outputLabel value="#{data.current_profit}" converter="#{converterStorage.currencyConverter}"/></f:facet>
+	            		<f:facet name="input">
+	            			<p:inputText value="#{data.current_profit}" converter="#{converterStorage.integerConverter}" converterMessage="#{messages.income_generally}. #{messages.positiveIntegerFormatMessage}"
+								validatorMessage="#{messages.income_generally}. #{messages.integer_validate_message}" styleClass="arrow-fit-container">
+								<p:ajax event="change" process="@this" update="@this" resetValues="false" />
+								<f:validateDoubleRange minimum="0" maximum="2147483647"/>
+								<f:convertNumber integerOnly="true" />
+							</p:inputText>
+						</f:facet>
+	            	</p:cellEditor>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-currency-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.net_income}" />
+	            	</f:facet>
+	            	<p:cellEditor>
+	            		<f:facet name="output"><h:outputLabel value="#{data.posttax_profit}" converter="#{converterStorage.currencyConverter}"/></f:facet>
+	            		<f:facet name="input">
+	            			<p:inputText value="#{data.posttax_profit}" converter="#{converterStorage.integerConverter}" converterMessage="#{messages.net_income}. #{messages.positiveIntegerFormatMessage}"
+								validatorMessage="#{messages.net_income}. #{messages.integer_validate_message}" styleClass="arrow-fit-container">
+								<p:ajax event="change" process="@this" update="@this" resetValues="false" />
+								<f:validateDoubleRange minimum="0" maximum="2147483647"/>
+								<f:convertNumber integerOnly="true" />
+							</p:inputText>
+						</f:facet>
+	            	</p:cellEditor>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-percent-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.proportion_own_capital}" />
+                    </f:facet>
+	            	<p:cellEditor>
+	            		<f:facet name="output"><p:outputLabel value="#{data.r_capital}"/></f:facet>
+	            		<f:facet name="input">
+	            			<p:inputText value="#{data.r_capital}" styleClass="arrow-fit-container" converter="#{converterStorage.currencyConverter}" 
+	            				converterMessage="#{messages.proportion_own_capital}. #{messages.positiveIntegerFormatMessage}" validatorMessage="#{messages.proportion_own_capital}. #{messages.integer_validate_message}">
+								<p:ajax event="change" process="@this" update="@this" resetValues="false" />
+								<f:validateDoubleRange minimum="0" maximum="2147483647"/>
+								<f:convertNumber integerOnly="true" />
+							</p:inputText>
+						</f:facet>
+	            	</p:cellEditor>
+	            </p:column>
+	            
+	            <p:column styleClass="arrow-ui-view-column">
+	            	<f:facet name="header">
+	            		<ar:columHeader value="#{messages.financial_statement}" />
+                    </f:facet>
+	            	<p:cellEditor>
+	            		<f:facet name="output"><p:outputLabel value="#{messages.get(inputFinancialDataBean.convertFinanceStatement(data.flg_fstatement))}"/></f:facet>
+	            		<f:facet name="input">
+	            			<p:selectOneMenu value="#{data.flg_fstatement}" style="width: 150px;" converter="javax.faces.Short">
+								<f:selectItems value="#{inputFinancialDataBean.listFinanceStatement}" var="statement" itemValue="#{statement.value}" itemLabel="#{messages.get(statement.label)}"/>
+	            			</p:selectOneMenu>
+	            		</f:facet>
+	            	</p:cellEditor>
+	            </p:column>
+	            
+				<!-- This column present to prevent bug of rowEditor make last cell of row not render after save or cancel -->
+	            <p:column style="width: 0;" visible="false"></p:column>
+	        </arrow:dataTable>
+        </p:scrollPanel>
+        <p:outputPanel id="btnPanel" styleClass="arrow-button-right-panel">
+     		<p:commandButton id="btnEdit" value="#{messages.edit}" action="#{inputFinancialDataBean.triggerEditRow}" 
+     			process="@this" update="financialTable btnPanel" icon="fa fa-edit"
+     			disabled="#{inputFinancialDataBean.viewMode or inputFinancialDataBean.editMode or (inputFinancialDataBean.selectedFinance eq null)}"
+     			onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+     		<p:commandButton id="btnDelete" value="#{messages.delete}" action="#{inputFinancialDataBean.deleteFinance}" 
+     			process="@this" update="financialTable btnPanel" icon="fa fa-trash" 
+     			disabled="#{inputFinancialDataBean.viewMode or (inputFinancialDataBean.selectedFinance eq null)}" 
+     			onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;">
+     			<p:confirm header="#{messages.confirmation}" message="#{messages.are_you_sure_to_delete}" icon="ui-icon-alert" />	
+     		</p:commandButton>
+     		<p:commandButton value="#{messages.add_new}" action="#{inputFinancialDataBean.addNewFinance}" 
+     			process="@this" update="financialTable" disabled="#{inputFinancialDataBean.viewMode}" icon="fa fa-plus"
+     			onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+        </p:outputPanel>
+        <div style="clear: both;"></div>
+    </h:form>
+    <script>
+	    $(document).ready(function() {
+	    	triggerRowEdit();
+	    	PF('financialTable').unselectAllRows();
+	    });
+    </script>
+</ui:composition>

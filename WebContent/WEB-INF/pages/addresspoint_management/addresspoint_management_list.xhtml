@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:p="http://primefaces.org/ui">
+	<script type="text/javascript">
+          renderTableWithFilter();
+    </script>
+	<h:form id="listAddresspointForm">
+		<p:panel id="settingSupervisorBtn">
+			<p:commandButton value="#{messages.setting_superior}"
+				icon="fa fa-cogs"
+				action="#{addresspointManagementBean.settingSuppervisor()}"
+				update=":contentPane"
+				disabled="#{addresspointManagementBean.selectedAddresspoint==null}"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock()" />
+		</p:panel>
+		<p:scrollPanel mode="native">
+			<arrow:dataTable
+				value="#{addresspointManagementBean.listAddresspoint}" var="address"
+				rows="10" id="addresspoint_table" rowIndexVar="index"
+				paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				paginatorPosition="bottom">
+				
+				<p:column styleClass="arrow-column-header arrow-ui-select-column">
+					<f:facet name="header">
+                  	#{messages.select}
+					</f:facet>
+					<p:selectBooleanCheckbox value="#{address.selected}">
+						<p:ajax event="change" update=":listAddresspointForm"
+							listener="#{addresspointManagementBean.toggleAddressSelection(address)}" />
+					</p:selectBooleanCheckbox>
+          		</p:column>
+				<p:column styleClass="arrow-ui-name-column" >
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.addresspoint_code}"
+							parentTable="addresspoint_table"
+							sorter="#{addresspointManagementBean.listAddresspoint.sort('adp_code')}"
+							filter="#{addresspointManagementBean.listAddresspoint.filter('adp_code')}">
+						</ar:columHeader>
+					</f:facet>
+                #{address.adp_code}
+            	</p:column>
+				<p:column styleClass="arrow-ui-name-column">
+					<f:facet name="header">
+						<ar:columHeader value="#{messages.addresspoint_name}"
+							parentTable="addresspoint_table"
+							sorter="#{addresspointManagementBean.listAddresspoint.sort('adp_name')}"
+							filter="#{addresspointManagementBean.listAddresspoint.filter('adp_name')}">
+						</ar:columHeader>
+					</f:facet>
+                #{address.adp_name}
+            	</p:column>
+			</arrow:dataTable>
+			
+		</p:scrollPanel>
+	</h:form>
+</ui:composition>

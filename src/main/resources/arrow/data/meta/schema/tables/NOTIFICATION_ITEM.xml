@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DAILY_REPORT -->
+<table desc="Thông tin chi tiết của thông báo">
+	<primary-key>
+		<column name="NI_ITEM_KEY" data-type="integer" not-null="true" default-value="null" comment="Key của dữ liệu"/>
+	</primary-key>
+	<column name="NI_TYPE" data-type="c-short-code" not-null="true" default-value="null" comment="Loại dữ liệu"/>
+	<column name="NI_CREATED_AT" data-type="timestamp" not-null="true" default-value="null" comment="Thời điểm tạo"/>
+	
+	<column name="NI_EMPLOYEE_CODE" data-type="integer" not-null="true" default-value="null" comment="mã nhân viên"/>
+	<column name="NI_POINT_CODE" data-type="c-short-code" not-null="true" default-value="null" comment="Chi nhánh"/>
+	<column name="NI_WORK_DATE" data-type="date" not-null="false" default-value="null" comment="Ngày làm việc"/>
+	<column name="NI_WORK_STIME" data-type="time" not-null="false" default-value="null" comment="Thời gian bắt đầu"/>
+	<column name="NI_WORK_ETIME" data-type="time" not-null="false" default-value="null" comment="Thời gian kết thúc"/>
+</table>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+    xmlns:ac="http://arrow-tech.vn/ui"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+<composite:interface>
+    <composite:attribute name="id" type="java.lang.String"/>
+    <composite:attribute name="process" default="@this"/>
+    <composite:attribute name="update" default="@this"/>
+    <composite:attribute name="value"/>
+    <composite:attribute name="auto" default="true" />
+    <composite:attribute name="listener" method-signature="void listener(org.primefaces.event.FileUploadEvent)"/>
+    <composite:attribute name="oncomplete" />
+    <composite:attribute name="disabled" default="false" />
+    <composite:attribute name="allowTypes" default="#{sysConfig.documentFileTypesAllowed}" />
+</composite:interface>
+
+<composite:implementation>
+    <p:fileUpload fileUploadListener="#{cc.attrs.listener}" mode="advanced" id="#{cc.attrs.id}" widgetVar="wg_#{cc.attrs.id}" multiple="true" 
+    	styleClass="upload_file" disabled="#{cc.attrs.disabled}" fileLimit="#{sysConfig.docFileLimit}"
+        invalidFileMessage="#{messages.file_type_invalid}" invalidSizeMessage="#{messages.file_size_could_not_greater_than_100_mb}" 
+        fileLimitMessage="#{messages.not_more_than_one_file}" auto="#{cc.attrs.auto}" label="#{messages.choose_file_upload}"
+        value="#{cc.attrs.value}" sizeLimit="#{sysConfig.docFileSizeLimit}" allowTypes="#{cc.attrs.allowTypes}" 
+        process="#{cc.attrs.process}" update="#{cc.attrs.update}" oncomplete="#{cc.attrs.oncomplete}">
+    </p:fileUpload>
+</composite:implementation>
+
+</html>

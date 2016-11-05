@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<p:outputPanel autoUpdate="true">
+	<script>
+	var previousSelection;
+	function onRowSelect(){
+		if(isModified) {
+			var result = confirm('#{messages.confirm_data_changes}');
+			if(!result){
+				PF('reportTable_js').unhighlightRow(jQuery("tr[data-rk='" + PF('reportTable_js').selection[0] + "']"));
+				PF('reportTable_js').highlightRow(jQuery("tr[data-rk='" + previousSelection + "']"));
+				return false;
+			}
+			else{
+				isModified = false;
+				
+			}
+		}
+		previousSelection = PF('reportTable_js').selection[0];
+		return true;
+	};
+
+	function reSelectRow(){
+		PF('reportTable_js').highlightRow(jQuery("tr[data-rk='" + previousSelection + "']"));
+	};
+	</script>
+		<h:outputScript library="js" name="timepicker/timepicker.customizer.js" />
+	</p:outputPanel>
+	
+	<p:panel style="height:auto;" id="panelReport" >
+		<p:fieldset legend="#{messages['daily_worktime']}">
+				<table width="100%">
+					<tr>
+						<h:panelGrid columns="5">  
+						    <p:outputLabel value="#{messages['start_time']}: " for="startWorkingTime" />
+						    <pe:timePicker id="startWorkingTime" class="startTime" value="#{registerActivityBean.currentReport.dai_work_stime}" 
+						    	mode="popup" widgetVar="startTimeWidget" disabled="#{monthlyReportDisableForUpdate}"
+					        	rows="3" intervalMinutes="10" locale="#{localeSelector.locale}" 
+					        	required="true" requiredMessage="#{messages['daily_013_start_time_and_end_time_are_required']}" >
+				        		<p:ajax event="close" onstart="tpCloseStartTime(); return false;" />
+				        	</pe:timePicker>
+						      
+						    <h:panelGroup layout="block" style="width:20px;"/>
+						      
+						    <p:outputLabel value="#{messages['end_time']}: " for="endWorkingTime" />
+						    <pe:timePicker id="endWorkingTime" class="endTime" value="#{registerActivityBean.currentReport.dai_work_etime}" 
+						    	mode="popup" onHourShow="tpEndOnHourShowCallback" disabled="#{monthlyReportDisableForUpdate}" 
+						        onMinuteShow="tpEndOnMinuteShowCallback" widgetVar="endTimeWidget" 
+						        rows="3" intervalMinutes="10" locale="#{localeSelector.locale}"
+						        required="true" requiredMessage="#{messages['daily_013_start_time_and_end_time_are_required']}" />
+						</h:panelGrid> 
+					</tr>
+				</table>
+		</p:fieldset>
+		<br />
+		<!-- BLOCK NUMBER 2 -->
+		<p:fieldset legend="#{messages['daily_category']}">
+			<p:selectOneRadio id="Kachigori" layout="grid" columns="1" value="#{registerActivityBean.currentReport.dai_work_type}" disabled="#{(registerActivityBean.currentReport eq null) or monthlyReportDisableForUpdate}"
+				style="text-align:left;">
+				<f:selectItem itemLabel="#{messages.category_visit_business}" itemValue="true" />
+				<f:selectItem itemLabel="#{messages.category_other_work}" itemValue="false" />
+				<p:ajax update="panelCorporation, dailyReportReminderPart, dailyReportProjectPart, dailyReportOpenPart" oncomplete="isModified = true"></p:ajax>
+			</p:selectOneRadio>
+		</p:fieldset>
+
+		<br />
+		<!-- BLOCK NUMBER 3 -->
+		<p:outputPanel id="panelCorporation">
+			<p:fieldset legend="#{messages['daily_corp_info']}" styleClass="mandatory" rendered="#{!registerActivityBean.currentReport.otherWork}">
+				<table>
+					<tr>
+						<td colspan="4">
+							<ui:include src="/WEB-INF/pages/company_management/company_search.xhtml" />
+						</td>
+					</tr>
+				</table>
+			</p:fieldset>
+		</p:outputPanel>
+		<br />
+		<!-- BLOCK NUMBER 4 -->
+		<p:fieldset legend="#{messages['daily_content']}" styleClass="mandatory">
+			<h:outputLabel value="#{errorCodeClientIdMappingManager.put('ERROR_DAILY_006', p:component('txtContent'))}" />
+			<p:inputTextarea rows="6" value="#{registerActivityBean.currentReport.dai_business_details}" style="height:100% ;width:98%;" id="txtContent" disabled="#{monthlyReportDisableForUpdate}">
+				<p:ajax process="@this" update="@this" oncomplete="isModified = true"/>
+			</p:inputTextarea>
+		</p:fieldset>
+
+		<br />
+		<!-- BLOCK NUMBER 5 -->
+		<p:outputPanel id="dailyReportReminderPart">
+			<p:fieldset legend="#{messages['daily_reminder']}" rendered="#{!registerActivityBean.currentReport.otherWork}">
+				<p:selectOneRadio id="rdbReminder" value="#{registerActivityBean.currentReport.dai_rimaindar_flg}" layout="grid" columns="1" disabled="#{monthlyReportDisableForUpdate}">
+					<f:selectItems value="#{sysConfig.onOffSelectItems}" />
+					<p:ajax event="change" update="dailyReportReminderPart" oncomplete="isModified = true" />
+				</p:selectOneRadio>
+				<h:outputLabel value="#{errorCodeClientIdMappingManager.put('ERROR_DAILY_013, ERROR_DAILY_011', p:component('dateReminderStartTime'))}" />
+					<h:outputLabel value="#{errorCodeClientIdMappingManager.put('ERROR_DAILY_013, ERROR_DAILY_011', p:component('dateReminderEndTime'))}" />
+				<h:panelGrid columns="4">
+					
+					<p:calendar showOn="both" mode="popup" value="#{registerActivityBean.currentReport.dai_summary_stime}"
+						id="dateReminderStartTime"
+						disabled="#{!registerActivityBean.currentReport.dai_rimaindar_flg or monthlyReportDisableForUpdate}"
+						pattern="MM/dd/yyyy">
+						<p:ajax process="@this" update="@this" oncomplete="isModified = true"/>
+					</p:calendar>
+					<h:outputText value="#{messages.from}" styleClass="#{registerActivityBean.currentReport.turnOnReminder ? 'mandatory' : ''}"/>
+					<p:calendar showOn="both" mode="popup"
+						value="#{registerActivityBean.currentReport.dai_summary_etime}"
+						id="dateReminderEndTime"
+						disabled="#{!registerActivityBean.currentReport.dai_rimaindar_flg or monthlyReportDisableForUpdate}"
+						pattern="MM/dd/yyyy">
+						<p:ajax process="@this" update="@this" oncomplete="isModified = true"/>
+					</p:calendar>
+					<h:outputText value="#{messages.to}" styleClass="#{registerActivityBean.currentReport.turnOnReminder ? 'mandatory' : ''}"/>
+				</h:panelGrid>
+			</p:fieldset>
+		</p:outputPanel>
+
+		<br />
+		<!-- BLOCK NUMBER 7 -->
+		<table style="width: 100%;">
+			<tr>
+				<td><p:outputPanel id="dailyReportProjectPart">
+						<p:fieldset legend="#{messages['daily_project_flag']}" rendered="#{registerActivityBean.currentReport.dai_work_type}">
+							<p:selectOneRadio id="projectFlag" value="#{registerActivityBean.currentReport.dai_anken_flg}" disabled="#{monthlyReportDisableForUpdate}">
+								<f:selectItems value="#{sysConfig.onOffSelectItems}" />
+								<p:ajax process="@this" update="@this" oncomplete="isModified = true"/>
+							</p:selectOneRadio>
+						</p:fieldset>
+					</p:outputPanel>
+				</td>
+				<td><p:outputPanel id="dailyReportOpenPart">
+						<p:fieldset legend="#{messages['daily_open_flag']}" rendered="#{registerActivityBean.currentReport.dai_work_type}">
+							<p:selectOneRadio id="openFlag" value="#{registerActivityBean.currentReport.dai_matter_flg}" disabled="#{monthlyReportDisableForUpdate}">
+								<f:selectItems value="#{sysConfig.onOffSelectItems}" />
+								<p:ajax process="@this" update="@this" oncomplete="isModified = true"/>
+							</p:selectOneRadio>
+						</p:fieldset>
+					</p:outputPanel>
+				</td>
+			</tr>
+		</table>
+	</p:panel>
+</ui:composition>

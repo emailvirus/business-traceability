@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AUTHORITY_MST -->
+<table desc="Phân loại quyền hạn của Nhân viên">
+	<primary-key>
+		<column lname="Authority code" name="AUT_CODE" data-type="small-int" not-null="true" default-value="0" comment="0: Chi nhánh, 1: Head Quarter. Default là 0"/>
+	</primary-key>
+	<column lname="Authority name" name="AUT_NAME" data-type="name" not-null="true" default-value="null"/>
+</table>

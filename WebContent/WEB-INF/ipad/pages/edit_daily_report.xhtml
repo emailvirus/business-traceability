@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile" xmlns:h="http://java.sun.com/jsf/html" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent">
+
+	<o:importConstants type="arrow.businesstraceability.constant.MobilePageId" />
+	<ui:param name="disabledRegisterDailyReportWhenMonthlyReportWasCreated" value="#{registerActivityMobileBean.disabledRegisterDailyReportWhenMonthlyReportWasCreated}"/>
+	
+	<pm:header title="#{registerActivityMobileBean.title}">
+	</pm:header>
+	<pm:content>
+		<h:form id="form_edit_daily_report">
+			<p:toolbar >
+				<f:facet name="left">
+					<p:commandButton type="submit" action="#{mobileScreenFlowBean.goBack()}" value="#{messages.back}" icon="ui-icon-arrow-l" process="@this" styleClass="ui-btn-inline" update=":dailyReport, :home" />
+					<p:commandButton value="#{messages.home}" icon="ui-icon-home" action="#{mobileScreenFlowBean.gotoHome()}" update=":home" process="@this" />
+					<p:commandButton value="#{messages.daily_reports}" icon="ui-icon-bullets" action="#{mobileScreenFlowBean.gotoPage(MobilePageId.DAILY_REPORTS)}" update=":dailyReport" process="@this" />
+					<p:commandButton value="#{messages.add}" icon="ui-icon-plus" action="#{registerActivityMobileBean.addAndSaveNewReport}" 
+						disabled="#{registerActivityMobileBean.viewReport or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+						process="@this" update="daily_report_content_panel" />
+					<p:commandButton value="#{messages.update}" 
+						disabled="#{registerActivityMobileBean.viewReport or registerActivityMobileBean.choosedRegister or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+						icon="ui-icon-edit" action="#{registerActivityMobileBean.saveWhenEditReport}" process="@this" update=":growl" />
+					<p:commandButton value="#{messages.delete}" 
+						disabled="#{registerActivityMobileBean.viewReport or registerActivityMobileBean.choosedRegister or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+						icon="ui-icon-delete" action="#{registerActivityMobileBean.deleteReport}" process="@form" update=":growl, :dailyReport" />
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="#{messages.logout}" icon="ui-icon-power" action="#{authenticationBean.logout}" process="@this" update="@all" />
+				</f:facet>
+			</p:toolbar>
+			<p:panel id="daily_report_content_panel">
+				<pm:field>
+					<p:outputLabel value="#{messages.work_date}" for="workDate" />
+					<p:inputText type="date" id="workDate" value="#{registerActivityMobileBean.workDateInput}" 
+						required="true" requiredMessage="#{messages['calendar_is_not_null']}">
+						<p:ajax event="change" update="@form" process="@this"></p:ajax>
+					</p:inputText>
+				</pm:field>
+				<pm:field>
+					<p:outputLabel value="#{messages['daily_worktime']}" for="startTimeHours" />
+					<table>
+						<tr>
+							<td><p:outputLabel value="#{messages.start_time}" for="startTimeHours" /></td>
+							<td><p:selectOneMenu id="startTimeHours" value="#{registerActivityMobileBean.startTimeHour}" 
+									disabled="#{(registerActivityMobileBean.currentReport eq null) or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+									required="true" requiredMessage="#{messages['start_work_date_not_null']}">
+									<f:selectItem itemValue="#{null}" itemLabel="----" noSelectionOption="true" />
+									<f:selectItems value="#{sysConfig.hourSelectItems}" />
+									<p:ajax event="change" process="@this" update="@form" />
+								</p:selectOneMenu></td>
+							<td><p:selectOneMenu value="#{registerActivityMobileBean.startTimeMinute}" 
+									disabled="#{(registerActivityMobileBean.currentReport eq null) or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+									required="true" requiredMessage="#{messages['start_work_date_not_null']}" immediate="true">
+									<f:selectItem itemValue="#{null}" itemLabel="----" noSelectionOption="true" />
+									<f:selectItems value="#{sysConfig.minuteSelectItems}" />
+									<p:ajax event="change" process="@this" update="@form" />
+								</p:selectOneMenu></td>
+							<td></td>
+							<td><p:outputLabel value="#{messages.end_time}" for="endTimeHours" /></td>
+							<td><p:selectOneMenu id="endTimeHours" value="#{registerActivityMobileBean.endTimeHour}" 
+									disabled="#{(registerActivityMobileBean.currentReport eq null) or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+									required="true" requiredMessage="#{messages['end_work_date_not_null']}">
+									<f:selectItem itemValue="#{null}" itemLabel="----" noSelectionOption="true" />
+									<f:selectItems value="#{sysConfig.hourSelectItems}" />
+									<p:ajax event="change" process="@this" update="@form" />
+								</p:selectOneMenu></td>
+							<td><p:selectOneMenu value="#{registerActivityMobileBean.endTimeMinute}" 
+									disabled="#{(registerActivityMobileBean.currentReport eq null) or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+									required="true" requiredMessage="#{messages['end_work_date_not_null']}">
+									<f:selectItem itemValue="#{null}" itemLabel="----" noSelectionOption="true" />
+									<f:selectItems value="#{sysConfig.minuteSelectItems}" />
+									<p:ajax event="change" process="@this" update="@form" />
+								</p:selectOneMenu></td>
+						</tr>
+					</table>
+				</pm:field>
+				<pm:field>
+					<p:outputLabel value="#{messages.daily_category}" for="select_in_category" />
+					<p:selectOneRadio id="select_in_category" value="#{registerActivityMobileBean.currentReport.dai_work_type}" 
+						disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated}">
+						<f:selectItem itemLabel="#{messages.category_visit_business}" itemValue="true" />
+						<f:selectItem itemLabel="#{messages.category_other_work}" itemValue="false" />
+						<p:ajax event="change" update="@form"></p:ajax>
+					</p:selectOneRadio>
+				</pm:field>
+
+				<p:outputPanel id="searchPanel">
+					<p:panel rendered="#{registerActivityMobileBean.currentReport.dai_work_type}">
+						<p:commandButton value="#{messages.create_new_company}" action="#{companyManagementMobileBean.addNewCompanyMobileScreen}" 
+						disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated}" update=":newCompany" process="@this" />
+						<pm:field>
+							<p:outputLabel value="#{messages.company_name}" />
+
+							<ar:companyMobileSuggestion value="#{registerActivityMobileBean.companyName}" id="companySuggestion" process="@this" update="@([id$=searchPanel])"
+								onSelect="#{registerActivityMobileBean.changeCompany}" disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated}"/>
+						</pm:field>
+						<pm:field>
+							<p:outputLabel value="#{messages.branch}" />
+<!-- 							<p:inputText readonly="true" disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated or registerActivityMobileBean.currentReport.company_mst eq null}" value="#{registerActivityMobileBean.currentReport.company_mst.addresspoint_mst.adp_name_DIRECT}" /> -->
+							<p:selectOneMenu disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated or registerActivityMobileBean.currentReport.company_mst eq null}"
+								value="#{registerActivityMobileBean.currentReport.dai_comppoint_code}">
+								<f:selectItem itemValue="#{null}" itemLabel="---" />
+								<f:selectItems value="#{registerActivityMobileBean.allBranch}"
+									var="branch" itemValue="#{branch.adp_code}" itemLabel="#{branch.adp_name}" />
+							</p:selectOneMenu>
+						</pm:field>
+						
+						<pm:field>
+							<p:outputLabel value="#{messages.person_in_charge}" for="psnInChargeSuggestion" />
+							<p:outputPanel id="personInChargeSuggestionPanel">
+								<ar:officerMobileSuggestion id="psnInChargeSuggestion" process="@this" update="@this @([id$=departmentSuggestionPanel])" 
+								value="#{registerActivityMobileBean.currentReport.dai_compemp_name}" 
+									onSelect="#{registerActivityMobileBean.changeEmployeeAndDepartmentName}"
+									comPointCode="#{registerActivityMobileBean.currentReport.company_mst.addresspoint_mst.adp_code}" companyCode="#{registerActivityMobileBean.currentReport.company_mst.com_company_code}" 
+									disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated or registerActivityMobileBean.currentReport.company_mst eq null}" />
+							</p:outputPanel>
+						</pm:field>
+						
+						
+						<pm:field>
+							<p:outputLabel value="#{messages.department}" for="departmentSuggestion" />
+							<p:outputPanel id="departmentSuggestionPanel">
+								<ar:departmentMobileSuggestion id="departmentSuggestion" process="@this" update="@this @([id$=personInChargeSuggestionPanel])" 
+								value="#{registerActivityMobileBean.currentReport.dai_employee_post}" 
+									onSelect="#{registerActivityMobileBean.changeEmployeeAndDepartmentName}"
+									comPointCode="#{registerActivityMobileBean.currentReport.company_mst.addresspoint_mst.adp_code}" companyCode="#{registerActivityMobileBean.currentReport.company_mst.com_company_code}" 
+									disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated or registerActivityMobileBean.currentReport.company_mst eq null}" />
+							</p:outputPanel>
+						</pm:field>
+						
+						<pm:field>
+							
+						</pm:field>
+						<pm:field>
+							<p:outputLabel value="#{messages.purpose}" for="select_purpose" />
+							<p:selectOneMenu id="select_purpose" value="#{registerActivityMobileBean.currentReport.daily_activity_type}"
+								disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+								required="true" requiredMessage="#{messages['daily_require_purpose']}"
+								converter="#{converterStorage.dailyActivityTypeConverter}">
+								<f:selectItems value="#{registerActivityMobileBean.activityTypes}" var="item" itemValue="#{item}" itemLabel="#{item.dat_name_DIRECT}" />
+								<p:ajax event="change" />
+							</p:selectOneMenu>
+						</pm:field>
+						<pm:field>
+							<p:outputLabel value="#{messages.business_type}" for="select_business_type" />
+							<p:selectOneMenu id="select_business_type" value="#{registerActivityMobileBean.currentReport.dai_bus_code}" 
+								disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated}"
+								required="true" requiredMessage="#{messages['daily_require_businesstype']}">
+								<f:selectItems value="#{registerActivityMobileBean.listIndustryBigMST}" var="item" itemValue="#{item.big_code}" itemLabel="#{item.big_name}" />
+								<p:ajax event="change" />
+							</p:selectOneMenu>
+						</pm:field>
+					</p:panel>
+				</p:outputPanel>
+				<pm:field>
+					<p:outputLabel value="#{messages.daily_content}" for="content" />
+					<p:inputTextarea id="content" value="#{registerActivityMobileBean.currentReport.dai_business_details}"
+						disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated}"
+						onchange="PrimeFaces.ab({s:'editDailyReport:form_edit_daily_report:content',e:'change',p:'editDailyReport:form_edit_daily_report:content',ps:true});" 
+						required="true" requiredMessage="#{messages['daily_require_content']}">
+						<p:ajax process="@this" update="@this"/>
+					</p:inputTextarea>
+				</pm:field>
+				<pm:field rendered="#{registerActivityMobileBean.currentReport.dai_work_type}">
+					<p:outputLabel value="#{messages.daily_reminder}" />
+					<pm:switch onchange="jQuery('#fromToDate').toggle();" disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated}">
+					</pm:switch>
+					<div id="fromToDate" style="display: none;">
+						<pm:field>
+							<p:outputLabel value="#{messages.from}" for="from" />
+							<p:inputText type="date" id="from" value="#{registerActivityMobileBean.startReminderTime}"
+								disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</pm:field>
+						<pm:field>
+							<p:outputLabel value="#{messages.to}" for="to" />
+							<p:inputText type="date" id="to" value="#{registerActivityMobileBean.endReminderTime}"
+								disabled="#{disabledRegisterDailyReportWhenMonthlyReportWasCreated}">
+								<p:ajax event="change"></p:ajax>
+							</p:inputText>
+						</pm:field>
+					</div>
+				</pm:field>
+			</p:panel>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton type="submit" action="#{mobileScreenFlowBean.goBack()}" value="#{messages.back}" icon="ui-icon-arrow-l" process="@this content" styleClass="ui-btn-inline" update=":dailyReport, :home" />
+					<p:commandButton value="#{messages.daily_reports}" icon="ui-icon-bullets" action="#{mobileScreenFlowBean.gotoPage(MobilePageId.DAILY_REPORTS)}" update=":dailyReport" process="@this" />
+					<p:commandButton value="#{messages.add}" icon="ui-icon-plus" action="#{registerActivityMobileBean.addAndSaveNewReport}" 
+						disabled="#{registerActivityMobileBean.viewReport or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+						process="@this" update=":growl, @form" />
+					<p:commandButton value="#{messages.update}" 
+						disabled="#{registerActivityMobileBean.viewReport or registerActivityMobileBean.choosedRegister or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+						icon="ui-icon-edit" action="#{registerActivityMobileBean.saveWhenEditReport}" process="@this" update=":growl" />
+					<p:commandButton value="#{messages.delete}" 
+						disabled="#{registerActivityMobileBean.viewReport or registerActivityMobileBean.choosedRegister or disabledRegisterDailyReportWhenMonthlyReportWasCreated}" 
+						icon="ui-icon-delete" action="#{registerActivityMobileBean.deleteReport}" process="@form" update=":growl, :dailyReport" />
+				</f:facet>
+				<f:facet name="right">
+					<p:commandButton value="#{messages.logout}" icon="ui-icon-power" action="#{authenticationBean.logout}" process="@this" update="@all" />
+				</f:facet>
+			</p:toolbar>
+		</h:form>
+	</pm:content>
+</ui:composition>

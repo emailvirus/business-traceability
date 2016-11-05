@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MONTHLY_REPORT_REVISION -->
+<table desc="Dữ liệu báo cáo tháng">
+	<primary-key>
+		<column name="BAJON_BANGOU" data-type="integer" not-null="true" default-value="null" comment="Số version"  />
+		<column name="SHAIN_KODO" data-type="integer" not-null="true" default-value="null" comment="Mã nhân viên" />
+		<column name="REPOTO_NO_GETSUDO" data-type="integer" not-null="true" default-value="null" comment="Tháng của báo cáo" />
+		<column name="REPOTO_NO_NENDO" data-type="integer" not-null="true" default-value="null" comment="Năm của báo cáo" />	
+	</primary-key>
+
+	<column name="SHOUNIN_JOUTAI" data-type="c-short-code" not-null="true" default-value="'OP'" comment="Trạng thái phê duyệt OP-Open, WT-Waiting, AP-Approved, RE-Reject, RO-Reopen"/>
+	<column name="CHOKKIN_NO_HENSHUU_BI" data-type="date" not-null="false" default-value="null" comment="Ngày chinh sửa gần nhất Dùng khi cần nộp lại"/>
+	<column name="HENSHUU_RIYUU" data-type="free-text" not-null="false" default-value="null" comment="Lý do chỉnh sửa"/>
+	<column name="REPOTO_NO_RIBIJON_NO_SAKUJO_FURAGU" data-type="flag" not-null="true" default-value="null" comment="Cờ xóa phiên bản báo cáo true: đã xóa, false: chưa xóa"/>
+	<column name="SHOUNINSHA_KODO" data-type="integer" not-null="false" default-value="null" comment="Người phê duyệt"/>
+	<column name="KADOU_NISSUU" data-type="integer" not-null="false" default-value="0" comment="Số ngày làm việc"/>
+	<column name= "NYURYOKU_NISSUU"  data-type="integer"  not-null="false" default-value="0"  comment="Số ngày nhập" />
+    <column name= "TOUGETSU_TSUITACHI_KARA_NO_HAKEN_SHAIN_SUU"  data-type="integer"  not-null="false" default-value="0"  comment="Số nhân viên biệt phái từ ngày 1 tháng này" />
+    <column name= "JIGETSU_TSUITACHI_KARA_NO_HAKEN_SHAIN_SUU"  data-type="integer"  not-null="false" default-value="0"  comment="Số nhân viên biệt phái từ ngày 1 tháng tháng sau" />
+    <column name= "HOUMON_KENSUU_SHOKUSHU_SOFUTO_WEA"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Software" />
+    <column name= "HOUMON_KENSUU_SHOKUSHU_NETTO_WAKU"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Network" />
+  	<column name= "HOUMON_KENSUU_SHOKUSHU_KENCHIKU"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Kiến trúc" />
+ 	<column name= "HOUMON_KENSUU_SHOKUSHU_DOBOKU"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Xây dựng" />
+ 	<column name= "HOUMON_KENSUU_SHOKUSHU_SETSUBI"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Thiết bị vật tư" />
+	<column name= "HOUMON_KENSUU_SHOKUSHU_DENKI"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Điện" />
+	<column name= "HOUMON_KENSUU_SHOKUSHU_PURANTO"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Nhà máy" />
+ 	<column name= "HOUMON_KENSUU_SHOKUSHU_IPPAN"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Chung" />
+	<column name= "HOUMON_KENSUU_SHOKUSHU_TSUUSHIN_MUSEN"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Truyền thông_Không dây" />
+ 	<column name= "HOUMON_KENSUU_SHOKUSHU_TSUUSHIN_YUUSEN"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Truyền thông_có dây" />
+ 	<column name= "HOUMON_KENSUU_SHOKUSHU_KIKAI_HADO"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Máy móc・Phần cứng" />
+ 	<column name= "HOUMON_KENSUU_SHOKUSHU_JIMU"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Văn phòng" />
+ 	<column name= "HOUMON_KENSUU_SHOKUSHU_KORU_CENTA"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_ngành nghề_Call center" />
+ 	<column name= "HOUMON_KENSUU_MOKUTEKI_SHINKIHOUMON"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_Mục đích_Thăm mới" />
+ 	<column name= "HOUMON_KENSUU_MOKUTEKI_KIZON_NO_TEIKI_HOUMON"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_Mục đích_Thăm định kì đã có" />
+ 	<column name= "HOUMON_KENSUU_MOKUTEKI_KIZON_IGAI_NO_TEIKI_HOUMON"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_Mục đích_Thăm định kì chưa có" />
+ 	<column name= "HOUMON_KENSUU_MOKUTEKI_GIJUTSUSHA_SHOUKAI"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_Mục đích_Giới thiệu kỹ sư" />
+ 	<column name= "HOUMON_KENSUU_MOKUTEKI_GYOUDA"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_Mục đích_Thảo luận nghiệp vụ" />
+ 	<column name= "HOUMON_KENSUU_MOKUTEKI_MITSUMORI"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_Mục đích_Báo giá" />
+ 	<column name= "HOUMON_KENSUU_MOKUTEKI_KUREMU"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_Mục đích_Khiếu nại" />
+ 	<column name= "HOUMON_KENSUU_MOKUTEKI_SONOTA"  data-type="integer"  not-null="false" default-value="0"  comment="Số viếng thăm_Mục đích_Khác" />
+ 	<column name= "SUTAFFU_KANRI_DENWA_FOROSUU"  data-type="integer"  not-null="false" default-value="0"  comment="Quản lý nhân viên_Số lượng theo dõi điện thoại" />
+ 	<column name= "SUTAFFU_KANRI_MENSETSU_FOROSUU"  data-type="integer"  not-null="false" default-value="0"  comment="Quản lý nhân viên_Số lượng theo dõi phỏng vấn" />
+ 	<column name= "SUTAFFU_KANRI_KUREMU_SUU"  data-type="integer"  not-null="false" default-value="0"  comment="Quản lý nhân viên_Số lượng Khiếu nại" />
+ 	<column name= "SUTAFFU_KANRI_SONO_TA_NO_KAZU"  data-type="integer"  not-null="false" default-value="0"  comment="Quản lý nhân viên_Số lượng Loại Khác" />
+ 	<column name= "ICHIJI_MENSETSU_NO_KENSUU"  data-type="integer"  not-null="false" default-value="0"  comment="Số lượng Phỏng vấn vòng 1" />
+ 	<column name= "NIJI_MENSETSU_NO_KENSUU"  data-type="integer"  not-null="false" default-value="0"  comment="Số lượng Phỏng vấn vòng 2" />
+ 	<column name= "SAIYOU_SUU"  data-type="integer"  not-null="false" default-value="0"  comment="Số lượng tuyển" />
+ 	<column name= "SAIYOU_SAPOTO_NINZUU"  data-type="integer"  not-null="false" default-value="0"  comment="Số người hỗ trợ tuyển dụng" />
+ 	<column name= "SHINKI_KAITAKU_SUU"  data-type="integer"  not-null="false" default-value="0"  comment="Số lượng khai thác mới" />
+ 	<column name= "ZOUKA_SUU"  data-type="integer"  not-null="false" default-value="0"  comment="Số lượng gia tăng" />
+ 	<column name= "URIAGE_PH"  data-type="integer"  not-null="false" default-value="0"  comment="Doanh thu PH" />
+ 	<column name= "GENKA_RITSU"  data-type="numeric"  not-null="false" default-value="0.0"  comment="Tỉ lệ chi phí Format" />
+ 	<column name= "NO_KEKKA_NI_KANSURU_GENIN"  data-type="free-text"  not-null="false" default-value="null"  comment="Nguyên nhân phát sinh tăng giảm" />
+ 	<column name= "SONO_GENIN_GA_SHOUJITA_RIYUU"  data-type="free-text"  not-null="false" default-value="null"  comment="Lí do phát sinh tăng giảm" />
+ 	<column name= "JIGETSUNO_MOKUHYOU"  data-type="free-text"  not-null="false" default-value="null"  comment="mục tiêu của tháng tới" />
+ 	<column name= "HOUMON_SAKI_KIGYOU_ICHIRAN"  data-type="free-text"  not-null="false" default-value="null"  comment="Danh sách doanh nghiệp đến thăm" />
+ 	<column name= "SHOCHOU_NO_SOUKATSU"  data-type="free-text"  not-null="false" default-value="null"  comment="Tổng hợp của trưởng chi nhánh" />
+ 	<column name= "SOU_HOUMON_KENSUU"  data-type="integer"  not-null="false" default-value="0"  comment="Tổng số chuyến thăm" />
+ 	
+ 	<foreign-key parent-table="EMPLOYEE_MST">
+		<column name="SHAIN_KODO" referColumn="EMP_CODE"/>
+		</foreign-key>		
+	<foreign-key parent-table="EMPLOYEE_MST" javaName="manager">
+		<column name="SHOUNINSHA_KODO" referColumn="EMP_CODE"/>
+	</foreign-key>	
+</table>

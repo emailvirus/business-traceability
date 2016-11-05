@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent" xmlns:o="http://omnifaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<!-- To access constants -->
+	<o:importConstants type="arrow.businesstraceability.control.helper.ScreenContext" />
+
+	<h:form>
+		<p:panel styleClass="panel-notice-setting">
+			<table style="width: 100%; margin: -6px 0 0 0;">
+				<tr>
+					<td style="width: 5%; min-width: 110px;">
+						<p:commandButton id="viewNotification" value="#{messages.view_notifications}" disabled="#{notificationBean.disableButtonMarkAllAsRead}"
+							icon="fa fa-bell" action="#{screenBean.switchScreen(ScreenContext.NOTIFICATION_DASHBOARD)}" actionListener="#{notificationBean.init()}" process="@this"
+							update=":contentPane, :globalBlockUI" onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock()" />
+					</td>
+					<td style="width:10%; min-width: 180px;"><h:panelGrid columns="2">
+							<p:outputLabel value="#{messages.branch}" for="address_point" styleClass="mandatory"/>
+							<p:selectOneMenu id="address_point" value="#{notificationBean.selectedAddress}" requiredMessage="#{messages.please_select}">
+								<f:selectItem itemLabel="#{messages.please_select}" itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{notificationBean.allBranch}" var="addresspoint" itemValue="#{addresspoint.adp_code}" itemLabel="#{addresspoint.adp_name}" />
+								<p:ajax update="position_base,listEmployee,addNotificationConfig" listener="#{notificationBean.renderListPosition}" event="change" />
+							</p:selectOneMenu>
+						</h:panelGrid></td>
+					<td style="width:5%; min-width: 120px;"><h:panelGrid columns="2">
+							<p:outputLabel value="#{messages.employee_position}" for="position_base"/>
+							<p:selectOneMenu id="position_base" value="#{notificationBean.selectedPosition}">
+								<f:selectItem itemLabel="#{messages.pick_all_position}" itemValue="" />
+								<f:selectItems value="#{notificationBean.allPosition}" var="pos" itemValue="#{pos.pos_code}" itemLabel="#{pos.pos_name}" />
+								<p:ajax update="listEmployee" listener="#{notificationBean.renderListEmployee}" event="change" />
+							</p:selectOneMenu>
+						</h:panelGrid></td>
+					<td style="width:12%; min-width: 220px;"><h:panelGrid columns="2">
+							<p:outputLabel value="#{messages.employee_name}" for="listEmployee" styleClass="mandatory"/>
+							<p:selectOneMenu value="#{notificationBean.selectedEmployee}" id="listEmployee" requiredMessage="#{messages.please_select}">
+								<f:selectItem itemLabel="#{messages.please_select}" itemValue="0"/>
+								<f:selectItem itemLabel="#{messages.all_employee}" itemValue="1" />
+								<f:selectItems value="#{notificationBean.allEmployee}" var="employee" itemValue="#{employee.pk.emp_code}" itemLabel="#{employee.emp_name}" />
+								<p:ajax update="addNotificationConfig" listener="#{notificationBean.renderListEmployee}" event="change" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</td>
+					<td style="width: 5%; min-width: 80px;">
+						<p:commandButton id="addNotificationConfig" value="#{messages.add}" update="notificationTable" 
+							icon="ui-icon-document" action="#{notificationBean.addNewNotification}" process="@form"
+							disabled="#{notificationBean.selectedEmployee eq 0}" />
+								<!-- disabled="#{!notificationBean.hasSelectedMenuItems}" -->
+					</td>
+					<td style="float: right; margin-top: 2px;">
+						<p:commandButton id="leftDeleteButton" value="#{messages.delete}" disabled="#{!notificationBean.hasNotificationSelected}"
+								action="#{notificationBean.deleteNotification}" update="notificationTable, @this" icon="ui-icon-trash" process="@this" />
+					</td>
+				</tr>
+			</table>
+		</p:panel>
+		<p:panel>
+			<arrow:dataTable id="notificationTable" paginator="true" rows="20" value="#{notificationBean.listNotification}" var="notification" resizableColumns="true" paginatorPosition="bottom">
+				<p:column styleClass="arrow-ui-code-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.employee_code}" escape="false">
+						</h:outputText>
+					</f:facet>
+					<h:outputText value="#{notification.nc_target_employee}"></h:outputText>
+				</p:column>
+
+				<p:column styleClass="arrow-ui-name-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.employee_name}" escape="false">
+						</h:outputText>
+					</f:facet>
+					<h:outputText value="#{notificationBean.getEmployeeByCode(notification.nc_target_employee).emp_name}"></h:outputText>
+				</p:column>
+
+				<p:column styleClass="arrow-ui-longcode-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.type}" />
+					</f:facet>
+					<p:selectOneMenu value="#{notification.nc_type}" disabled="#{notificationBean.isRetiredEmployee(notification.nc_target_employee)}">
+						<f:selectItem itemLabel="#{messages.daily_report}" itemValue="D" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column styleClass="arrow-ui-select-column long">
+					<f:facet name="header">
+						<h:outputText value="#{messages.enable}?" escape="false" />
+					</f:facet>
+					<p:selectBooleanCheckbox value="#{notification.nc_enable}" disabled="#{notificationBean.isRetiredEmployee(notification.nc_target_employee)}">
+						<p:ajax event="change" update="notificationTable, @form:leftDeleteButton" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+
+				<p:column styleClass="arrow-ui-number-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.unread}" escape="false" />
+					</f:facet>
+					<p:outputLabel value="#{notificationBean.getNumRowNotiUnread(notification)}" />
+				</p:column>
+				<p:column styleClass="arrow-ui-select-column">
+					<f:facet name="header">
+						<h:outputText value="#{messages.delete}" escape="false" />
+					</f:facet>
+					<p:selectBooleanCheckbox value="#{notification.selected}">
+						<p:ajax event="change" update="notificationTable, @form:leftDeleteButton" listener="#{notificationBean.toggleSelection(notification)}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+			</arrow:dataTable>
+		</p:panel>
+	</h:form>
+
+</ui:composition>

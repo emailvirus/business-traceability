@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+		<h:form enctype="multipart/form-data">
+			<table>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.credit_score_number}</label>
+					</td>
+					<td class="proc3-width-col">
+						<pe:inputNumber value="#{inputAccountingDataBean.accComCredit.score_credit}" id="inputScoreCredit"
+                    		symbolPosition="s" emptyValue="empty" decimalPlaces="0" disabled="#{inputAccountingDataBean.viewMode}"
+                    		required="#{inputAccountingDataBean.accComCredit.code_acc_creditscore eq null and inputAccountingDataBean.accComCredit.score_credit eq null}" 
+                    		requiredMessage="#{messages.credit_score_number_is_required}"
+                    		maxValue="999999999">
+                    		<p:ajax event="change" update="@this scoreRankSelector" process="@this" resetValues="true"></p:ajax>
+                   		</pe:inputNumber>
+					</td>
+					<td>
+						<label class="mandatory">#{messages.credit_score_rank}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:selectOneMenu id="scoreRankSelector" value="#{inputAccountingDataBean.accComCredit.code_acc_creditscore}"
+							required="#{inputAccountingDataBean.accComCredit.code_acc_creditscore eq null and inputAccountingDataBean.accComCredit.score_credit eq null}" 
+							requiredMessage="#{messages.credit_score_rank_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode}">
+							<f:selectItem itemValue="" itemLabel="#{messages.select}" />
+							<f:selectItems value="#{commonSelectorBean.listAccComBugyo15}" var="accCom" 
+								itemValue="#{accCom.code}" itemLabel="#{accCom.title}" />
+							<p:ajax event="change" update="@this inputScoreCredit" />
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.trading_condition_category}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:selectOneMenu value="#{inputAccountingDataBean.accComCredit.code_acc_tradecond}"
+							required="true" requiredMessage="#{messages.trading_condition_category_is_required}"
+							disabled="#{inputAccountingDataBean.viewMode}">
+							<f:selectItem itemValue="" itemLabel="#{messages.select}" />
+							<f:selectItems value="#{accComBugyoBean.listAccComBugyo14}" var="accCom" 
+								itemValue="#{accCom.code}" itemLabel="#{accCom.title}" />
+							<p:ajax event="change" update="@this" />
+						</p:selectOneMenu>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="mandatory">#{messages.authorizer_in_the_middle_of_flow}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:autoComplete value="#{inputAccountingDataBean.accComCredit.middleApprovalEmployee}" 
+							converter="#{converterStorage.employeeConverter}" title="#{messages.type_to_find_employee}"
+							forceSelection="true" emptyMessage="#{messages.no_employee_found}" cache="true" cacheTimeout="300" dropdown="true" scrollHeight="200"
+							var="emp" itemLabel="#{emp.emp_name}" itemValue="#{emp}" completeMethod="#{inputAccountingDataBean.filterApprovalEmployee}" 
+							required="true" requiredMessage="#{messages.authorizer_in_the_middle_of_flow_is_required}"
+							widgetVar="middleApproval_wg_var" disabled="#{inputAccountingDataBean.viewMode}">
+							
+							<p:ajax event="itemSelect" process="@this" update="@this" resetValues="true" />
+							<p:ajax event="change" process="@this" update="@this" 
+								onstart="if(PF('middleApproval_wg_var').panel.is(':visible')) return false;" resetValues="true"/>
+							<p:column headerText="#{messages.employee_code}">
+				                <h:outputText value="#{emp.emp_code}" />
+				            </p:column>
+				 
+				            <p:column headerText="#{messages.employee_name}">
+				                <h:outputText value="#{emp.emp_name}" />
+				            </p:column>
+						</p:autoComplete>
+					</td>
+					<td>
+						<label class="mandatory">#{messages.final_authorizer}</label>
+					</td>
+					<td class="proc3-width-col">
+						<p:autoComplete value="#{inputAccountingDataBean.accComCredit.finalApprovalEmployee}" 
+							converter="#{converterStorage.employeeConverter}" title="#{messages.type_to_find_employee}"
+							forceSelection="true" emptyMessage="#{messages.no_employee_found}" cache="true" cacheTimeout="300" dropdown="true" scrollHeight="200"
+							var="emp" itemLabel="#{emp.emp_name}" itemValue="#{emp}" completeMethod="#{inputAccountingDataBean.filterApprovalEmployee}" 
+							required="true" requiredMessage="#{messages.final_authorizer_is_required}"
+							widgetVar="finalApproval_wg_var" disabled="#{inputAccountingDataBean.viewMode}">
+							
+							<p:ajax event="itemSelect" process="@this" update="@this" resetValues="true" />
+							<p:ajax event="change" process="@this" update="@this" 
+								onstart="if(PF('finalApproval_wg_var').panel.is(':visible')) return false;" resetValues="true"/>
+							<p:column headerText="#{messages.employee_code}">
+				                <h:outputText value="#{emp.emp_code}" />
+				            </p:column>
+				 
+				            <p:column headerText="#{messages.employee_name}">
+				                <h:outputText value="#{emp.emp_name}" />
+				            </p:column>
+						</p:autoComplete>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>#{messages.cause_of_decision}</label>
+					</td>
+					<td colspan="3" class="proc3-width-col">
+						<p:inputTextarea value="#{inputAccountingDataBean.accComCredit.cause_decision}"
+							disabled="#{inputAccountingDataBean.viewMode}">
+							<p:ajax event="change" process="@this" update="@this"></p:ajax>
+						</p:inputTextarea>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>#{messages.additional_direction}</label>
+					</td>
+					<td colspan="3" class="proc3-width-col">
+						<p:inputTextarea value="#{inputAccountingDataBean.accComCredit.other_direction}"
+							disabled="#{inputAccountingDataBean.viewMode}">
+							<p:ajax event="change" process="@this" update="@this"></p:ajax>
+						</p:inputTextarea>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>#{messages.accountant_direction}</label>
+					</td>
+					<td colspan="3" class="proc3-width-col">
+						<p:inputTextarea value="#{inputAccountingDataBean.accComCredit.acc_direction}"
+							disabled="#{inputAccountingDataBean.viewMode}">
+							<p:ajax event="change" process="@this" update="@this"></p:ajax>
+						</p:inputTextarea>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>#{messages.research_report_file}</label>
+					</td>
+					<td colspan="2" class="proc3-width-col">
+						<table>
+							<tr>
+								<p:outputPanel rendered="#{!inputAccountingDataBean.viewMode}">
+									<td>
+										<p:fileUpload mode="advanced" skinSimple="true" allowTypes="#{sysConfig.documentFileTypesAllowed}" 
+											sizeLimit="#{sysConfig.docFileSizeLimit}" multiple="false" fileLimit="#{sysConfig.docFileLimit}"
+									    	invalidFileMessage="#{messages.file_type_invalid}" invalidSizeMessage="#{messages.file_size_could_not_greater_than_100_mb}" 
+									    	fileLimitMessage="#{messages.not_more_than_one_file}" auto="false" label="#{messages.choose_file_upload}" 
+									    	uploadLabel="#{messages.upload}" cancelLabel="#{messages.cancel}" process="@this"
+									    	fileUploadListener="#{inputAccountingDataBean.fileUploadListener}" 
+									    	update="@this @([id$=uploadedFileName])" widgetVar="upload">
+									    </p:fileUpload>
+									</td>
+								</p:outputPanel>
+								<p:outputPanel rendered="#{inputAccountingDataBean.showDownload}">
+									<td>
+										<p:commandButton value="#{messages.download}" ajax="false" immediate="true"
+									    	onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+									        <p:fileDownload value="#{inputAccountingDataBean.reportFile}" />
+									    </p:commandButton>
+									</td>
+								</p:outputPanel>
+								<td>
+									<p:outputPanel id="uploadedFileName">
+										<p:outputLabel rendered="#{inputAccountingDataBean.accComCredit.path_report ne null}">
+											#{inputAccountingDataBean.accComCredit.path_report}
+										</p:outputLabel>
+									</p:outputPanel>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</h:form>
+</ui:composition>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CAPTITAL_LEVEL_MST -->
+<table>
+	<primary-key>
+		<column name="CAL_LEVEL" data-type="integer" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="CAL_GRADE" data-type="name" not-null="true" default-value="null"/>
+</table>

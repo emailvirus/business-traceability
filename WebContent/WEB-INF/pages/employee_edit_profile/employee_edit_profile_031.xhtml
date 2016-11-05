@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:o="http://omnifaces.org/ui"
+    xmlns:arrow="http://arrow-tech.vn/arrow"
+    xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+    xmlns:p="http://primefaces.org/ui">
+    <h:form id="form">
+        <table>
+            <tr>
+                <td class="label">#{messages['employee_code']}</td>
+                <td>
+                    <p:inputText id="employee_add_code" value="#{employeeProfileBean.employeeBean.emp_code}" label="#{messages['code']}" 
+                        required="false" autocomplete="false" disabled="true"/>
+                </td>
+            </tr>
+           
+            <tr>
+                <td class="label">#{messages['name']}</td>
+                <td>
+                    <p:inputText id="employee_add_name" value="#{employeeProfileBean.employeeBean.emp_name}" label="#{messages['name']}"
+                        required="true" autocomplete="false" maxlength="32" disabled="true"/>
+                </td>
+            </tr>
+             <tr>
+                <td class="label"><p:outputLabel value="#{messages.tel}" for="employee_add_tel" /></td>
+                <td>
+                    <p:inputText id="employee_add_tel" value="#{employeeProfileBean.empTel}" validatorMessage="#{messages['invalid_tel_input']}" maxlength="10">
+					        <f:validateRegex pattern="^[0-9\s]*+$" />
+					</p:inputText>
+                </td>
+            </tr>
+             <tr>
+                <td class="label"><p:outputLabel value="#{messages.mobile}" for="employee_add_mobile" /></td>
+                <td>
+                	<p:inputText id="employee_add_mobile" value="#{employeeProfileBean.empMobile}" validatorMessage="#{messages['invalid_mobile_input']}" maxlength="11">
+					        <f:validateRegex pattern="^[0-9\s]*+$" />
+					</p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><p:outputLabel value="#{messages.email}" for="employee_add_email" /></td>
+                <td>
+                    <p:inputText id="employee_add_email" value="#{employeeProfileBean.empEmail}"
+                       	autocomplete="false" maxlength="32" validatorMessage="#{messages.invalid_email_format}">
+                        <f:validateRegex pattern="$|[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
+                        </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left">
+                    <p:commandButton id="btnInsertCompany" value="#{messages['save']}" action="#{employeeProfileBean.saveEditEployee}" update="@form" icon="ui-icon-disk"/>
+                    <p:commandButton id="btnclose" value="#{messages['cancel']}" action="#{screenBean.switchToHome}" update=":contentPane" immediate="true" icon="ui-icon-close" process="@this"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</ui:composition>

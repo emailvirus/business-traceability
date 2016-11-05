@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent">
+	<p:panel>
+		<h:form id="exportForm">
+			<p:commandButton value="#{messages.export}" id="exportBtn"
+				action="#{bassExportBean.export()}"
+				onstart="PF('globalBlockUI_js').block();"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;addReadOnlyInputText();"
+				update=":contentPane"></p:commandButton>
+		</h:form>
+
+		<h:form id="contentListDownloadForm">
+			<p:panelGrid columns="2" rendered="#{bassExportBean.visible}" id="contentListDownloadPanel"
+				style="margin-top:15px;">
+				<f:facet name="header">
+					<h:outputText value="#{messages.file_exported}" />
+				</f:facet>
+				<h:outputText value="#{messages.acc_com_entity}" />
+				<p:commandLink ajax="false" id="accComEntity" 
+					actionListener="#{bassExportBean.downloadFile(bassExportBean.accComEntityFileName)}"
+					onclick="PrimeFaces.monitorDownload(start, stop);"
+					styleClass="register-link">
+					<h:outputText value="#{bassExportBean.accComEntityFileName}" />
+				</p:commandLink>
+
+				<h:outputText value="#{messages.acc_com_credit}" />
+				<p:commandLink ajax="false" id="accComCredit"
+					actionListener="#{bassExportBean.downloadFile(bassExportBean.accComCreditFileName)}"
+					onclick="PrimeFaces.monitorDownload(start, stop);"
+					styleClass="register-link">
+					<h:outputText value="#{bassExportBean.accComCreditFileName}" />
+				</p:commandLink>
+
+				<h:outputText value="#{messages.san_com_info}" />
+				<p:commandLink ajax="false" id="sanComInfoDownload"
+					actionListener="#{bassExportBean.downloadFile(bassExportBean.sanComInfoFileName)}"
+					onclick="PrimeFaces.monitorDownload(start, stop);"
+					styleClass="register-link">
+					<h:outputText value="#{bassExportBean.sanComInfoFileName}" />
+				</p:commandLink>
+
+				<h:outputText value="#{messages.san_com_branch}" />
+				<p:commandLink ajax="false" id="sanComBranch"
+					actionListener="#{bassExportBean.downloadFile(bassExportBean.sanComBranchFileName)}"
+					onclick="PrimeFaces.monitorDownload(start, stop);"
+					styleClass="register-link">
+					<h:outputText value="#{bassExportBean.sanComBranchFileName}" />
+				</p:commandLink>
+
+				<h:outputText value="#{messages.san_com_site}" />
+				<p:commandLink ajax="false" id="sanComSite"
+					actionListener="#{bassExportBean.downloadFile(bassExportBean.sanComSiteFileName)}"
+					onclick="PrimeFaces.monitorDownload(start, stop);"
+					styleClass="register-link">
+					<h:outputText value="#{bassExportBean.sanComSiteFileName}" />
+				</p:commandLink>
+
+				<h:outputText value="#{messages.san_com_cnumber}" />
+				<p:commandLink ajax="false" id="sanComCnumberDownload"
+					actionListener="#{bassExportBean.downloadFile(bassExportBean.sanComCnumberFileName)}"
+					onclick="PrimeFaces.monitorDownload(start, stop);"
+					styleClass="register-link">
+					<h:outputText value="#{bassExportBean.sanComCnumberFileName}" />
+				</p:commandLink>
+			</p:panelGrid>
+
+		</h:form>
+		<p:outputPanel rendered="#{bassExportBean.visible}" style="margin-bottom:10px;">
+			<button onclick="downloadAllOnlyMe()" id="buttonDownloadAll" onmouseover="onHover(this)" onmouseout="normalState(this)"
+				class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ">
+				<span class="ui-button-text ui-c">#{messages.download_all}</span>
+			</button>
+			<h:outputText value="#{bassExportBean.nameProject}"
+				styleClass="param-project-hidden" />
+			<h:outputText value="#{bassExportBean.folderDownLoadBassEncode}"
+				styleClass="param-project-hidden" />
+		</p:outputPanel>
+
+		<h:form id="savingPathForm">
+			<div class="ui-grid" id="savingPathDiv">
+				<h:outputText value="#{messages.download_location}:"
+					style="font-size:23px;" rendered="#{bassExportBean.visible}" />
+				<h:inputText value="#{bassExportBean.savingPathInScreen}"
+					style="font-size:23px;width:30%"
+					rendered="#{bassExportBean.visible}" id="inputSavingPath"
+					styleClass="inputSavingPath ui-state-disabled " />
+				<p:commandButton value="#{messages.copy}" id="copyBtn"
+					rendered="#{bassExportBean.visible}"
+					style="font-size:17px;height:100%;"
+					onclick="copyClipboard('.inputSavingPath');"></p:commandButton>
+			</div>
+			<p:commandButton value="#{messages.edit}"
+				rendered="#{bassExportBean.visible}"
+				onclick="editSavingPathTable();" id="editSavingButton"></p:commandButton>
+
+			<p:commandButton value="#{messages.save}"
+				onclick="saveSavingPathTable();" styleClass="invisible-button"
+				update="@form"
+				action="#{bassExportBean.settingSavingPathInConfigFile()}"
+				onstart="PF('globalBlockUI_js').block()" id="saveSavingButton"
+				oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;addReadOnlyInputText();"></p:commandButton>
+			<p:commandButton value="#{messages.cancel}"
+				onclick="cancelSavingPathTable();" id="cancelButton"
+				styleClass="invisible-button" oncomplete="addReadOnlyInputText();"></p:commandButton>
+
+		</h:form>
+
+
+	</p:panel>
+	<script>
+		//<![CDATA[
+		var currentSavingPath;
+	        
+		 //]]>
+	</script>
+
+
+</ui:composition>

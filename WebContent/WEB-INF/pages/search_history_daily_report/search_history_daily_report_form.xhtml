@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
+    xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+    xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <arrow:dialog id="searchHistoryDialog" visible="true"
+        widgetVar="searchHistoryDialog_js" style="z-index:1000;" modal="true">
+        <p:ajax event="close" listener="#{registerActivityHistorySearchBean.hide()}" />
+        <f:facet name="header">
+			#{messages.search_conditions}
+		</f:facet>
+        <h:form>
+            <p:panel id="panelReport">
+                <p:fieldset legend="#{messages['daily_worktime']}" id="timePart">
+                    <table width="100%">
+                        <tr valign="middle">
+                            <td style="width: 5%;"><p:selectBooleanCheckbox id="checkBox_startTime"
+                                    value="#{registerActivityHistorySearchBean.enableStartTime}">
+                                    <p:ajax event="change" update="timePart, search_history_button" process="@this" />
+                                </p:selectBooleanCheckbox></td>
+                            <td style="width: 15%;"><p:outputLabel value="#{messages['fromDate']} " /></td>
+                            <td style="width: 30%;"><p:calendar id="calendar_startTime" pattern="yyyy/MM/dd" locale="#{localeSelector.locale}"
+                                    value="#{registerActivityHistorySearchBean.startDate}" navigator="true" showOn="focus"
+                                    update="@form" disabled="#{!registerActivityHistorySearchBean.enableStartTime}"
+                                    required="true" requiredMessage="#{messages.date_is_required}">
+                                    <p:ajax event="dateSelect" process="@this" update="@this, search_history_button"/>
+                                    <p:ajax event="change" process="@this" update="@this, search_history_button"/>
+                                </p:calendar></td>
+                            <td style="width: 5%;"><p:selectBooleanCheckbox id="checkBox_endTime"
+                                    value="#{registerActivityHistorySearchBean.enableEndDate}"
+                                    disabled="#{!registerActivityHistorySearchBean.enableStartTime}">
+                                    <p:ajax event="change" update="timePart, search_history_button" process="@this" />
+                                </p:selectBooleanCheckbox></td>
+                            <td style="width: 15%;"><p:outputLabel value="#{messages['toDate']} " /></td>
+                            <td style="width: 30%;"><p:calendar id="calendar_endTime"
+                                    value="#{registerActivityHistorySearchBean.endDate}" navigator="true" showOn="focus"
+                                    update="@form" pattern="yyyy/MM/dd" locale="#{localeSelector.locale}"
+                                    disabled="#{!registerActivityHistorySearchBean.enableStartTime or !registerActivityHistorySearchBean.enableEndDate}"
+                                    required="true" requiredMessage="#{messages.date_is_required}">
+                                    <p:ajax event="dateSelect" process="@this" update="@this, search_history_button"/>
+                                    <p:ajax event="change" process="@this" update="@this, search_history_button"/>
+                                </p:calendar></td>
+                        </tr>
+                    </table>
+                </p:fieldset>
+
+
+                <p:fieldset legend="#{messages['daily_category']}">
+                    <table>
+                        <tr>
+                            <td width="5%"><p:selectBooleanCheckbox id="businessTask"
+                                    value="#{registerActivityHistorySearchBean.businessTask}">
+                                    <p:ajax event="change" update="@this, search_history_button" process="@this" />
+                                </p:selectBooleanCheckbox></td>
+                            <td width="95%">#{messages.category_visit_business}</td>
+                        </tr>
+
+                        <tr>
+                            <td><p:selectBooleanCheckbox id="otherTask"
+                                    value="#{registerActivityHistorySearchBean.otherTask}">
+                                    <p:ajax event="change" update="@this, search_history_button" process="@this" />
+                                </p:selectBooleanCheckbox></td>
+                            <td>#{messages.category_other_work}</td>
+                        </tr>
+                    </table>
+
+                </p:fieldset>
+
+                <p:outputPanel id="employee">
+                    <p:fieldset legend="#{messages['employee_info']}">
+                        <table>
+                            <tr>
+                                <td>#{messages.branch} :
+                                </td>
+                                <td>
+                                <p:selectOneMenu
+                                        value="#{registerActivityHistorySearchBean.selectPosition}" filter="true"
+                                        filterMatchMode="contains">
+                                        <f:selectItem itemLabel="" itemValue="" />
+                                        <f:selectItems value="#{registerActivityHistorySearchBean.listPositionEmployee}"
+                                            var="positions" itemValue="#{positions.adp_code}" itemLabel="#{positions.adp_name}" />
+                                        <p:ajax event="change"
+                                            listener="#{registerActivityHistorySearchBean.getEmployeeByAddrPoint}"
+                                            update="@this, search_history_button, employee" />
+                                    </p:selectOneMenu></td>
+                                </tr>
+                        </table> 
+                        <table width="100%">
+                        	<tr>
+                                <td>
+                                	<p:selectBooleanCheckbox id="toggleRetiredEmployee" value="#{registerActivityHistorySearchBean.includeRetiredEmployee}">
+                                		<p:ajax process="@this" update="@this, search_history_button, @([id$='listEmployee'])"></p:ajax>
+                                	</p:selectBooleanCheckbox>
+                                </td>
+                                <td>
+                                	#{messages.include_retired_employee}
+                                </td>    
+                                <td>
+                                </td>
+                                <td>#{messages.employee_name} :</td>
+                                <td>
+                                	<p:autoComplete id="listEmployee"
+                                        value="#{registerActivityHistorySearchBean.selectedEmployee}"
+                                        converter="#{converterStorage.employeeConverter}"
+                                        title="#{messages.type_to_find_employee}" forceSelection="true"
+                                        emptyMessage="#{messages.no_employee_found}" cache="true" cacheTimeout="300"
+                                        dropdown="true" scrollHeight="200" size="100" var="emp" itemLabel="#{emp.emp_name}"
+                                        itemValue="#{emp}" completeMethod="#{registerActivityHistorySearchBean.filterEmployee}">
+                                        <p:ajax event="itemSelect" process="@this" update="@this, search_history_button" />
+                                        <p:column headerText="#{messages.employee_code}">
+                                            <h:outputText value="#{emp.emp_code}" />
+                                        </p:column>
+
+                                        <p:column headerText="#{messages.employee_name}">
+                                            <h:outputText value="#{emp.emp_name}" />
+                                        </p:column>
+                                    </p:autoComplete></td>
+                            </tr>
+                        </table>
+                    </p:fieldset>
+                </p:outputPanel>
+                <p:fieldset legend="#{messages['business_detail']}">
+                    <p:inputTextarea id="company_activity" value="#{registerActivityHistorySearchBean.inputTextCompanyActivity}"
+                        style="width:100% !important;" >
+                    	<p:ajax event="change" process="@this" update="@this, search_history_button" />    
+                    </p:inputTextarea>
+                </p:fieldset>
+
+                <p:outputPanel id="dailyReportReminderPart">
+                    <p:fieldset legend="#{messages['daily_corp_info']}">
+                        <table>
+                            <tr>
+                                <td><p:outputLabel value="#{messages.company_base} : " for="company_base" /></td>
+                                <td><p:selectOneMenu id="company_base"
+                                        value="#{registerActivityHistorySearchBean.selectAddressPoint}" filter="true"
+                                        filterMatchMode="contains">
+                                        <f:selectItem itemLabel="" itemValue="" />
+                                        <f:selectItems value="#{registerActivityHistorySearchBean.allAddressPoint}"
+                                            var="addresspoint" itemValue="#{addresspoint.adp_code}"
+                                            itemLabel="#{addresspoint.adp_name}" />
+                                        <p:ajax event="change" process="@this" update="@this, search_history_button" />
+                                    </p:selectOneMenu></td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="#{messages.company_name} : " for="company_name" /></td>
+                                <td><p:inputText id="company_name" value="#{registerActivityHistorySearchBean.companyName}">
+                                		<p:ajax event="change" process="@this" update="@this, search_history_button" />
+                                	</p:inputText></td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="#{messages.department} : " for="company_department" /></td>
+                                <td><p:inputText id="company_department"
+                                        value="#{registerActivityHistorySearchBean.companyDepartment}">
+                                   	    <p:ajax event="change" process="@this" update="@this, search_history_button" />
+                                    </p:inputText></td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="#{messages.person_in_charge} : " for="person_in_charge" /></td>
+                                <td><p:inputText id="person_in_charge"
+                                        value="#{registerActivityHistorySearchBean.personInChanrge}">
+                                    	<p:ajax event="change" process="@this" update="@this, search_history_button" />    
+                                    </p:inputText></td>
+                            </tr>
+                        </table>
+
+                    </p:fieldset>
+                </p:outputPanel>
+
+                <!-- BLOCK NUMBER 7 -->
+                <table style="width: 100%;">
+                    <tr>
+                        <td><p:outputPanel id="historyReminder">
+                                <p:fieldset legend="#{messages['daily_reminder']}">
+                                    <p:selectManyCheckbox id="checkBox_reminder" columns="1" layout="grid"
+                                        value="#{registerActivityHistorySearchBean.checkBoxReminder}">
+                                        <f:selectItems value="#{sysConfig.onOffSelectItems}" />
+                                        <p:ajax process="@this" update="@this, search_history_button" />
+                                    </p:selectManyCheckbox>
+                                </p:fieldset>
+                            </p:outputPanel></td>
+                        <td><p:outputPanel id="historyOpenFlag">
+                                <p:fieldset legend="#{messages['daily_project_flag']}">
+                                    <p:selectManyCheckbox id="checkBox_project-flag" columns="1" layout="grid"
+                                        value="#{registerActivityHistorySearchBean.checkBoxProjectFlag}">
+                                        <f:selectItems value="#{sysConfig.onOffSelectItems}" />
+                                        <p:ajax process="@this" update="@this, search_history_button" />
+                                    </p:selectManyCheckbox>
+                                </p:fieldset>
+                            </p:outputPanel></td>
+                        <td><p:outputPanel id="historyProjectFlag">
+                                <p:fieldset legend="#{messages['daily_open_flag']}">
+                                    <p:selectManyCheckbox id="checkBox_open_flag" columns="1" layout="grid"
+                                        value="#{registerActivityHistorySearchBean.checkBoxOpenFlag}">
+                                        <f:selectItems value="#{sysConfig.onOffSelectItems}" />
+                                        <p:ajax process="@this" update="@this, search_history_button" />
+                                    </p:selectManyCheckbox>
+                                </p:fieldset>
+                            </p:outputPanel></td>
+                    </tr>
+                </table>
+            </p:panel>
+            <p:panel style="float:right;">
+                <p:commandButton value="#{messages.search}" icon="ui-icon-search" process="@form" id="search_history_button"
+                	onstart="PF('globalBlockUI_js').block()"
+                    action="#{registerActivityHistorySearchBean.searchHistoryReport}" update=":contentPane"
+                    disabled="#{!registerActivityHistorySearchBean.enableSearchButton}"
+                    oncomplete="PF('globalBlockUI_js').unblock()" />
+                <p:commandButton value="#{messages.close}" icon="ui-icon-close" title="Search report" process="@this"
+                    onclick="PF('searchHistoryDialog_js').hide()" immediate="true" />
+            </p:panel>
+        </h:form>
+    </arrow:dialog>
+
+</ui:composition>

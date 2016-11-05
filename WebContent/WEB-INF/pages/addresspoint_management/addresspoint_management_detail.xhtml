@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui">
+	<o:importConstants
+		type="arrow.businesstraceability.constant.BranchPositionConstant.BranchPositionType" />
+	<p:panel id="adpDetailPane">
+		<h:form>
+			<p:panel>
+				<table>
+					<tr>
+						<td class="label"><p:outputLabel
+								value="#{messages.addresspoint_code}" /></td>
+						<td>:</td>
+						<td><h:outputText
+								value="#{addresspointManagementBean.currentAddresspoint.adp_code}" />
+						</td>
+					</tr>
+					<tr>
+						<td class="label"><p:outputLabel
+								value="#{messages.addresspoint_name}" /></td>
+						<td>:</td>
+						<td><h:outputText
+								value="#{addresspointManagementBean.currentAddresspoint.adp_name}" /></td>
+					</tr>
+					<tr>
+						<p:outputPanel
+							rendered="#{addresspointManagementBean.currentListBranchPosition.size()==0}" >
+							<td><p:outputLabel value="#{messages.list_superiors}"
+									styleClass="" /></td>
+							<td>:</td>
+							<td><h:outputText value="#{messages.noResults}" /></td>
+						</p:outputPanel>
+					</tr>
+				</table>
+			</p:panel>
+				<p:fieldset legend="#{messages.list_superiors}" rendered="#{addresspointManagementBean.currentListBranchPosition.size()>0}">
+				<p:outputPanel id="btn_delete">
+					<table>
+						<tr>
+							<td><p:commandButton value="#{messages.delete}"
+									icon="fa fa-trash"
+									action="#{addresspointManagementBean.removeSupervisor()}"
+									update="contentPane"
+									disabled="#{addresspointManagementBean.listSelectedBranchPosition == null || addresspointManagementBean.listSelectedBranchPosition.size() == 0 }"
+									onstart="PF('globalBlockUI_js').block()"
+									oncomplete="PF('globalBlockUI_js').unblock()" /></td>
+						</tr>
+					</table>
+				</p:outputPanel>
+
+				<p:scrollPanel>
+					<arrow:dataTable
+						value="#{addresspointManagementBean.currentListBranchPosition}"
+						var="branchPosition" rows="20" id="branch_position_table"
+						rowIndexVar="index">
+						<p:column styleClass="arrow-column-header arrow-ui-select-column">
+							<f:facet name="header">
+                  	#{messages.select}
+					</f:facet>
+							<p:selectBooleanCheckbox value="#{branchPosition.selected}">
+								<p:ajax event="change" update=":contentPane"
+									listener="#{addresspointManagementBean.toggleBranchSelection(branchPosition)}" />
+							</p:selectBooleanCheckbox>
+          		</p:column>
+						<p:column styleClass="arrow-ui-name-column">
+							<f:facet name="header">
+							#{messages.name}
+					</f:facet>
+               	 #{branchPosition.employee_mst.emp_name}
+            	</p:column>
+						<p:column styleClass="arrow-ui-name-column">
+							<f:facet name="header">
+						#{messages.employee_position}
+					</f:facet>
+            	  #{branchPosition.position_mst.pos_name}
+            	</p:column>
+						<p:column styleClass="arrow-ui-name-column">
+							<f:facet name="header">
+						#{messages.workplace}
+					</f:facet>
+              	 #{branchPosition.employee_mst.addresspoint_mst.adp_name}
+            	</p:column>
+					</arrow:dataTable>
+				</p:scrollPanel>
+				</p:fieldset>
+		</h:form>
+		<h:form>
+			<p:fieldset id="settingSupervisorPane" legend="#{messages.setting_superior}">
+				<table>
+					<tr>
+						<td><p:outputLabel value="#{messages.select_branch}"></p:outputLabel></td>
+						<td><p:autoComplete id="employee_add_head_office"
+								value="#{addresspointManagementBean.selectedAddresspoint}"
+								converter="#{converterStorage.addressPointMstConverter}"
+								title="#{messages.type_to_find_head_office}"
+								forceSelection="true" cache="true" cacheTimeout="300"
+								dropdown="true" scrollHeight="200" var="head"
+								itemLabel="#{head.adp_name}" itemValue="#{head}"
+								widgetVar="head_office_wiget_var"
+								completeMethod="#{addresspointManagementBean.autoCompleteHeadOffice}">
+								<p:ajax event="itemSelect" process="@this"
+									update="@this selectEmployee @form"
+									listener="#{addresspointManagementBean.updateCurentListManagerEmp()}"
+									resetValues="true" />
+								<p:column headerText="#{messages.head_office_code}">
+									<h:outputText value="#{head.adp_code}" />
+								</p:column>
+
+								<p:column headerText="#{messages.head_office_name}">
+									<h:outputText value="#{head.adp_name}" />
+								</p:column>
+							</p:autoComplete></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel value="#{messages.select_employee}"></p:outputLabel></td>
+						<td><p:autoComplete id="selectEmployee"
+								value="#{addresspointManagementBean.currentEmp}"
+								converter="#{converterStorage.employeeConverter}"
+								title="#{messages.type_to_find_employee}" forceSelection="true"
+								emptyMessage="#{messages.no_employee_found}" cache="true"
+								cacheTimeout="300" dropdown="true" scrollHeight="200" var="emp"
+								itemLabel="#{emp.emp_name}" itemValue="#{emp}"
+								completeMethod="#{addresspointManagementBean.filterEmployee}"
+								widgetVar="employee_wg_var">
+
+								<p:ajax event="itemSelect" process="@this" update="@this"
+									resetValues="true" />
+								<p:ajax event="change" process="@this" update="@this"
+									onstart="if(PF('employee_wg_var').panel.is(':visible')) return false;"
+									resetValues="true" />
+								<p:column headerText="#{messages.employee_code}">
+									<h:outputText value="#{emp.emp_code}" />
+								</p:column>
+
+								<p:column headerText="#{messages.employee_name}">
+									<h:outputText value="#{emp.emp_name}" />
+								</p:column>
+							</p:autoComplete></td>
+					</tr>
+					<tr>
+						<td><p:commandButton
+								value="#{messages.selected_branch_chief}"
+								icon="fa icon-ok-circled2" update="contentPane"
+								action="#{addresspointManagementBean.chosenToPosition(BranchPositionType.MANAGER)}"
+								disabled="#{addresspointManagementBean.haveBranchChief()}"
+								onstart="PF('globalBlockUI_js').block()"
+								oncomplete="PF('globalBlockUI_js').unblock()" /></td>
+						<td><p:commandButton value="#{messages.chosen_represent}"
+								icon="fa icon-ok-circled2" update="contentPane"
+								action="#{addresspointManagementBean.chosenToPosition(BranchPositionType.REPRESENTER)}"
+								disabled="#{addresspointManagementBean.currentListBranchPosition.size()==0 || !addresspointManagementBean.haveBranchChief()}"
+								onstart="PF('globalBlockUI_js').block()"
+								oncomplete="PF('globalBlockUI_js').unblock()" /></td>
+					</tr>
+
+				</table>
+				</p:fieldset>
+			<table style="margin-top: 10px;">
+				<tr>
+					<td><p:commandButton value="#{messages.save}"
+							icon="fa icon-ok-circled2" update=":contentPane" process="@this"
+							action="#{addresspointManagementBean.saveBranchPosition}"
+							onstart="PF('globalBlockUI_js').block()"
+							oncomplete="PF('globalBlockUI_js').unblock()" /></td>
+
+					<td><p:commandButton value="#{messages.reset}"
+							icon="fa icon-ok-circled2" update=":contentPane"
+							action="#{addresspointManagementBean.resetBranchPosition()}"
+							onstart="PF('globalBlockUI_js').block()"
+							oncomplete="PF('globalBlockUI_js').unblock()" /></td>
+
+					<td><p:commandButton value="#{messages.cancel}"
+							icon="fa icon-ok-circled2" process="@this"
+							action="#{addresspointManagementBean.showCancelDialog()}"
+							update=":contentPane" /></td>
+
+				</tr>
+			</table>
+			<p:confirmDialog id="cancelDialog" global="true"
+				widgetVar="cancelDialog"
+				message="#{messages.confirmCloseWhenNotSaveModifiedData}">
+				<p:outputPanel styleClass="dialog-confirm">
+					<p:commandButton value="#{messages.yes}">
+						<p:ajax process="@this" update=":contentPane"
+							listener="#{addresspointManagementBean.clearScreen()}"
+							oncomplete="PF('cancelDialog').hide();" />
+					</p:commandButton>
+					<p:commandButton value="#{messages.no}"
+						onclick="PF('cancelDialog').hide();" />
+				</p:outputPanel>
+			</p:confirmDialog>
+		</h:form>
+
+	</p:panel>
+</ui:composition>

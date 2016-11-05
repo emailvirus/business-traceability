@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CREDIT_INFO -->
+<table>
+	<primary-key>
+		<column name="CRD_COMPANY_CODE" data-type="c-code" not-null="true" default-value="null"/>
+	<column name="CRD_DATE" data-type="timestamp" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="CRD_BUSINESS_STATE" data-type="flag" not-null="false" default-value="null"/>	
+	<column name="CRD_DETAILS" data-type="url" not-null="true" default-value="null"/>
+	<column name="CRD_UPDATE_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+	
+	<foreign-key parent-table="COMPANY_MST">
+		<column name="CRD_COMPANY_CODE" referColumn="COM_COMPANY_CODE"/>
+	</foreign-key>
+</table>

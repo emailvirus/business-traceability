@@ -1,0 +1,1 @@
+package arrow.framework.persistence.provider.hibernate;

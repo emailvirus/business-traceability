@@ -1,0 +1,143 @@
+	
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:arrow="http://arrow-tech.vn/arrow"
+	xmlns:p="http://primefaces.org/ui">
+	<script type="text/javascript">
+          renderTableWithNoFilter();
+    </script>
+	<p:scrollPanel mode="native" style="border:none;">
+		<h:form id="formAccountTable">
+			<p:panel id="accountPanel" styleClass="accountPanel">
+				<arrow:dataTable
+					value="#{maintenanceAccountingDataBean.listAccountingData}"
+					widgetVar="accountTable" rowKey="#{account.indx_customer}"
+					paginator="true" rows="5" tableStyle="width:100% !important;"
+					paginatorPosition="bottom" id="accountTable" var="account"
+					styleClass="name-card-table"
+					selection="#{maintenanceAccountingDataBean.listSelectedComEntity}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+					<p:ajax event="page"  onstart="PF('globalBlockUI_js').block()"  oncomplete="PF('globalBlockUI_js').unblock();clearAfterChangePage('accountTable', 'buttonSelect');" />
+					<f:facet name="header">
+	                    #{messages.accounting_data}
+	                  <p:commandButton id="toggler" type="button"
+							value="#{messages.toggle_column}" style="float:right"
+							icon="ui-icon-calculator" />
+						<p:columnToggler datasource="accountTable" trigger="toggler">
+							<p:ajax event="toggle" listener="#{toggleColumnBean.onToggle}" />
+						</p:columnToggler>
+						<br />
+					</f:facet>
+					<p:column selectionMode="multiple"
+						style="width:16px;text-align:center">
+						<h:inputHidden value="#{account.id_int_san_company}" pt:idComEntity="#{account.id_com_entity}"/>
+					</p:column>
+					<p:column styleClass="arrow-ui-code-column"
+						visible="#{toggleColumnBean.list[1]}">
+						<f:facet name="header">
+							<ar:columHeader value="#{messages.customer_code}">
+							</ar:columHeader>
+						</f:facet>
+						<h:outputText value="#{account.indx_customer}" />
+					</p:column>
+
+					<p:column styleClass="arrow-ui-name-column"
+						visible="#{toggleColumnBean.list[2]}">
+						<f:facet name="header">
+							<ar:columHeader value="#{messages.sansan_company_id}">
+							</ar:columHeader>
+						</f:facet>
+						<h:outputText value="#{account.san_com_info.id_san_company}" />
+					</p:column>
+
+					<p:column styleClass="arrow-ui-name-column"
+						visible="#{toggleColumnBean.list[3]}">
+						<f:facet name="header">
+							<ar:columHeader value="#{messages.national_com_name}">
+							</ar:columHeader>
+						</f:facet>
+						<h:outputText value="#{account.name_company}" />
+					</p:column>
+					<p:column styleClass="arrow-ui-code-column"
+						visible="#{toggleColumnBean.list[4]}">
+						<f:facet name="header">
+							<ar:columHeader value="#{messages.national_com_no}">
+							</ar:columHeader>
+						</f:facet>
+						<h:outputText value="#{account.mynum_com}" />
+					</p:column>
+					<p:column styleClass="arrow-ui-name-column"
+						visible="#{toggleColumnBean.list[5]}">
+						<f:facet name="header">
+							<ar:columHeader value="#{messages.company_name_in_kana}">
+							</ar:columHeader>
+						</f:facet>
+						<h:outputText value="#{account.name_com_kana}" />
+					</p:column>
+					<p:column styleClass="arrow-ui-code-column"
+						visible="#{toggleColumnBean.list[6]}">
+						<f:facet name="header">
+							<ar:columHeader value="#{messages.client_status}">
+							</ar:columHeader>
+						</f:facet>
+						<h:outputText
+							value="#{maintenanceAccountingDataBean.clientStatus.get(account.code_acc_client)}" />
+					</p:column>
+					<p:column styleClass="arrow-ui-number-column"
+						visible="#{toggleColumnBean.list[7]}">
+						<f:facet name="header">
+							<ar:columHeader value="#{messages.year_of_starting_business}">
+							</ar:columHeader>
+						</f:facet>
+						<h:outputText value="#{account.y_start}" />
+					</p:column>
+					<p:column styleClass="arrow-ui-number-column"
+						visible="#{toggleColumnBean.list[8]}">
+						<f:facet name="header">
+							<ar:columHeader
+								value="#{messages.year_of_official_establishment}">
+							</ar:columHeader>
+						</f:facet>
+						<h:outputText value="#{account.y_establish}" />
+					</p:column>
+					<p:column styleClass="arrow-ui-date-time-column"
+						visible="#{toggleColumnBean.list[9]}">
+						<f:facet name="header">
+							<ar:columHeader value="#{messages.last_export}">
+							</ar:columHeader>
+						</f:facet>
+						<arrow:outputDateTime value="#{account.ts_export}">
+						</arrow:outputDateTime>
+					</p:column>
+				</arrow:dataTable>
+			</p:panel>
+			<p:commandButton value="#{messages.select}" id="buttonSelect"
+				widgetVar="buttonSelect"
+				action="#{maintenanceAccountingDataBean.onSelectAccounting()}"
+				icon="fa fa-hand-o-up" update="@this @([id$=proc2Panel])"
+				onstart="PF('globalBlockUI_js').block()"
+				oncomplete="PF('globalBlockUI_js').unblock();loadFreezeReason();PF('blockUIWidget').show();disableSelectBtnAfterSelect(); selectSansanCompanyTableRow();"
+				styleClass="select-name-card-button" />
+			<p:blockUI block="accountPanel" widgetVar="blockUIWidget" />
+		</h:form>
+	</p:scrollPanel>
+	<br />
+	<br />
+	<br />
+	<p:outputPanel id="proc2Panel" >
+		<ui:include
+			src="/WEB-INF/pages/maintenance_accounting_data/search_sansan_company_PROC2.xhtml" />
+	</p:outputPanel>
+	<script>
+			
+			PrimeFaces.widgets['buttonSelect'].disable();
+			initDataTableSelectRow('formAccountTable', 'accountTable', 'accountTable', 'buttonSelect');
+	</script>
+</ui:composition>

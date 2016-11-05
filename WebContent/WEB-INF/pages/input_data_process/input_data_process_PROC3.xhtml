@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<p:outputPanel id="customerTradeName" rendered="#{!inputAccountingDataBean.showDetailReport}">
+		<ui:include src="/WEB-INF/pages/input_data_process/customer_trade_name.xhtml" />
+	</p:outputPanel>
+	
+	<p:outputPanel id="reportHistory" rendered="#{!inputAccountingDataBean.showDetailReport}">
+		<ui:include src="/WEB-INF/pages/input_data_process/credit_history.xhtml" />
+	</p:outputPanel>
+
+	<p:outputPanel rendered="#{inputAccountingDataBean.showDetailReport}">
+		<p:outputPanel id="mainPanel">
+			<ui:include src="/WEB-INF/pages/input_data_process/survey_specifications.xhtml" />
+			<p:tabView id="mainTab" activeIndex="#{inputAccountingDataBean.tabView}" widgetVar="mainTab">
+
+				<p:tab title="#{messages.trade_survey_results}" id="tradeSurveyTab">
+					<ui:include src="/WEB-INF/pages/input_data_process/trade_survey_results.xhtml" />
+				</p:tab>
+				<p:tab title="#{messages.business_factors}" id="bussinessFactorTab">
+					<ui:include src="/WEB-INF/pages/input_data_process/business_factors.xhtml" />
+				</p:tab>
+				<p:tab title="#{messages.industry_classification}" id="industryClassificationTab">
+					<ui:include src="/WEB-INF/pages/input_data_process/industry_classification.xhtml" />
+				</p:tab>
+				<p:tab title="#{messages.input_financial_data}" id="inputFinancialTab">
+					<ui:include src="/WEB-INF/pages/input_financial_data/input_financial_data_PROC4.xhtml" />
+				</p:tab>
+				<p:tab title="#{messages.input_customer_data}" id="inputCustomerTab">
+					<ui:include src="/WEB-INF/pages/input_customer_data/input_customer_data_PROC5.xhtml" />
+				</p:tab>
+			</p:tabView>
+		</p:outputPanel>
+		
+		<p:spacer height="5" />
+		
+		<h:form>
+			<p:commandButton value="#{messages.cancel}" process="@this" update=":contentPane" 
+				action="#{inputAccountingDataBean.cancel}" icon="fa fa-close"
+				onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+				
+			<p:commandButton value="#{messages.temporary_save}" process="@this" update=":contentPane" immediate="true"
+				action="#{inputAccountingDataBean.saveTemporaryCredit}" rendered="#{!inputAccountingDataBean.viewMode}"
+				onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+				icon="fa fa fa-save" />
+			
+			<p:commandButton value="#{messages.approve}" process="@this @([id$=mainPanel])" update=":contentPane"
+				rendered="#{userCredential.managerHQ and !inputAccountingDataBean.viewMode}" action="#{inputAccountingDataBean.saveApproveCredit}"
+				onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"
+				icon="fa fa fa-save" />
+			
+			<p:commandButton value="#{messages.reset}" process="@this" update=":contentPane"
+				rendered="#{!inputAccountingDataBean.accComCredit.persisted}" icon="fa fa-refresh"
+				action="#{inputAccountingDataBean.resetCredit()}" immediate="true"
+				onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" >
+				<p:confirm header="#{messages.confirmation}" message="#{messages.are_you_sure_to_reset}" icon="ui-icon-alert" />
+			</p:commandButton>
+			
+			<p:commandButton value="#{messages.discard}" process="@this" update=":contentPane"
+				action="#{inputAccountingDataBean.discardCredit()}" icon="fa fa-trash"
+				rendered="#{inputAccountingDataBean.accComCredit.persisted and inputAccountingDataBean.accComCredit.draft}"
+				onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" >
+				<p:confirm header="#{messages.confirmation}" message="#{messages.are_you_sure_to_discard_this_report}" icon="ui-icon-alert" />
+			</p:commandButton>
+				
+			<p:commandButton value="#{messages.modify}" process="@this" update=":contentPane"
+				action="#{inputAccountingDataBean.modifyActionFromDetail()}" icon="fa fa-copy"
+				rendered="#{inputAccountingDataBean.accComCredit.persisted and inputAccountingDataBean.accComCredit.approved}"
+				onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;" />
+		</h:form>
+	</p:outputPanel>
+</ui:composition>

@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:pm="http://primefaces.org/mobile"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+	<pm:page id="home">
+		<ui:include src="/WEB-INF/ipad/pages/dashboard.xhtml" />
+	</pm:page>
+
+	<pm:page id="dailyReport" title="#{messages.daily_report}">
+		<ui:fragment rendered="#{mobileScreenFlowBean.currentContext.pageId eq 'dailyReport'}">
+			<ui:include src="/WEB-INF/ipad/pages/daily_report.xhtml" />
+		</ui:fragment>
+	</pm:page>
+	<pm:page id="editDailyReport" title="#{messages.daily_report}">
+		<ui:fragment rendered="#{mobileScreenFlowBean.currentContext.pageId eq 'editDailyReport'}">
+			<ui:include src="/WEB-INF/ipad/pages/edit_daily_report.xhtml" />
+		</ui:fragment>
+	</pm:page>
+
+	<pm:page id="newCompany">
+		<ui:fragment rendered="#{mobileScreenFlowBean.currentContext.pageId eq 'newCompany'}">
+			<ui:include src="/WEB-INF/ipad/pages/add_company.xhtml" />
+		</ui:fragment>
+	</pm:page>
+	
+	<pm:page id="searchCompany">
+		<ui:fragment rendered="#{mobileScreenFlowBean.currentContext.pageId eq 'searchCompany'}">
+			<ui:include src="/WEB-INF/ipad/pages/search_company.xhtml" />
+		</ui:fragment>
+	</pm:page>
+</ui:composition>

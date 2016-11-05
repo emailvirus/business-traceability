@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- POSITION_MST -->
+<table desc="Chức vụ">
+	<primary-key>
+		<column name="POS_CODE" data-type="small-int" not-null="true" default-value="null"/>
+	</primary-key>
+	<column name="POS_NAME" data-type="name" not-null="true" default-value="null"/>
+</table>

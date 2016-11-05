@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:arrow="http://arrow-tech.vn/arrow">
+
+	<ui:param name="readOnly" value="#{!summaryReportBean.monthlyReportPermission.hasSubmitPermission()}" />
+	<ui:fragment>
+		<ui:include src="/WEB-INF/pages/summary_report/includes/header_monthly_report_summary.xhtml" />
+	</ui:fragment>
+	
+	<ui:fragment>
+		<ui:include src="/WEB-INF/pages/summary_report/includes/content_monthly_report_summary.xhtml" />
+	</ui:fragment>
+	
+	<ui:fragment>
+		<ui:include src="/WEB-INF/pages/summary_report/includes/comment_monthly_report_summary.xhtml" />
+	</ui:fragment>
+	
+	
+</ui:composition>

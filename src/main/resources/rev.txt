@@ -1,0 +1,5 @@
+commit 77f47437dba36fcf642081da17c4e517727e3165
+Author: haind <haind@arrow-tech.vn>
+Date:   Wed Jun 8 19:03:38 2016 +0700
+
+    revert file

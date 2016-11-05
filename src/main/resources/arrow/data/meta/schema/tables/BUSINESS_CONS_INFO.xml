@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- BUSINESS_CONS_INFO -->
+<table>
+	<primary-key>
+		<column name="BCO_BUSINESS_CODE" data-type="c-mid-code" not-null="true" default-value="null"/>
+		<column name="BCO_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+	</primary-key>
+	<column name="BCO_EMP_CODE" data-type="integer" not-null="true" default-value="null"/>
+	<column name="BCO_EMP_ADPCODE" data-type="c-short-code" not-null="false" default-value="null"/>
+	<column name="BCO_CONSIDERATION" data-type="free-text" not-null="false" default-value="null"/>	
+	<column name="BCO_UPDATE_DATE" data-type="timestamp" not-null="false" default-value="null"/>
+
+	<foreign-key parent-table="EMPLOYEE_MST">
+		<column name="BCO_EMP_CODE" referColumn="EMP_CODE"/>
+	</foreign-key>
+	<!-- <foreign-key parent-table="BUSINESS_COMPANY_MST" columns="BCO_BUSINESS_CODE" /> -->
+</table>

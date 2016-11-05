@@ -1,0 +1,24 @@
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form>
+	<table>
+		<tr>
+			<p:inputText value="#{debugSearchElastic.textSearch}">
+				<p:ajax event="change" process="@this" update="@this" />
+			</p:inputText>
+		</tr>
+		<tr>
+			<p:commandButton value="Search all field" process="@this" update="@form" action="#{debugSearchElastic.loadAllData}" />
+		</tr>
+		<tr>
+			<p:outputLabel value="Search with field Field_name and Branch_office" />
+			<p:commandButton value="Search" process="@this" update="@form" action="#{debugSearchElastic.searchWithFieldNameAndBranchOffice}" />
+		</tr>
+	</table>
+	</h:form>
+</ui:composition>

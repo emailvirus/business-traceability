@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
+    xmlns:arrow="http://arrow-tech.vn/arrow" xmlns:ar="http://java.sun.com/jsf/composite/compositeComponent"
+    xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <ui:param name="isEnableDelete"
+        value="#{registerActivityBean.currentReport ne null and (registerActivityBean.currentReport.persisted)}" />
+    <ui:param name="monthlyReportDisableForUpdate" value="#{registerActivityBean.monthlyReportDisableForUpdate}"/>    
+        
+    <h:form id="registerDailyReportForm">
+        <p:panel id="panel_search_by_workdate">
+            <table style="width: 100%;">
+                <tr>
+                    <td>#{messages['date']} <p:calendar value="#{registerActivityBean.currentReport.dai_work_date}" locale="#{localeSelector.locale}"
+                            showOn="button" pattern="yyyy/MM/dd" navigator="true" mask="true" required="true"
+                            requiredMessage="#{messages['date_is_required']}" showButtonPanel="true">
+                         	<p:ajax event="valueChange" listener="#{registerActivityBean.searchDailyReport}" process="@this"
+                                update="reportTable,panelReport panel_search_by_workdate" oncomplete="isModified=false"/>
+                            <p:ajax event="dateSelect" listener="#{registerActivityBean.searchDailyReport}" process="@this"
+                                update="reportTable,panelReport panel_search_by_workdate" oncomplete="isModified=false"/>
+                        </p:calendar> 
+                        <p:commandButton id="leftDeleteButton" value="#{messages.delete}"
+                            disabled="#{!registerActivityBean.enableDelete or monthlyReportDisableForUpdate}" action="#{registerActivityBean.deleteReport}"
+                            update="@this, reportTable, panelReport" icon="fa fa-trash" process="@this" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;">
+                            <p:confirm header="#{messages.confirmation}" message="#{messages.are_you_sure_to_delete}" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </td>
+
+                    <td style="float: right;">
+                        <p:commandButton id="btnAdd" value="#{messages.add}" action="#{registerActivityBean.addAndSaveNewReport}" 
+                        	disabled="#{registerActivityBean.disableAdd}"
+                            update=":contentPane" icon="fa fa-plus" process="@this, @form, panel_search_by_workdate" 
+                            onstart="PF('globalBlockUI_js').block()" oncomplete="PF('globalBlockUI_js').unblock(); isModified=false;"/>
+                        <p:commandButton value="#{messages.update}" id="saveButon" 
+                        	disabled="#{registerActivityBean.disableUpdate}" 
+                            action="#{registerActivityBean.saveWhenEditReport}" update=":contentPane" icon="fa fa-save"
+                            process="@this, panelReport, panel_search_by_workdate" oncomplete="isModified=false"/>
+                    </td>
+                </tr>
+            </table>
+        </p:panel>
+        <div id="container_dailyreport">
+            <div id="left_dailyreport">
+                <p:panel>
+                    <div class="toolbox">
+                    	<p:commandLink action="#{registerActivityBean.checkAllReports}" value="#{messages.checkAll}" process="@this" update="@form:leftDeleteButton, @([id$=checkForDelete])"></p:commandLink>,
+                    	<p:commandLink action="#{registerActivityBean.unCheckAllReports}" value="#{messages.unCheckAll}" process="@this" update="@form:leftDeleteButton, @([id$=checkForDelete])"></p:commandLink>
+                    </div>
+                    <div class="clear"></div>
+                        <script type="text/javascript">
+                              renderTableWithNoFilter();
+                        </script>
+                    <arrow:dataTable id="reportTable" selectionMode="single" widgetVar="reportTable_js" rowIndexVar="rowIndex"
+                        rowKey="#{report}" paginator="true" rows="10" value="#{registerActivityBean.allReport}" var="report"
+                        resizableColumns="true" paginatorPosition="bottom" tableStyle="width:auto;" >
+                        <f:facet name="header">
+                              #{messages.daily_reports}
+                            <p:commandButton id="toggler" type="button" value="#{messages.toggle_column}" style="float:right" icon="ui-icon-calculator" />
+                            <p:columnToggler datasource="reportTable" trigger="toggler" >
+                                   <p:ajax event="toggle" listener="#{toggleColumnBean.onToggle}" />
+                            </p:columnToggler>
+                         </f:facet>
+                        
+                        <p:column styleClass="arrow-ui-select-column" toggleable="false" visible="#{toggleColumnBean.list[0]}" >
+                            <p:selectBooleanCheckbox value="#{report.selected}" id="checkForDelete" immediate="true" >
+                                <p:ajax event="valueChange" update="@form:leftDeleteButton" listener="#{registerActivityBean.toggleSelectReport(report)}"/>
+                            </p:selectBooleanCheckbox>
+                        </p:column>
+						<p:ajax event="rowSelect" listener="#{registerActivityBean.editReport}" immediate="true" process="@this"
+                            update="@([id$=panelReport]) @([id$=panel_search_by_workdate])" onstart="return onRowSelect();"/>
+                        <p:column styleClass="arrow-column-header arrow-ui-time-column" visible="#{toggleColumnBean.list[1]}">
+                            <f:facet name="header">
+                                <ar:columHeader value="#{messages.start_br_time}" escape="false">
+                                </ar:columHeader>
+                            </f:facet>
+                            <arrow:outputTime value="#{report.dai_work_stime}"></arrow:outputTime>
+                        </p:column>
+
+                        <p:column styleClass="arrow-column-header arrow-ui-time-column" visible="#{toggleColumnBean.list[2]}">
+                            <f:facet name="header">
+                                <ar:columHeader value="#{messages.end_br_time}" escape="false">
+                                </ar:columHeader>
+                            </f:facet>
+                            <arrow:outputTime value="#{report.dai_work_etime}"></arrow:outputTime>
+                        </p:column>
+
+                        <p:column styleClass="arrow-column-header arrow-ui-time-column" visible="#{toggleColumnBean.list[3]}">
+                            <f:facet name="header">
+                                <ar:columHeader value="#{messages.duration_abbr}" />
+                            </f:facet>
+                            <arrow:outputTime value="#{report.dai_required_time}"></arrow:outputTime>
+                        </p:column>
+
+                        <p:column styleClass="arrow-column-header arrow-text-column" visible="#{toggleColumnBean.list[4]}">
+                            <f:facet name="header">
+                                <ar:columHeader value="#{messages.company_br_name}" escape="false" />
+                            </f:facet>
+                            <h:outputText value="#{report.company_mst.extendComName}" title="#{report.company_mst.com_company_name}" />
+                        </p:column>
+
+                        <p:column styleClass="arrow-column-header arrow-text-column" visible="#{toggleColumnBean.list[5]}">
+                            <f:facet name="header">
+                                <ar:columHeader value="#{messages.department}" escape="false" />
+                            </f:facet>
+                            <h:outputText value="#{report.dai_employee_post}" />
+                        </p:column>
+                        
+                        <p:column styleClass="arrow-column-header arrow-text-column" visible="#{toggleColumnBean.list[6]}">
+                            <f:facet name="header">
+                                <ar:columHeader value="#{messages.person_in_charge}" escape="false" />
+                            </f:facet>
+                            <h:outputText value="#{report.dai_compemp_name}" />
+                        </p:column>
+
+                        <p:column styleClass="arrow-column-header arrow-text-column" visible="#{toggleColumnBean.list[7]}">
+                            <f:facet name="header">
+                                <ar:columHeader value="#{messages.purpose}" />
+                            </f:facet>
+                            <h:outputText value="#{report.daily_activity_type.dat_name}" />
+                        </p:column>
+                        
+                        <p:column styleClass="arrow-column-header arrow-ui-date-column" visible="#{toggleColumnBean.list[8]}">
+                            <f:facet name="header">
+                                <ar:columHeader value="#{messages.reminder_stime}" escape="false">
+                                </ar:columHeader>
+                            </f:facet>
+                            <arrow:outputDate value="#{report.dai_summary_stime}"></arrow:outputDate>
+                        </p:column>
+                        
+                        <p:column styleClass="arrow-column-header arrow-ui-date-column" visible="#{toggleColumnBean.list[9]}">
+                            <f:facet name="header">
+                                <ar:columHeader value="#{messages.reminder_etime}" escape="false">
+                                </ar:columHeader>
+                            </f:facet>
+                            <arrow:outputDate value="#{report.dai_summary_etime}"></arrow:outputDate>
+                        </p:column>
+                    </arrow:dataTable>
+                </p:panel>
+            </div>
+            <div id="right_dailyreport">
+               <ui:include src="/WEB-INF/pages/daily_report/daily_report_detail.xhtml" />
+                   <script>
+				        $(document).ready(function(){
+				            $('#right_dailyreport input').change(function() {
+				                isModified = true;
+				            });
+				        });
+				    </script>
+            </div>
+        </div>
+
+    </h:form>
+
+</ui:composition>
